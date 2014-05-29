@@ -36,6 +36,7 @@ public class NewServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		List<String> errorMessageList = new ArrayList<String>();
+		Map<String, String[]> map = request.getParameterMap();
 		String action = request.getParameter("action");
 		// new
 		if (!("new_end".equals(action))) {
@@ -58,6 +59,7 @@ public class NewServlet extends HttpServlet {
 			if (errorMessageList.size() != 0) {
 				String page = DIR_BASE + "New.jsp";
 				request.setAttribute("errorMessageList", errorMessageList);
+				request.setAttribute("inputDataList", map);
 				request.getRequestDispatcher(page).forward(request, response);
 			} else {
 				try {

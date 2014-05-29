@@ -4,6 +4,7 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	List<String> errorMessageList = (List<String>)request.getAttribute("errorMessageList");
+	Map<String, String[]> inputDataList = (Map<String, String[]>)request.getAttribute("inputDataList");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -30,11 +31,11 @@
 	<table>
 		<tr>
 			<th>商品名</th>
-			<td><input type="text" name="item_name" size="60"></td>
+			<td><input type="text" name="item_name" size="60" value="${inputDataList.get('item_name')[0]}"></td>
 		</tr>
 		<tr>
 			<th>商品単価</th>
-			<td><input type="text" name="item_price" size="10" value="${itemPrice}">円</td>
+			<td><input type="text" name="item_price" size="10" value="${inputDataList.get('item_price')[0]}">円</td>
 		</tr>
 		<tr>
 			<th>ジャンル</th>
@@ -55,19 +56,19 @@
 		</tr>
 		<tr>
 			<th>商品説明</th>
-			<td><textarea name="item_explanation" rows="20" cols="60"></textarea></td>
+			<td><textarea name="item_explanation" rows="20" cols="60">${inputDataList.get('item_explanation')[0]}</textarea></td>
 		</tr>
 		<tr>
 			<th>販売開始日</th>
-			<td><input type="text" name="item_sales_period_from" size="10"></td>
+			<td><input type="text" name="item_sales_period_from" size="10" value="${inputDataList.get('item_sales_period_from')[0]}"></td>
 		</tr>
 		<tr>
 			<th>販売終了日</th>
-			<td><input type="text" name="item_sales_period_to" size="10"></td>
+			<td><input type="text" name="item_sales_period_to" size="10" value="${inputDataList.get('item_sales_period_to')[0]}"></td>
 		</tr>
 		<tr>
 			<th>在庫数</th>
-			<td><input type="text" name="item_stock" size="10"></td>
+			<td><input type="text" name="item_stock" size="10" value="${inputDataList.get('item_stock')[0]}"></td>
 		</tr>
 		<tr>
 			<td>
