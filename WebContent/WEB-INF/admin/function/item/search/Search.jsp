@@ -1,12 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
+<%@ page import="com.nmnw.admin.dao.Item"%>
 <%@ page import="com.nmnw.admin.Enum.ItemCategoryEnum"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 	String action = (String)request.getParameter("action");
 	List<ItemCategoryEnum> itemCategoryList = (List<ItemCategoryEnum>)request.getAttribute("itemCategoryList");
+	List<String> errorMessageList = (List<String>)request.getAttribute("errorMessageList");
 	Map<String, String[]> inputDataList = (Map<String, String[]>)request.getAttribute("inputDataList");
+	List<Item> resultList = (List<Item>)request.getAttribute("result");
 	String actionParam = "";
 	if (inputDataList.containsKey("action")) {
 		actionParam = inputDataList.get("action")[0];
@@ -91,6 +94,20 @@
 			<th>販売終了日</th>
 			<th>在庫数</th>
 		</tr>
+<%
+for(int i = 0; i < resultList.size(); i++) {
+	out.println("<tr>");
+	out.println("<td><a href=\"detail?item_id=" + String.valueOf(resultList.get(i).getId()) + "\">" + String.valueOf(resultList.get(i).getId()) + "</td>");
+	out.println("<td>" + resultList.get(i).getName() + "</td>");
+	out.println("<td><img src='" + resultList.get(i).getImageUrl() + "' width='50' height='50'></td>");
+	out.println("<td>" + resultList.get(i).getPrice() + "</td>");
+	out.println("<td>" + resultList.get(i).getCategory() + "</td>");
+	out.println("<td>" + resultList.get(i).getSalesPeriodFrom() + "</td>");
+	out.println("<td>" + resultList.get(i).getSalesPeriodTo() + "</td>");
+	out.println("<td>" + resultList.get(i).getStock() + "</td>");
+	out.println("</tr>");
+}
+%>
 	</table>
 </div>
 </body>

@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +60,6 @@ public class ItemDao {
 			item.setPrice(result.getInt("price"));
 			item.setCategory(result.getString("category"));
 			item.setImageUrl(ConfigConstants.IMAGE_DIR_ITEM + result.getString("image_url"));
-			item.setExplanation(result.getString("explanation"));
 			item.setSalesPeriodFrom(result.getString("sales_period_from"));
 			item.setSalesPeriodTo(result.getString("sales_period_to"));
 			item.setStock(result.getInt("stock"));
@@ -75,52 +77,69 @@ public class ItemDao {
 		StringBuilder sqlBuilder = new StringBuilder();
 		sqlBuilder.append("select * from " + TABLE_NAME + " where 1");
 
-		Map likeList = new HashMap();
-		int count = 1;
+		Map likeList = new LinkedHashMap();
 		if (id != ConfigConstants.NULL_INT) {
 			sqlBuilder.append(" and id = ?");
-			likeList.put(count, id);
+			likeList.put("id", id);
 		}
 		if (name != null && name.length() > 0) {
 			sqlBuilder.append(" and name like ?");
-			likeList.put(count, name);
+			likeList.put("name", name);
 		}
 		if (category != null && category.length() > 0) {
 			// not "default"
 			if (!("0".equals(category))) {
 				sqlBuilder.append(" and category = ?");
-				likeList.put(count, category);
-				count++;
+				likeList.put("category", category);
 			}
 		}
 		if (from != null && from.length() > 0) {
 			if (to != null && to.length() > 0) {
 				// from & to
 				sqlBuilder.append(" and sales_period_from <= ? and sales_period_to >= ?");
-				statement.setString(count, to);
-				count++;
-				statement.setString(count, from);
-				count++;
+				likeList.put("to", to);
+				likeList.put("from", from);
 			} else {
 				// from
 				sqlBuilder.append(" and sales_period_to >= ?");
-				statement.setString(count, from);
-				count++;
+				likeList.put("from", from);
 			}
 		} else {
 			if (to != null && to.length() > 0) {
 				// to
 				sqlBuilder.append(" and sales_period_from <= ?");
-				statement.setString(count, to);
-				count++;
+				likeList.put("to", to);
 			} else {
 				// none
 			}
 		}
+		String sql = sqlBuilder.toString();
 		PreparedStatement statement = connection.prepareStatement(sql);
-
-		statement.setString(1, likeSql.toString());
-
+		Iterator iterator = likeList.keySet().iterator();
+		int count = 1;
+		while (iterator.hasNext()) {
+			String key = (String)iterator.next();
+			switch(key) {
+			case "id":
+				statement.setObject(count, likeList.get(key), Types.INTEGER);
+				break;
+			case "name":
+				statement.setObject(count, likeList.get(key), Types.VARCHAR);
+				break;
+			case "category":
+				statement.setObject(count, likeList.get(key), Types.VARCHAR);
+				break;
+			case "from":
+				statement.setObject(count, likeList.get(key), Types.DATE);
+				break;
+			case "to":
+				statement.setObject(count, likeList.get(key), Types.DATE);
+				break;
+			default:
+				break;
+			}
+			count++;
+		}
 		ResultSet result = statement.executeQuery();
 		List<Item> resultList = new ArrayList<Item>();
 		while (result.next()) {
@@ -129,7 +148,7 @@ public class ItemDao {
 			item.setName(result.getString("name"));
 			item.setPrice(result.getInt("price"));
 			item.setCategory(result.getString("category"));
-			item.setImageUrl(result.getString("image_url"));
+			item.setImageUrl(ConfigConstants.IMAGE_DIR_ITEM + result.getString("image_url"));
 			item.setExplanation(result.getString("explanation"));
 			item.setSalesPeriodFrom(result.getString("sales_period_from"));
 			item.setSalesPeriodTo(result.getString("sales_period_to"));
