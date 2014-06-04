@@ -1,12 +1,15 @@
 package com.nmnw.admin.validator;
 
 import java.util.*;
+
+import javax.servlet.http.Part;
+
 import com.nmnw.admin.constant.ValidatorConstants;
 
 public class Validator {
 	private static final String REQUIRED_SELECT = "0";
 	private static final String MATCH_NUMBER = "^[0-9]+$";
-	private static final String MATCH_DATE = "^[0-9]{4}[/-][01]?[0-9][/-][0123]?[0-9]$";
+	private static final String MATCH_DATE = "^[0-9]{4}[-][01]?[0-9][-][0123]?[0-9]$";
 	private List<String> _errorMassageList = new ArrayList<String>();
 
 	public boolean required(String value, String fieldName) {
@@ -29,6 +32,17 @@ public class Validator {
 		return hasError;
 	}
 
+	public boolean requiredImage(Part image, String fieldName) {
+		boolean hasError = false;
+		long minSize = 0;
+		if(image.getSize() == minSize) {
+			String message = getMessage(ValidatorConstants.MESSAGE_REQUIRED_IMAGE, fieldName);
+			addErrorMessageList(message);
+			hasError = true;
+		}
+		return hasError;
+	}
+
 	public boolean isInt(String value, String fieldName) {
 		boolean hasError = false;
 		if (!value.matches(MATCH_NUMBER)) {
@@ -41,12 +55,26 @@ public class Validator {
 
 	public boolean isDate(String value, String fieldName) {
 		boolean hasError = false;		
-		if (!value.matches(MATCH_DATE)) {
-			String message = getMessage(ValidatorConstants.MESSAGE_IS_DATE, fieldName);
-			addErrorMessageList(message);
-			hasError = true;
+		try {
+			if (!value.matches(MATCH_DATE)) {
+				throw new IllegalArgumentException();
+			} else {
+				String[] dateStrings = value.split("-");
+				int year = Integer.valueOf(dateStrings[0]);
+				int month = Integer.valueOf(dateStrings[1])-1;
+				int day = Integer.valueOf(dateStrings[2]);
+				Calendar cal = Calendar.getInstance();
+				cal.setLenient(false);
+				cal.set(year, month, day);
+				cal.getTime();
+				return hasError;
+			}
+		} catch (IllegalArgumentException e) {
+				String message = getMessage(ValidatorConstants.MESSAGE_IS_DATE, fieldName);
+				addErrorMessageList(message);
+				hasError = true;
+				return hasError;
 		}
-		return hasError;
 	}
 
 	public boolean maxSizeInt(int value, int maxSize, String fieldName) {
@@ -63,6 +91,16 @@ public class Validator {
 		boolean hasError = false;
 		if (value.length() > maxSize) {
 			String message = getMessage(ValidatorConstants.MESSAGE_MAXSIZE_STRING, fieldName, String.valueOf(maxSize));
+			addErrorMessageList(message);
+			hasError = true;
+		}
+		return hasError;
+	}
+
+	public boolean maxSizeImage(long imageSize, long maxSize, String fieldName) {
+		boolean hasError = false;
+		if (imageSize > maxSize) {
+			String message = getMessage(ValidatorConstants.MESSAGE_MAXSIZE_IMAGE, fieldName, String.valueOf(maxSize));
 			addErrorMessageList(message);
 			hasError = true;
 		}

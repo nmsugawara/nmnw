@@ -1,27 +1,29 @@
 package com.nmnw.admin.function.item.New;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
 import com.nmnw.admin.validator.ItemValidator;
+import com.nmnw.admin.Enum.ItemCategoryEnum;
+import com.nmnw.admin.constant.ConfigConstants;
 
 @WebServlet(name="admin/item/new", urlPatterns={"/admin/item/new"})
+@MultipartConfig(location = ConfigConstants.TMP_IMAGE_DIR)
 public class NewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String DIR_BASE = "/WEB-INF/admin/function/item/New/";
 
 	/**
 	 * Construct
@@ -36,11 +38,18 @@ public class NewServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		List<String> errorMessageList = new ArrayList<String>();
-		Map<String, String[]> map = request.getParameterMap();
+		Map<String, String[]> inputDataList = request.getParameterMap();
+		// get item category list
+		List<ItemCategoryEnum> itemCategoryList = new ArrayList<ItemCategoryEnum>(Arrays.asList(ItemCategoryEnum.values()));
+		request.setAttribute("itemCategoryList", itemCategoryList);
+		// get "action" parameter
 		String action = request.getParameter("action");
+		String page = ConfigConstants.JSP_DIR_ITEM_NEW + "New.jsp";
 		// new
 		if (!("new_end".equals(action))) {
-			String page = DIR_BASE + "New.jsp";
+			errorMessageList.add("");
+			request.setAttribute("errorMessageList", errorMessageList);
+			request.setAttribute("inputDataList", inputDataList);
 			request.getRequestDispatcher(page).forward(request, response);
 		} else {
 		// new end
@@ -53,13 +62,14 @@ public class NewServlet extends HttpServlet {
 			iv.checkSalesPeriodFrom(request.getParameter("item_sales_period_from"));
 			iv.checkSalesPeriodTo(request.getParameter("item_sales_period_to"));
 			iv.checkStock(request.getParameter("item_stock"));
+			Part image = request.getPart("item_image");
+			iv.checkImage(image);
 
 			errorMessageList = iv.getValidationList();
 			// has error: go back new page
 			if (errorMessageList.size() != 0) {
-				String page = DIR_BASE + "New.jsp";
 				request.setAttribute("errorMessageList", errorMessageList);
-				request.setAttribute("inputDataList", map);
+				request.setAttribute("inputDataList", inputDataList);
 				request.getRequestDispatcher(page).forward(request, response);
 			} else {
 				try {
@@ -67,22 +77,28 @@ public class NewServlet extends HttpServlet {
 					Item item = new Item();
 					item.setName(request.getParameter("item_name"));
 					item.setPrice(Integer.parseInt(request.getParameter("item_price")));
-					item.setCategory(Integer.parseInt(request.getParameter("item_category")));
+					item.setCategory(request.getParameter("item_category"));
 					item.setExplanation(request.getParameter("item_explanation"));
 					item.setSalesPeriodFrom(request.getParameter("item_sales_period_from"));
 					item.setSalesPeriodTo(request.getParameter("item_sales_period_to"));
 					item.setStock(Integer.parseInt(request.getParameter("item_stock")));
-					item.setImageUrl("http://yahoo.co.jp");
-				
+					String newImageFileName = getNewImageFileName(image);
+					image.write(ConfigConstants.STORED_IMAGE_DIR_ITEM + newImageFileName);
+					item.setImageUrl(newImageFileName);
+
 					ItemDao itemdao = new ItemDao();
 					String itemId = String.valueOf(itemdao.insert(item));
-					String url = "http://localhost:8080/nmnw/admin/item/detail?item_id=" + itemId + "&action=new_end";
+					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ITEM_DETAIL + "?item_id=" + itemId + "&action=new_end";
 					response.sendRedirect(url);
-				} catch (SQLException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println("error");
-				} catch (ClassNotFoundException ex) {
-					ex.printStackTrace();
+					String exceptionMessage = e.getStackTrace().toString();
+					String exceptionCause = e.getCause().toString();
+					HttpSession session = request.getSession();
+					session.setAttribute("exceptionMessage", exceptionMessage);
+					session.setAttribute("exceptionCause", exceptionCause);
+					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ERROR;
+					response.sendRedirect(url);
 				}
 			}
 		}
@@ -93,13 +109,25 @@ public class NewServlet extends HttpServlet {
 			throws IOException, ServletException {
 		doGet(request, response);
 	}
-	
-	protected Image loadImage (File f) {
-		try {
-			BufferedImage img = ImageIO.read(f);
-			return img;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+
+	protected String getNewImageFileName (Part image) {
+		String newFileName = "";
+		String contentDispotision = image.getHeader("Content-Disposition");
+		String[] contentDispotisions = contentDispotision.split(";");
+		for (String cd : contentDispotisions) {
+			if (cd.trim().startsWith("filename")) {
+				// generate file name
+				String filePath = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+				int lastSeparatorIndex = filePath.lastIndexOf(File.separator);
+				String oldFileName = filePath.substring(lastSeparatorIndex + 1);
+				String[] oldFileString = oldFileName.split("\\.");
+				String oldFileExtension = oldFileString[oldFileString.length - 1];
+				Calendar cal = Calendar.getInstance();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
+				newFileName = "image" + sdf.format(cal.getTime()) + "." + oldFileExtension;
+				return newFileName;
+			}
 		}
+		throw new IllegalStateException();
 	}
 }

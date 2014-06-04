@@ -1,4 +1,4 @@
-package com.nmnw.admin.function.error;
+	package com.nmnw.admin.function.error;
 
 import java.io.IOException;
 
@@ -7,11 +7,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.nmnw.admin.constant.ConfigConstants;
 
 @WebServlet(name="admin/error/error", urlPatterns={"/admin/error/error"})
 public class ErrorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String DIR_BASE = "/WEB-INF/admin/function/error/";
 
 	/**
 	 * Construct
@@ -25,8 +27,10 @@ public class ErrorServlet extends HttpServlet {
 			throws IOException, ServletException {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
-		String page = DIR_BASE + "Error.jsp";
-		request.setAttribute("errorMessage", (String)request.getAttribute("errorMessage"));
+		String page = ConfigConstants.JSP_DIR_ERROR + "Error.jsp";
+		HttpSession session = request.getSession();
+		request.setAttribute("exceptionMessage", (String)session.getAttribute("exceptionMessage"));
+		request.setAttribute("exceptionCause", (String)session.getAttribute("exceptionCause"));
 		request.getRequestDispatcher(page).forward(request, response);
 	}
 

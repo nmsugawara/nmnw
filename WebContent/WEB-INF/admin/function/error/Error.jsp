@@ -2,7 +2,8 @@
     pageEncoding="UTF-8"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String errorMessage = (String)request.getAttribute("errorMessage");
+	String exceptionMessage = (String)request.getAttribute("exceptionMessage");
+	String exceptionCause = (String)request.getAttribute("exceptionCause");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -13,11 +14,17 @@
 <body>
 エラーが発生しました。<br>
 下記メッセージを元にシステム管理者に問い合わせてください。<br>
-<table>
+<p>
+<table border=1>
 	<tr>
 		<td>メッセージ</td>
-		<td><%= errorMessage %></td>
+		<td><%= exceptionMessage %></td>
+	</tr>
+	<tr>
+		<td>原因</td>
+		<td><%= exceptionCause %></td>
 	</tr>
 </table>
+</p>
 </body>
 </html>

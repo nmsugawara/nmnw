@@ -3,10 +3,10 @@ import com.nmnw.admin.utility.HtmlHelper;
 
 public class Item {
 
-	private Integer _id;
+	private int _id;
 	private String _name = "";
-	private Integer _price;
-	private int _category;
+	private int _price;
+	private String _category = "";
 	private String _imageUrl = "";
 	private String _explanation = "";
 	private String _salesPeriodFrom = "";
@@ -49,11 +49,11 @@ public class Item {
 		return _price;
 	}
 
-	public void setCategory(int category) {
+	public void setCategory(String category) {
 		_category = category;
 	}
 
-	public int getCategory() {
+	public String getCategory() {
 		return _category;
 	}
 

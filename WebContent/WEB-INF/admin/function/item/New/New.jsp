@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
+<%@ page import="com.nmnw.admin.Enum.ItemCategoryEnum"%>
 <%
 	request.setCharacterEncoding("UTF-8");
+	List<ItemCategoryEnum> itemCategoryList = (List<ItemCategoryEnum>)request.getAttribute("itemCategoryList");
 	List<String> errorMessageList = (List<String>)request.getAttribute("errorMessageList");
 	Map<String, String[]> inputDataList = (Map<String, String[]>)request.getAttribute("inputDataList");
 %>
@@ -27,7 +29,7 @@
 %>
 	</font>
 </p>
-<form method="post" action="new">
+<form method="post" action="new?action=new_end" enctype="multipart/form-data">
 	<table>
 		<tr>
 			<th>商品名</th>
@@ -41,12 +43,15 @@
 			<th>ジャンル</th>
 			<td>
 				<select name="item_category">
-					<option value="0">選択してください</option>
-					<option value="1">邦楽POP</option>
-					<option value="2">邦楽HIP-HOP</option>
-					<option value="3">邦楽レゲエ</option>
-					<option value="4">邦楽リミックス</option>
-					<option value="99">その他</option>					
+<% for(int i=0; i < itemCategoryList.size(); i++) {%>
+	<option value="<%= itemCategoryList.get(i).getCategoryCode()%>"
+	<% if(!inputDataList.isEmpty()) {
+			if (inputDataList.get("item_category")[0].equals(itemCategoryList.get(i).getCategoryCode())) {
+					out.println(" selected='selected'");
+			}
+		}
+	%>><%= itemCategoryList.get(i).name()%></option>
+<%} %>
 				</select>
 			</td>
 		</tr>
@@ -60,11 +65,11 @@
 		</tr>
 		<tr>
 			<th>販売開始日</th>
-			<td><input type="text" name="item_sales_period_from" size="10" value="${inputDataList.get('item_sales_period_from')[0]}"></td>
+			<td><input type="text" name="item_sales_period_from" size="20" value="${inputDataList.get('item_sales_period_from')[0]}"></td>
 		</tr>
 		<tr>
 			<th>販売終了日</th>
-			<td><input type="text" name="item_sales_period_to" size="10" value="${inputDataList.get('item_sales_period_to')[0]}"></td>
+			<td><input type="text" name="item_sales_period_to" size="20" value="${inputDataList.get('item_sales_period_to')[0]}"></td>
 		</tr>
 		<tr>
 			<th>在庫数</th>

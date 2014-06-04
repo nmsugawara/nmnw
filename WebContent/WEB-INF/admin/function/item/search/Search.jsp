@@ -1,8 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>
+<%@ page import="com.nmnw.admin.Enum.ItemCategoryEnum"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 	String action = (String)request.getParameter("action");
+	List<ItemCategoryEnum> itemCategoryList = (List<ItemCategoryEnum>)request.getAttribute("itemCategoryList");
+	Map<String, String[]> inputDataList = (Map<String, String[]>)request.getAttribute("inputDataList");
+	String actionParam = "";
+	if (inputDataList.containsKey("action")) {
+		actionParam = inputDataList.get("action")[0];
+	}
+
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -12,51 +21,58 @@
 </head>
 <body>
 <div id="search_table">
-<form method="post" action="search">
+<form method="post" action="search?action=search">
 	<table border=1>
 		<tr>
 			<th colspan="2">検索</th>
 		</tr>
 		<tr>
 			<th>商品ID</th>
-			<td><input type="text" name="search_item_id"></td>
+			<td><input type="text" name="search_item_id" value="<%
+			if ("search".equals(actionParam)) {
+				out.print(inputDataList.get("search_item_id")[0]);
+			} %>"></td>
 		</tr>
 		<tr>
 			<th>商品名</th>
-			<td><input type="text" name="search_item_name"></td>
-		</tr>
-		<tr>
-			<th>商品単価</th>
-			<td><input type="text" name="search_item_price">円</td>
+			<td><input type="text" name="search_item_name" value="<%
+			if ("search".equals(actionParam)) {
+				out.print(inputDataList.get("search_item_name")[0]);
+			} %>"></td>
 		</tr>
 		<tr>
 			<th>ジャンル</th>
 			<td>
 				<select name="search_item_category">
-					<option value="0">選択してください</option>
-					<option value="1">邦楽POP</option>
-					<option value="2">邦楽HIP-HOP</option>
-					<option value="3">邦楽レゲエ</option>
-					<option value="4">邦楽リミックス</option>
-					<option value="99">その他</option>					
+<% for(int i=0; i < itemCategoryList.size(); i++) {
+		out.print("<option value='" + itemCategoryList.get(i).getCategoryCode() + "'");
+		if("search".equals(actionParam)) {
+			if (inputDataList.get("search_item_category")[0].equals(itemCategoryList.get(i).getCategoryCode())) {
+				out.print(" selected='selected'");
+			}
+		}
+		out.println(">" + itemCategoryList.get(i).name() + "</option>");
+	}
+%>
 				</select>
 			</td>
 		</tr>
 		<tr>
 			<th>販売開始日</th>
-			<td><input type="text" name="search_item_sales_period_from"></td>
+			<td><input type="text" name="search_item_sales_period_from" value="<%
+			if ("search".equals(actionParam)) {
+				out.print(inputDataList.get("search_item_sales_period_from")[0]);
+			} %>"></td>
 		</tr>
 		<tr>
 			<th>販売終了日</th>
-			<td><input type="text" name="search_item_sales_period_to"></td>
-		</tr>
-		<tr>
-			<th>在庫数</th>
-			<td><input type="text" name="search_item_stock"></td>
+			<td><input type="text" name="search_item_sales_period_to" value="<%
+			if ("search".equals(actionParam)) {
+				out.print(inputDataList.get("search_item_sales_period_to")[0]);
+			} %>"></td>
 		</tr>
 		<tr>
 			<td colspan="2">
-				<input type="hidden" name="action" value="search">
 				<input type="submit" value="検索">
 			</td>
 		</tr>
@@ -68,6 +84,7 @@
 		<tr>
 			<th>商品ID</th>
 			<th>商品名</th>
+			<th>商品画像</th>
 			<th>商品単価</th>
 			<th>ジャンル</th>
 			<th>販売開始日</th>
