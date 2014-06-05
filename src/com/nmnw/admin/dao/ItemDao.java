@@ -46,6 +46,13 @@ public class ItemDao {
 		return resultList;
 	}
 
+	/**
+	 * select(item_id指定)
+	 * @param id
+	 * @return Item
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public Item selectByItemId(int id)
 			throws ClassNotFoundException, SQLException {
 		Connection connection = DdConnector.getConnection();
@@ -60,6 +67,7 @@ public class ItemDao {
 			item.setPrice(result.getInt("price"));
 			item.setCategory(result.getString("category"));
 			item.setImageUrl(ConfigConstants.IMAGE_DIR_ITEM + result.getString("image_url"));
+			item.setExplanation(result.getString("explanation"));
 			item.setSalesPeriodFrom(result.getString("sales_period_from"));
 			item.setSalesPeriodTo(result.getString("sales_period_to"));
 			item.setStock(result.getInt("stock"));
@@ -70,73 +78,94 @@ public class ItemDao {
 		return item;
 	}
 
+	/**
+	 * select（検索機能）
+	 * @param id
+	 * @param name
+	 * @param category
+	 * @param from
+	 * @param to
+	 * @return List
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public List<Item> selectBySearch(int id, String name, String category, String from, String to)
 			throws ClassNotFoundException, SQLException {
 		Connection connection = DdConnector.getConnection();
 
 		StringBuilder sqlBuilder = new StringBuilder();
-		sqlBuilder.append("select * from " + TABLE_NAME + " where 1");
+		sqlBuilder.append("select * from " + TABLE_NAME);
 
-		Map likeList = new LinkedHashMap();
+		StringBuilder whereBuilder = new StringBuilder();
+		Map<String, List<Object>> likeList = new LinkedHashMap<String, List<Object>>();
 		if (id != ConfigConstants.NULL_INT) {
-			sqlBuilder.append(" and id = ?");
-			likeList.put("id", id);
+			whereBuilder.append(" and id = ?");
+			likeList.put("id", new ArrayList<Object>());
+			likeList.get("id").add("int");
+			likeList.get("id").add(id);
 		}
 		if (name != null && name.length() > 0) {
-			sqlBuilder.append(" and name like ?");
-			likeList.put("name", name);
+			whereBuilder.append(" and name like ?");
+			likeList.put("name", new ArrayList<Object>());
+			likeList.get("name").add("String");
+			likeList.get("name").add("%" + name + "%");
 		}
 		if (category != null && category.length() > 0) {
 			// not "default"
 			if (!("0".equals(category))) {
-				sqlBuilder.append(" and category = ?");
-				likeList.put("category", category);
+				whereBuilder.append(" and category = ?");
+				likeList.put("category", new ArrayList<Object>());
+				likeList.get("category").add("String");
+				likeList.get("category").add(category);
 			}
 		}
 		if (from != null && from.length() > 0) {
 			if (to != null && to.length() > 0) {
 				// from & to
-				sqlBuilder.append(" and sales_period_from <= ? and sales_period_to >= ?");
-				likeList.put("to", to);
-				likeList.put("from", from);
+				whereBuilder.append(" and sales_period_from <= ? and sales_period_to >= ?");
+				likeList.put("from", new ArrayList<Object>());
+				likeList.get("from").add("String");
+				likeList.get("from").add(from);
+				likeList.put("to", new ArrayList<Object>());
+				likeList.get("to").add("String");
+				likeList.get("to").add(to);
 			} else {
 				// from
-				sqlBuilder.append(" and sales_period_to >= ?");
-				likeList.put("from", from);
+				whereBuilder.append(" and sales_period_to >= ?");
+				likeList.put("from", new ArrayList<Object>());
+				likeList.get("from").add("String");
+				likeList.get("from").add(from);
 			}
 		} else {
 			if (to != null && to.length() > 0) {
 				// to
-				sqlBuilder.append(" and sales_period_from <= ?");
-				likeList.put("to", to);
+				whereBuilder.append(" and sales_period_from <= ?");
+				likeList.put("to", new ArrayList<Object>());
+				likeList.get("to").add("String");
+				likeList.get("to").add(to);
 			} else {
 				// none
 			}
 		}
+
+		if (whereBuilder.length() != 0) {
+			String where = whereBuilder.toString();
+			int deleteIndex = where.indexOf("and");
+			where = where.substring(deleteIndex+"and".length());
+			sqlBuilder.append(" where" + where);
+		}
+
 		String sql = sqlBuilder.toString();
 		PreparedStatement statement = connection.prepareStatement(sql);
 		Iterator iterator = likeList.keySet().iterator();
 		int count = 1;
 		while (iterator.hasNext()) {
 			String key = (String)iterator.next();
-			switch(key) {
-			case "id":
-				statement.setObject(count, likeList.get(key), Types.INTEGER);
-				break;
-			case "name":
-				statement.setObject(count, likeList.get(key), Types.VARCHAR);
-				break;
-			case "category":
-				statement.setObject(count, likeList.get(key), Types.VARCHAR);
-				break;
-			case "from":
-				statement.setObject(count, likeList.get(key), Types.DATE);
-				break;
-			case "to":
-				statement.setObject(count, likeList.get(key), Types.DATE);
-				break;
-			default:
-				break;
+			String type = (String)likeList.get(key).get(0);
+			if ("int".equals(type)) {
+				statement.setInt(count, (Integer)likeList.get(key).get(1));
+			} else if ("String".equals(type)) {
+				statement.setString(count, (String)likeList.get(key).get(1));
 			}
 			count++;
 		}
@@ -149,7 +178,6 @@ public class ItemDao {
 			item.setPrice(result.getInt("price"));
 			item.setCategory(result.getString("category"));
 			item.setImageUrl(ConfigConstants.IMAGE_DIR_ITEM + result.getString("image_url"));
-			item.setExplanation(result.getString("explanation"));
 			item.setSalesPeriodFrom(result.getString("sales_period_from"));
 			item.setSalesPeriodTo(result.getString("sales_period_to"));
 			item.setStock(result.getInt("stock"));
@@ -189,6 +217,13 @@ public class ItemDao {
 		return id;
 	}
 
+	/**
+	 * update
+	 * @param item
+	 * @return id
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public int update (Item item)
 			throws ClassNotFoundException, SQLException {
 			Connection connection = DdConnector.getConnection();

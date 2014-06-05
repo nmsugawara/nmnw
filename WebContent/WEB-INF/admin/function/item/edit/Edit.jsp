@@ -56,11 +56,14 @@
 				<select name="item_category">
 <% for(int i=0; i < itemCategoryList.size(); i++) {
 		out.print("<option value='" + itemCategoryList.get(i).getCategoryCode() + "'");
+		String selectedCateory = "";
 		if("edit_end".equals(actionParam)) {
-			if (inputDataList.get("item_category")[0].equals(itemCategoryList.get(i).getCategoryCode()) ||
-					result.getCategory().equals(itemCategoryList.get(i).getCategoryCode())) {
-				out.print(" selected='selected'");
-			}
+			selectedCateory= inputDataList.get("item_category")[0];
+		} else {
+			selectedCateory= result.getCategory();
+		}
+		if (selectedCateory.equals(itemCategoryList.get(i).getCategoryCode())) {
+			out.print(" selected='selected'");
 		}
 		out.println(">" + itemCategoryList.get(i).name() + "</option>");
 	}

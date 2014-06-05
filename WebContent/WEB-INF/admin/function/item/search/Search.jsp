@@ -5,7 +5,6 @@
 <%@ page import="com.nmnw.admin.Enum.ItemCategoryEnum"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String action = (String)request.getParameter("action");
 	List<ItemCategoryEnum> itemCategoryList = (List<ItemCategoryEnum>)request.getAttribute("itemCategoryList");
 	List<String> errorMessageList = (List<String>)request.getAttribute("errorMessageList");
 	Map<String, String[]> inputDataList = (Map<String, String[]>)request.getAttribute("inputDataList");
@@ -23,65 +22,78 @@
 <title>No Music No Work | 商品検索</title>
 </head>
 <body>
-<div id="search_table">
-<form method="post" action="search?action=search">
-	<table border=1>
-		<tr>
-			<th colspan="2">検索</th>
-		</tr>
-		<tr>
-			<th>商品ID</th>
-			<td><input type="text" name="search_item_id" value="<%
-			if ("search".equals(actionParam)) {
-				out.print(inputDataList.get("search_item_id")[0]);
-			} %>"></td>
-		</tr>
-		<tr>
-			<th>商品名</th>
-			<td><input type="text" name="search_item_name" value="<%
-			if ("search".equals(actionParam)) {
-				out.print(inputDataList.get("search_item_name")[0]);
-			} %>"></td>
-		</tr>
-		<tr>
-			<th>ジャンル</th>
-			<td>
-				<select name="search_item_category">
-<% for(int i=0; i < itemCategoryList.size(); i++) {
-		out.print("<option value='" + itemCategoryList.get(i).getCategoryCode() + "'");
-		if("search".equals(actionParam)) {
-			if (inputDataList.get("search_item_category")[0].equals(itemCategoryList.get(i).getCategoryCode())) {
-				out.print(" selected='selected'");
+<table>
+<tr>
+<td>
+	<div id="sub_menu">
+		<ul>
+			<li><a href="new">新規商品登録</a></li>
+		</ul>
+	</div>
+</td>
+<td>
+	<div id="search_table">
+	<form method="post" action="search?action=search">
+		<table border=1>
+			<tr>
+				<th colspan="2">検索</th>
+			</tr>
+			<tr>
+				<th>商品ID</th>
+				<td><input type="text" name="search_item_id" value="<%
+				if ("search".equals(actionParam)) {
+					out.print(inputDataList.get("search_item_id")[0]);
+				} %>"></td>
+			</tr>
+			<tr>
+				<th>商品名</th>
+				<td><input type="text" name="search_item_name" value="<%
+				if ("search".equals(actionParam)) {
+					out.print(inputDataList.get("search_item_name")[0]);
+				} %>"></td>
+			</tr>
+			<tr>
+				<th>ジャンル</th>
+				<td>
+					<select name="search_item_category">
+	<% for(int i=0; i < itemCategoryList.size(); i++) {
+			out.print("<option value='" + itemCategoryList.get(i).getCategoryCode() + "'");
+			if("search".equals(actionParam)) {
+				if (inputDataList.get("search_item_category")[0].equals(itemCategoryList.get(i).getCategoryCode())) {
+					out.print(" selected='selected'");
+				}
 			}
+			out.println(">" + itemCategoryList.get(i).name() + "</option>");
 		}
-		out.println(">" + itemCategoryList.get(i).name() + "</option>");
-	}
-%>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<th>販売開始日</th>
-			<td><input type="text" name="search_item_sales_period_from" value="<%
-			if ("search".equals(actionParam)) {
-				out.print(inputDataList.get("search_item_sales_period_from")[0]);
-			} %>"></td>
-		</tr>
-		<tr>
-			<th>販売終了日</th>
-			<td><input type="text" name="search_item_sales_period_to" value="<%
-			if ("search".equals(actionParam)) {
-				out.print(inputDataList.get("search_item_sales_period_to")[0]);
-			} %>"></td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<input type="submit" value="検索">
-			</td>
-		</tr>
-	</table>
-</form>
-</div>
+	%>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>販売開始日</th>
+				<td><input type="text" name="search_item_sales_period_from" value="<%
+				if ("search".equals(actionParam)) {
+					out.print(inputDataList.get("search_item_sales_period_from")[0]);
+				} %>"></td>
+			</tr>
+			<tr>
+				<th>販売終了日</th>
+				<td><input type="text" name="search_item_sales_period_to" value="<%
+				if ("search".equals(actionParam)) {
+					out.print(inputDataList.get("search_item_sales_period_to")[0]);
+				} %>"></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="submit" value="検索">
+				</td>
+			</tr>
+		</table>
+	</form>
+	</div>
+</td>
+</tr>
+</table>
 <div id="data_table">
 	<table border=1>
 		<tr>
@@ -95,17 +107,19 @@
 			<th>在庫数</th>
 		</tr>
 <%
-for(int i = 0; i < resultList.size(); i++) {
-	out.println("<tr>");
-	out.println("<td><a href=\"detail?item_id=" + String.valueOf(resultList.get(i).getId()) + "\">" + String.valueOf(resultList.get(i).getId()) + "</td>");
-	out.println("<td>" + resultList.get(i).getName() + "</td>");
-	out.println("<td><img src='" + resultList.get(i).getImageUrl() + "' width='50' height='50'></td>");
-	out.println("<td>" + resultList.get(i).getPrice() + "</td>");
-	out.println("<td>" + resultList.get(i).getCategory() + "</td>");
-	out.println("<td>" + resultList.get(i).getSalesPeriodFrom() + "</td>");
-	out.println("<td>" + resultList.get(i).getSalesPeriodTo() + "</td>");
-	out.println("<td>" + resultList.get(i).getStock() + "</td>");
-	out.println("</tr>");
+if ("search".equals(actionParam)) {
+	for(int i = 0; i < resultList.size(); i++) {
+		out.println("<tr>");
+		out.println("<td><a href=\"detail?item_id=" + String.valueOf(resultList.get(i).getId()) + "\">" + String.valueOf(resultList.get(i).getId()) + "</td>");
+		out.println("<td>" + resultList.get(i).getName() + "</td>");
+		out.println("<td><img src='" + resultList.get(i).getImageUrl() + "' width='50' height='50'></td>");
+		out.println("<td>" + resultList.get(i).getPrice() + "</td>");
+		out.println("<td>" + resultList.get(i).getCategory() + "</td>");
+		out.println("<td>" + resultList.get(i).getSalesPeriodFrom() + "</td>");
+		out.println("<td>" + resultList.get(i).getSalesPeriodTo() + "</td>");
+		out.println("<td>" + resultList.get(i).getStock() + "</td>");
+		out.println("</tr>");
+	}
 }
 %>
 	</table>

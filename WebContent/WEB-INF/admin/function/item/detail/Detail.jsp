@@ -62,5 +62,10 @@
 	</table>
 </form>
 </div>
+<%
+if("new_end".equals(action) || "edit_end".equals(action)) {
+	out.println("<a href=\"search\">商品管理TOPへ</a>");
+}
+%>
 </body>
 </html>

@@ -21,6 +21,7 @@ import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
 import com.nmnw.admin.validator.ItemValidator;
+import com.nmnw.admin.utility.RequestParameterHelper;
 
 @WebServlet(name="admin/item/search", urlPatterns={"/admin/item/search"})
 public class SearchServlet extends HttpServlet {
@@ -45,17 +46,17 @@ public class SearchServlet extends HttpServlet {
 		request.setAttribute("itemCategoryList", itemCategoryList);
 		String action = request.getParameter("action");
 		String page = ConfigConstants.JSP_DIR_ITEM_SEARCH + "Search.jsp";
-
+		RequestParameterHelper rph = new RequestParameterHelper();
 		if ("search".equals(action)) {
 			// validation
 			ItemValidator iv = new ItemValidator();
-			if (!isEmptyParam(request.getParameter("search_item_id"))) {
+			if (!rph.isEmptyParam(request.getParameter("search_item_id"))) {
 				iv.checkSearchId(request.getParameter("search_item_id"));
 			}
-			if (!isEmptyParam(request.getParameter("search_item_sales_period_from"))) {
+			if (!rph.isEmptyParam(request.getParameter("search_item_sales_period_from"))) {
 				iv.checkSearchDateFrom(request.getParameter("search_item_sales_period_from"));
 			}
-			if (!isEmptyParam(request.getParameter("search_item_sales_period_to"))) {
+			if (!rph.isEmptyParam(request.getParameter("search_item_sales_period_to"))) {
 				iv.checkSearchDateTo(request.getParameter("search_item_sales_period_to"));
 			}
 
@@ -73,19 +74,19 @@ public class SearchServlet extends HttpServlet {
 					String searchDateFrom = "";
 					String searchDateTo = "";
 					// parameter
-					if (!isEmptyParam(request.getParameter("search_item_id"))) {
+					if (!rph.isEmptyParam(request.getParameter("search_item_id"))) {
 						searchId = (Integer.parseInt(request.getParameter("search_item_id")));
 					}
-					if (!isEmptyParam(request.getParameter("search_item_name"))) {
+					if (!rph.isEmptyParam(request.getParameter("search_item_name"))) {
 						searchName = request.getParameter("search_item_name");
 					}
-					if (!isEmptyParam(request.getParameter("search_item_category"))) {
+					if (!rph.isEmptyParam(request.getParameter("search_item_category"))) {
 						searchCategory = request.getParameter("search_item_category");
 					}
-					if (!isEmptyParam(request.getParameter("search_item_sales_period_from"))) {
+					if (!rph.isEmptyParam(request.getParameter("search_item_sales_period_from"))) {
 						searchDateFrom = request.getParameter("search_item_sales_period_from");
 					}
-					if (!isEmptyParam(request.getParameter("search_item_sales_period_to"))) {
+					if (!rph.isEmptyParam(request.getParameter("search_item_sales_period_to"))) {
 						searchDateTo = request.getParameter("search_item_sales_period_to");
 					}
 					ItemDao itemdao = new ItemDao();
