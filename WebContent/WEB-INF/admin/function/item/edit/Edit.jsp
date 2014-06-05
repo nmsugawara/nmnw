@@ -6,7 +6,7 @@
 <%@ page import="com.nmnw.admin.constant.ConfigConstants"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	List<ItemCategoryEnum> itemCategoryList = (List<ItemCategoryEnum>)request.getAttribute("itemCategoryList");
+	List<ItemCategoryEnum> itemCategoryList = new ArrayList<ItemCategoryEnum>(Arrays.asList(ItemCategoryEnum.values()));
 	List<String> errorMessageList = (List<String>)request.getAttribute("errorMessageList");
 	Map<String, String[]> inputDataList = (Map<String, String[]>)request.getAttribute("inputDataList");
 	Item result = (Item)request.getAttribute("result");

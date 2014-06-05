@@ -12,9 +12,11 @@ public enum ItemCategoryEnum {
 	‚»‚Ì‘¼("99");
 
 	private final String code;
+
 	ItemCategoryEnum(String code) {
 		this.code = code;
 	}
+
 	public String getCategoryCode() {
 		return code;
 	}

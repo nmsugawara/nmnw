@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import com.nmnw.admin.Enum.ItemCategoryEnum;
 import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
@@ -41,9 +40,6 @@ public class SearchServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		List<String> errorMessageList = new ArrayList<String>();
 		Map<String, String[]> inputDataList = request.getParameterMap();
-		// get item category list
-		List<ItemCategoryEnum> itemCategoryList = new ArrayList<ItemCategoryEnum>(Arrays.asList(ItemCategoryEnum.values()));
-		request.setAttribute("itemCategoryList", itemCategoryList);
 		String action = request.getParameter("action");
 		String page = ConfigConstants.JSP_DIR_ITEM_SEARCH + "Search.jsp";
 		if ("search".equals(action)) {

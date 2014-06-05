@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>
 <%@ page import="com.nmnw.admin.Enum.ItemCategoryEnum"%>
 <%@ page import="com.nmnw.admin.constant.ConfigConstants"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 	String action = (String)request.getParameter("action");
+	List<ItemCategoryEnum> itemCategoryList = new ArrayList<ItemCategoryEnum>(Arrays.asList(ItemCategoryEnum.values()));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -18,7 +20,7 @@
 </p>
 <div id="data_table">
 <form method="post" action="edit?item_id=${result.getId()}&action=edit"  enctype="multipart/form-data">
-	<table border=1>
+	<table border=1 width="700">
 		<tr>
 			<th>商品名</th>
 			<td><input type="hidden" name="item_name" value="${result.getName()}">${result.getName()}</td>

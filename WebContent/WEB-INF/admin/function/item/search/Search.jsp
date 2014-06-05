@@ -6,7 +6,7 @@
 <%@ page import="com.nmnw.admin.constant.ConfigConstants"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	List<ItemCategoryEnum> itemCategoryList = (List<ItemCategoryEnum>)request.getAttribute("itemCategoryList");
+	List<ItemCategoryEnum> itemCategoryList = new ArrayList<ItemCategoryEnum>(Arrays.asList(ItemCategoryEnum.values()));
 	List<String> errorMessageList = (List<String>)request.getAttribute("errorMessageList");
 	Map<String, String[]> inputDataList = (Map<String, String[]>)request.getAttribute("inputDataList");
 	List<Item> resultList = (List<Item>)request.getAttribute("result");
@@ -114,7 +114,7 @@ if ("search".equals(actionParam)) {
 		out.println("<td><a href=\"detail?item_id=" + String.valueOf(resultList.get(i).getId()) + "\">" + String.valueOf(resultList.get(i).getId()) + "</td>");
 		out.println("<td>" + resultList.get(i).getName() + "</td>");
 		out.println("<td><img src='" + ConfigConstants.IMAGE_DIR_ITEM + resultList.get(i).getImageUrl() + "' width='50' height='50'></td>");
-		out.println("<td>" + resultList.get(i).getPrice() + "</td>");
+		out.println("<td>￥" + resultList.get(i).getPrice() + "</td>");
 		out.println("<td>" + resultList.get(i).getCategory() + "</td>");
 		out.println("<td>" + resultList.get(i).getSalesPeriodFrom() + "</td>");
 		out.println("<td>" + resultList.get(i).getSalesPeriodTo() + "</td>");

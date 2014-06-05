@@ -16,7 +16,6 @@ import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
 import com.nmnw.admin.utility.FileUtility;
 import com.nmnw.admin.validator.ItemValidator;
-import com.nmnw.admin.Enum.ItemCategoryEnum;
 import com.nmnw.admin.constant.ConfigConstants;
 
 @WebServlet(name="admin/item/new", urlPatterns={"/admin/item/new"})
@@ -38,9 +37,6 @@ public class NewServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		List<String> errorMessageList = new ArrayList<String>();
 		Map<String, String[]> inputDataList = request.getParameterMap();
-		// get item category list
-		List<ItemCategoryEnum> itemCategoryList = new ArrayList<ItemCategoryEnum>(Arrays.asList(ItemCategoryEnum.values()));
-		request.setAttribute("itemCategoryList", itemCategoryList);
 		// get "action" parameter
 		String action = request.getParameter("action");
 		String page = ConfigConstants.JSP_DIR_ITEM_NEW + "New.jsp";
