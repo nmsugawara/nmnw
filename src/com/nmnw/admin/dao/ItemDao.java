@@ -1,13 +1,10 @@
 package com.nmnw.admin.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -120,7 +117,7 @@ public class ItemDao {
 				// none
 			}
 		}
-
+		// ïsóvÇ»andÇÃèúãéÅAwhereãÂÇÃí«â¡
 		if (whereBuilder.length() != 0) {
 			String where = whereBuilder.toString();
 			int deleteIndex = where.indexOf("and");
@@ -162,6 +159,13 @@ public class ItemDao {
 		return resultList;
 	}
 
+	/**
+	 * insert
+	 * @param item
+	 * @return auto_increment_id
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public int insert (Item item)
 		throws ClassNotFoundException, SQLException {
 		Connection connection = DdConnector.getConnection();

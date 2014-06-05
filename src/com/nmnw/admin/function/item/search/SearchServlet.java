@@ -1,10 +1,7 @@
 package com.nmnw.admin.function.item.search;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
 import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.dao.Item;
@@ -45,18 +41,18 @@ public class SearchServlet extends HttpServlet {
 		if ("search".equals(action)) {
 			// validation
 			ItemValidator iv = new ItemValidator();
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_item_id"))) {
-				iv.checkSearchId(request.getParameter("search_item_id"));
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_id"))) {
+				iv.checkSearchId(request.getParameter("search_id"));
 			}
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_item_sales_period_from"))) {
-				iv.checkSearchDateFrom(request.getParameter("search_item_sales_period_from"));
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_from"))) {
+				iv.checkSearchDateFrom(request.getParameter("search_sales_period_from"));
 			}
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_item_sales_period_to"))) {
-				iv.checkSearchDateTo(request.getParameter("search_item_sales_period_to"));
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_to"))) {
+				iv.checkSearchDateTo(request.getParameter("search_sales_period_to"));
 			}
 
 			errorMessageList = iv.getValidationList();
-			// has error: go back new page
+			// has error: go back search page
 			if (errorMessageList.size() != 0) {
 				request.setAttribute("errorMessageList", errorMessageList);
 				request.setAttribute("inputDataList", inputDataList);
@@ -69,20 +65,20 @@ public class SearchServlet extends HttpServlet {
 					String searchDateFrom = "";
 					String searchDateTo = "";
 					// parameter
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_item_id"))) {
-						searchId = (Integer.parseInt(request.getParameter("search_item_id")));
+					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_id"))) {
+						searchId = (Integer.parseInt(request.getParameter("search_id")));
 					}
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_item_name"))) {
-						searchName = request.getParameter("search_item_name");
+					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_name"))) {
+						searchName = request.getParameter("search_name");
 					}
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_item_category"))) {
-						searchCategory = request.getParameter("search_item_category");
+					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_category"))) {
+						searchCategory = request.getParameter("search_category");
 					}
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_item_sales_period_from"))) {
-						searchDateFrom = request.getParameter("search_item_sales_period_from");
+					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_from"))) {
+						searchDateFrom = request.getParameter("search_sales_period_from");
 					}
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_item_sales_period_to"))) {
-						searchDateTo = request.getParameter("search_item_sales_period_to");
+					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_to"))) {
+						searchDateTo = request.getParameter("search_sales_period_to");
 					}
 					ItemDao itemdao = new ItemDao();
 					List<Item> itemList = itemdao.selectBySearch(searchId, searchName, searchCategory, searchDateFrom, searchDateTo);
@@ -113,13 +109,5 @@ public class SearchServlet extends HttpServlet {
 	protected void doPost (HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		doGet(request, response);
-	}
-
-	protected boolean isEmptyParam (String value) {
-		boolean status = false;
-		if(value == null || value.length() == 0) {
-			status = true;
-		}
-		return status;
 	}
 }

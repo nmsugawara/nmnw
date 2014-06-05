@@ -45,26 +45,26 @@
 			</tr>
 			<tr>
 				<th>商品ID</th>
-				<td><input type="text" name="search_item_id" value="<%
+				<td><input type="text" name="search_id" value="<%
 				if ("search".equals(actionParam)) {
-					out.print(inputDataList.get("search_item_id")[0]);
+					out.print(inputDataList.get("search_id")[0]);
 				} %>"></td>
 			</tr>
 			<tr>
 				<th>商品名</th>
-				<td><input type="text" name="search_item_name" value="<%
+				<td><input type="text" name="search_name" value="<%
 				if ("search".equals(actionParam)) {
-					out.print(inputDataList.get("search_item_name")[0]);
+					out.print(inputDataList.get("search_name")[0]);
 				} %>"></td>
 			</tr>
 			<tr>
 				<th>ジャンル</th>
 				<td>
-					<select name="search_item_category">
+					<select name="search_category">
 	<% for(int i=0; i < itemCategoryList.size(); i++) {
 			out.print("<option value='" + itemCategoryList.get(i).getCategoryCode() + "'");
 			if("search".equals(actionParam)) {
-				if (inputDataList.get("search_item_category")[0].equals(itemCategoryList.get(i).getCategoryCode())) {
+				if (inputDataList.get("search_category")[0].equals(itemCategoryList.get(i).getCategoryCode())) {
 					out.print(" selected='selected'");
 				}
 			}
@@ -76,16 +76,16 @@
 			</tr>
 			<tr>
 				<th>販売開始日</th>
-				<td><input type="text" name="search_item_sales_period_from" value="<%
+				<td><input type="text" name="search_sales_period_from" value="<%
 				if ("search".equals(actionParam)) {
-					out.print(inputDataList.get("search_item_sales_period_from")[0]);
+					out.print(inputDataList.get("search_sales_period_from")[0]);
 				} %>"></td>
 			</tr>
 			<tr>
 				<th>販売終了日</th>
-				<td><input type="text" name="search_item_sales_period_to" value="<%
+				<td><input type="text" name="search_sales_period_to" value="<%
 				if ("search".equals(actionParam)) {
-					out.print(inputDataList.get("search_item_sales_period_to")[0]);
+					out.print(inputDataList.get("search_sales_period_to")[0]);
 				} %>"></td>
 			</tr>
 			<tr>
@@ -99,6 +99,16 @@
 </td>
 </tr>
 </table>
+<p>
+	<font color="red">
+<% for(int i=0; i < errorMessageList.size(); i++) {
+	String message = errorMessageList.get(i);
+	out.println(message);
+	out.println("<br>");
+	}
+%>
+	</font>
+</p>
 <div id="data_table">
 	<table class="table table-striped table-bordered table-condensed">
 		<tr>
@@ -112,7 +122,7 @@
 			<th>在庫数</th>
 		</tr>
 <%
-if ("search".equals(actionParam)) {
+if ("search".equals(actionParam) && resultList != null && resultList.size() != 0) {
 	for(int i = 0; i < resultList.size(); i++) {
 		out.println("<tr>");
 		out.println("<td><a href=\"detail?item_id=" + String.valueOf(resultList.get(i).getId()) + "\">" + String.valueOf(resultList.get(i).getId()) + "</td>");

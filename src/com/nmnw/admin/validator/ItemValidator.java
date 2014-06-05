@@ -39,12 +39,6 @@ public class ItemValidator {
 		v = new Validator();
 	}
 
-	public void checkId(String value) {
-		if (!v.required(value, FIELD_NAME)) {
-			v.maxSizeString(value, MAX_SIZE_NAME, FIELD_NAME);
-		}
-	}
-
 	public void checkName(String value) {
 		if (!v.required(value, FIELD_NAME)) {
 			v.maxSizeString(value, MAX_SIZE_NAME, FIELD_NAME);

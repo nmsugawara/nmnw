@@ -16,7 +16,6 @@ import com.nmnw.admin.dao.ItemDao;
 @WebServlet(name="admin/item/detail", urlPatterns={"/admin/item/detail"})
 public class DetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String DIR_BASE = "/WEB-INF/admin/function/item/detail/";
 	private static final String MESSAGE_NEW_END = "ìoò^Ç™äÆóπÇµÇ‹ÇµÇΩÅB";
 	private static final String MESSAGE_EDIT_END = "ï“èWÇ™äÆóπÇµÇ‹ÇµÇΩÅB";
 
@@ -32,7 +31,7 @@ public class DetailServlet extends HttpServlet {
 			throws IOException, ServletException {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
-		String page = DIR_BASE + "Detail.jsp";
+		String page = ConfigConstants.JSP_DIR_ITEM_DETAIL + "Detail.jsp";
 
 		try {
 			Item item = new Item();
