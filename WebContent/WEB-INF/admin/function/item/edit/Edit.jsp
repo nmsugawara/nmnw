@@ -16,9 +16,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="/nmnw/commons/css/bootstrap.min.css" rel="stylesheet">
+<link href="/nmnw/commons/css/style.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | 商品情報編集</title>
 </head>
 <body>
+<table>
+<tr>
+<td>
 <h1>商品編集</h1>
 <p>
 	<font color="red">
@@ -32,7 +39,7 @@
 </p>
 <div id="data_table">
 <form method="post" action="edit?action=edit_end"  enctype="multipart/form-data">
-	<table border=1>
+	<table class="table table-bordered table-condensed">
 		<tr>
 			<th>商品名</th>
 			<td><input type="text" name="item_name" size="60" value="<%
@@ -117,18 +124,21 @@
 			} %>"></td> 
 		</tr>
 		<tr>
-			<td colspan="2">
+			<td colspan="2" align="center">
 				<input type="hidden" name="item_id" value="<%
 				if ("edit_end".equals(actionParam)) {
 					out.print(inputDataList.get("item_id")[0]);
  				} else {
 					out.print(result.getId());
 				} %>">
-				<input type="submit" value="編集完了">
+				<button type="submit" class="btn btn-primary">編集完了</button>
 			</td>
 		</tr>
 	</table>
 </form>
 </div>
+</td>
+</tr>
+</table>
 </body>
 </html>

@@ -20,4 +20,15 @@ public enum ItemCategoryEnum {
 	public String getCategoryCode() {
 		return code;
 	}
+
+	public static ItemCategoryEnum getEnum(String str) {
+		ItemCategoryEnum[] enumArray = ItemCategoryEnum.values();
+		for(ItemCategoryEnum enumStr : enumArray) {
+			// ˆø”‚ÆenumŒ^‚Ì•¶š—ñ‚ğ”äŠr
+			if (str.equals(enumStr.code.toString())){
+				return enumStr;
+			}
+		}
+		return null;
+	}
 }

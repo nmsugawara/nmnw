@@ -30,7 +30,6 @@ public class ErrorServlet extends HttpServlet {
 		String page = ConfigConstants.JSP_DIR_ERROR + "Error.jsp";
 		HttpSession session = request.getSession();
 		request.setAttribute("exceptionMessage", (String)session.getAttribute("exceptionMessage"));
-		request.setAttribute("exceptionCause", (String)session.getAttribute("exceptionCause"));
 		request.getRequestDispatcher(page).forward(request, response);
 	}
 

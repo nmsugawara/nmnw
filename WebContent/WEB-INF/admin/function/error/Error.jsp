@@ -3,12 +3,15 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	String exceptionMessage = (String)request.getAttribute("exceptionMessage");
-	String exceptionCause = (String)request.getAttribute("exceptionCause");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="/nmnw/commons/css/bootstrap.min.css" rel="stylesheet">
+<link href="/nmnw/commons/css/style.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | Error</title>
 </head>
 <body>
@@ -19,10 +22,6 @@
 	<tr>
 		<td>メッセージ</td>
 		<td><%= exceptionMessage %></td>
-	</tr>
-	<tr>
-		<td>原因</td>
-		<td><%= exceptionCause %></td>
 	</tr>
 </table>
 </p>

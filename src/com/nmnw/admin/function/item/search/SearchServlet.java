@@ -95,10 +95,8 @@ public class SearchServlet extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 					String exceptionMessage = e.getStackTrace().toString();
-					String exceptionCause = e.getCause().toString();
 					HttpSession session = request.getSession();
 					session.setAttribute("exceptionMessage", exceptionMessage);
-					session.setAttribute("exceptionCause", exceptionCause);
 					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ERROR;
 					response.sendRedirect(url);
 				}

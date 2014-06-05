@@ -12,12 +12,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="/common/css/bootstrap.min.css" rel="stylesheet">
+<link href="/nmnw/commons/css/bootstrap.min.css" rel="stylesheet">
+<link href="/nmnw/commons/css/style.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="/common/js/bootstrap.min.js"></script>
+<script src="/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | 商品登録</title>
 </head>
 <body>
+<table>
+<tr>
+<td>
 <h1>商品登録</h1>
 <p>
 	<font color="red">
@@ -30,7 +34,7 @@
 	</font>
 </p>
 <form method="post" action="new?action=new_end" enctype="multipart/form-data">
-	<table>
+	<table class="table table-bordered table-condensed">
 		<tr>
 			<th>商品名</th>
 			<td><input type="text" name="item_name" size="60" value="${inputDataList.get('item_name')[0]}"></td>
@@ -76,12 +80,15 @@
 			<td><input type="text" name="item_stock" size="10" value="${inputDataList.get('item_stock')[0]}"></td>
 		</tr>
 		<tr>
-			<td>
+			<td colspan="2" align="center">
 				<input type="hidden" name="action" value="new_end">
-				<input type="submit" value="登録">
+				<button type="submit" class="btn btn-primary">登録</button>
 			</td>
 		</tr>
 	</table>
 </form>
+</td>
+</tr>
+</table>
 </body>
 </html>

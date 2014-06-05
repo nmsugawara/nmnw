@@ -20,10 +20,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="/nmnw/commons/css/bootstrap.min.css" rel="stylesheet">
+<link href="/nmnw/commons/css/style.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | 商品検索</title>
 </head>
 <body>
-<table>
+<table align="center" >
 <tr>
 <td>
 	<div id="sub_menu">
@@ -35,7 +39,7 @@
 <td>
 	<div id="search_table">
 	<form method="post" action="search?action=search">
-		<table border=1>
+		<table class="table table-bordered">
 			<tr>
 				<th colspan="2">検索</th>
 			</tr>
@@ -85,8 +89,8 @@
 				} %>"></td>
 			</tr>
 			<tr>
-				<td colspan="2">
-					<input type="submit" value="検索">
+				<td colspan="2" align="center">
+					<button type="submit" class="btn btn-primary">Search</button>
 				</td>
 			</tr>
 		</table>
@@ -96,7 +100,7 @@
 </tr>
 </table>
 <div id="data_table">
-	<table border=1>
+	<table class="table table-striped table-bordered table-condensed">
 		<tr>
 			<th>商品ID</th>
 			<th>商品名</th>
@@ -115,7 +119,7 @@ if ("search".equals(actionParam)) {
 		out.println("<td>" + resultList.get(i).getName() + "</td>");
 		out.println("<td><img src='" + ConfigConstants.IMAGE_DIR_ITEM + resultList.get(i).getImageUrl() + "' width='50' height='50'></td>");
 		out.println("<td>￥" + resultList.get(i).getPrice() + "</td>");
-		out.println("<td>" + resultList.get(i).getCategory() + "</td>");
+		out.println("<td>" + ItemCategoryEnum.getEnum(resultList.get(i).getCategory()).name() + "</td>");
 		out.println("<td>" + resultList.get(i).getSalesPeriodFrom() + "</td>");
 		out.println("<td>" + resultList.get(i).getSalesPeriodTo() + "</td>");
 		out.println("<td>" + resultList.get(i).getStock() + "</td>");
