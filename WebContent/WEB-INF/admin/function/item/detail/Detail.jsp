@@ -28,7 +28,7 @@
 	<table class="table table-bordered table-condensed">
 		<tr>
 			<th>商品名</th>
-			<td><input type="hidden" name="item_name" value="<% out.print(result.getName()); %>"><% out.print(result.getName()); %></td>
+			<td><input type="hidden" name="item_name" value="<% out.print(result.getNameConvertedHtml()); %>"><% out.print(result.getNameConvertedHtml()); %></td>
 		</tr>
 		<tr>
 			<th>商品単価</th>

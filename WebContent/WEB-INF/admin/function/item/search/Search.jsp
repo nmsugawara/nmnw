@@ -116,7 +116,7 @@ if ("search".equals(actionParam)) {
 	for(int i = 0; i < resultList.size(); i++) {
 		out.println("<tr>");
 		out.println("<td><a href=\"detail?item_id=" + String.valueOf(resultList.get(i).getId()) + "\">" + String.valueOf(resultList.get(i).getId()) + "</td>");
-		out.println("<td>" + resultList.get(i).getName() + "</td>");
+		out.println("<td>" + resultList.get(i).getNameConvertedHtml() + "</td>");
 		out.println("<td><img src='" + ConfigConstants.IMAGE_DIR_ITEM + resultList.get(i).getImageUrl() + "' width='50' height='50'></td>");
 		out.println("<td>￥" + resultList.get(i).getPrice() + "</td>");
 		out.println("<td>" + ItemCategoryEnum.getEnum(resultList.get(i).getCategory()).name() + "</td>");
