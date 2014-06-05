@@ -3,6 +3,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.nmnw.admin.dao.Item"%>
 <%@ page import="com.nmnw.admin.Enum.ItemCategoryEnum"%>
+<%@ page import="com.nmnw.admin.constant.ConfigConstants"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 	List<ItemCategoryEnum> itemCategoryList = (List<ItemCategoryEnum>)request.getAttribute("itemCategoryList");
@@ -74,7 +75,8 @@
 		<tr>
 			<th>商品画像</th>
 			<td>
-				<img src="${result.getImageUrl()}" width="200" height="200">
+				<img src="<%= ConfigConstants.IMAGE_DIR_ITEM %>${result.getImageUrl()}" width="200" height="200">
+				<input type="hidden" name="old_item_image" value="${result.getImageUrl()}">
 				<input type="file" name="item_image" size="30">
 			</td>
 		</tr>

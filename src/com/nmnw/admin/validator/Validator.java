@@ -34,8 +34,8 @@ public class Validator {
 
 	public boolean requiredImage(Part image, String fieldName) {
 		boolean hasError = false;
-		long minSize = 0;
-		if(image.getSize() == minSize) {
+		long emptyValue = 0;
+		if(image.getSize() == emptyValue) {
 			String message = getMessage(ValidatorConstants.MESSAGE_REQUIRED_IMAGE, fieldName);
 			addErrorMessageList(message);
 			hasError = true;

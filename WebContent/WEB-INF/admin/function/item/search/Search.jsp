@@ -3,6 +3,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.nmnw.admin.dao.Item"%>
 <%@ page import="com.nmnw.admin.Enum.ItemCategoryEnum"%>
+<%@ page import="com.nmnw.admin.constant.ConfigConstants"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 	List<ItemCategoryEnum> itemCategoryList = (List<ItemCategoryEnum>)request.getAttribute("itemCategoryList");
@@ -112,7 +113,7 @@ if ("search".equals(actionParam)) {
 		out.println("<tr>");
 		out.println("<td><a href=\"detail?item_id=" + String.valueOf(resultList.get(i).getId()) + "\">" + String.valueOf(resultList.get(i).getId()) + "</td>");
 		out.println("<td>" + resultList.get(i).getName() + "</td>");
-		out.println("<td><img src='" + resultList.get(i).getImageUrl() + "' width='50' height='50'></td>");
+		out.println("<td><img src='" + ConfigConstants.IMAGE_DIR_ITEM + resultList.get(i).getImageUrl() + "' width='50' height='50'></td>");
 		out.println("<td>" + resultList.get(i).getPrice() + "</td>");
 		out.println("<td>" + resultList.get(i).getCategory() + "</td>");
 		out.println("<td>" + resultList.get(i).getSalesPeriodFrom() + "</td>");

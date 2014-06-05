@@ -1,12 +1,8 @@
 package com.nmnw.admin.function.item.edit;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +20,8 @@ import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
 import com.nmnw.admin.validator.ItemValidator;
+import com.nmnw.admin.utility.RequestParameterUtility;
+import com.nmnw.admin.utility.FileUtility;
 
 @WebServlet(name="admin/item/edit", urlPatterns={"/admin/item/edit"})
 @MultipartConfig(location = ConfigConstants.TMP_IMAGE_DIR)
@@ -80,12 +78,14 @@ public class EditServlet extends HttpServlet {
 				iv.checkName(request.getParameter("item_name"));
 				iv.checkPrice(request.getParameter("item_price"));
 				iv.checkCategory(request.getParameter("item_category"));
+				Part image = request.getPart("item_image");
+				if (!RequestParameterUtility.isEmptyImage(image)) {
+					iv.checkImage(image);
+				}
 				iv.checkExplanation(request.getParameter("item_explanation"));
 				iv.checkSalesPeriodFrom(request.getParameter("item_sales_period_from"));
 				iv.checkSalesPeriodTo(request.getParameter("item_sales_period_to"));
 				iv.checkStock(request.getParameter("item_stock"));
-				Part image = request.getPart("item_image");
-				iv.checkImage(image);
 
 				errorMessageList = iv.getValidationList();
 				// has error: go back new page
@@ -104,10 +104,14 @@ public class EditServlet extends HttpServlet {
 					item.setSalesPeriodFrom(request.getParameter("item_sales_period_from"));
 					item.setSalesPeriodTo(request.getParameter("item_sales_period_to"));
 					item.setStock(Integer.parseInt(request.getParameter("item_stock")));
-					String newImageFileName = getNewImageFileName(image);
-					image.write(ConfigConstants.STORED_IMAGE_DIR_ITEM + newImageFileName);
-					item.setImageUrl(newImageFileName);
-	
+					// 新規画像がアップロードされていなかったら現在登録の画像URL
+					if (RequestParameterUtility.isEmptyImage(image)) {
+						item.setImageUrl(request.getParameter("old_item_image"));
+					} else {
+						String newImageFileName = FileUtility.getNewFileName(image, "item");
+						image.write(ConfigConstants.STORED_IMAGE_DIR_ITEM + newImageFileName);
+						item.setImageUrl(newImageFileName);
+					}
 					ItemDao itemdao = new ItemDao();
 					String itemId = String.valueOf(itemdao.update(item));
 					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ITEM_DETAIL + "?item_id=" + itemId + "&action=edit_end";
@@ -130,26 +134,5 @@ public class EditServlet extends HttpServlet {
 	protected void doPost (HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		doGet(request, response);
-	}
-
-	protected String getNewImageFileName (Part image) {
-		String newFileName = "";
-		String contentDispotision = image.getHeader("Content-Disposition");
-		String[] contentDispotisions = contentDispotision.split(";");
-		for (String cd : contentDispotisions) {
-			if (cd.trim().startsWith("filename")) {
-				// generate file name
-				String filePath = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
-				int lastSeparatorIndex = filePath.lastIndexOf(File.separator);
-				String oldFileName = filePath.substring(lastSeparatorIndex + 1);
-				String[] oldFileString = oldFileName.split("\\.");
-				String oldFileExtension = oldFileString[oldFileString.length - 1];
-				Calendar cal = Calendar.getInstance();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-				newFileName = "image" + sdf.format(cal.getTime()) + "." + oldFileExtension;
-				return newFileName;
-			}
-		}
-		throw new IllegalStateException();
 	}
 }

@@ -19,33 +19,6 @@ import com.nmnw.admin.utility.DdConnector;
 public class ItemDao {
 	private static final String TABLE_NAME = "item";
 
-	public List<Item> selectAll()
-			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
-		String sql = "select * from " + TABLE_NAME + " order by id";
-		PreparedStatement statement = connection.prepareStatement(sql);
-		List<Item> resultList = new ArrayList<Item>();
-		ResultSet result = statement.executeQuery();
-		while (result.next()) {
-			Item item = new Item();
-			item.setId(result.getInt("id"));
-			item.setName(result.getString("name"));
-			item.setPrice(result.getInt("price"));
-			item.setCategory(result.getString("category"));
-			item.setImageUrl(result.getString("image_url"));
-			item.setExplanation(result.getString("explanation"));
-			item.setSalesPeriodFrom(result.getString("sales_period_from"));
-			item.setSalesPeriodTo(result.getString("sales_period_to"));
-			item.setStock(result.getInt("stock"));
-
-			resultList.add(item);
-		}
-		result.close();
-		statement.close();
-		connection.close();
-		return resultList;
-	}
-
 	/**
 	 * select(item_idŽw’è)
 	 * @param id
@@ -66,7 +39,7 @@ public class ItemDao {
 			item.setName(result.getString("name"));
 			item.setPrice(result.getInt("price"));
 			item.setCategory(result.getString("category"));
-			item.setImageUrl(ConfigConstants.IMAGE_DIR_ITEM + result.getString("image_url"));
+			item.setImageUrl(result.getString("image_url"));
 			item.setExplanation(result.getString("explanation"));
 			item.setSalesPeriodFrom(result.getString("sales_period_from"));
 			item.setSalesPeriodTo(result.getString("sales_period_to"));
@@ -177,7 +150,7 @@ public class ItemDao {
 			item.setName(result.getString("name"));
 			item.setPrice(result.getInt("price"));
 			item.setCategory(result.getString("category"));
-			item.setImageUrl(ConfigConstants.IMAGE_DIR_ITEM + result.getString("image_url"));
+			item.setImageUrl(result.getString("image_url"));
 			item.setSalesPeriodFrom(result.getString("sales_period_from"));
 			item.setSalesPeriodTo(result.getString("sales_period_to"));
 			item.setStock(result.getInt("stock"));

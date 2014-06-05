@@ -1,8 +1,6 @@
 package com.nmnw.admin.function.item.New;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.servlet.ServletException;
@@ -16,6 +14,7 @@ import javax.servlet.http.Part;
 
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
+import com.nmnw.admin.utility.FileUtility;
 import com.nmnw.admin.validator.ItemValidator;
 import com.nmnw.admin.Enum.ItemCategoryEnum;
 import com.nmnw.admin.constant.ConfigConstants;
@@ -82,7 +81,7 @@ public class NewServlet extends HttpServlet {
 					item.setSalesPeriodFrom(request.getParameter("item_sales_period_from"));
 					item.setSalesPeriodTo(request.getParameter("item_sales_period_to"));
 					item.setStock(Integer.parseInt(request.getParameter("item_stock")));
-					String newImageFileName = getNewImageFileName(image);
+					String newImageFileName = FileUtility.getNewFileName(image, "item");
 					image.write(ConfigConstants.STORED_IMAGE_DIR_ITEM + newImageFileName);
 					item.setImageUrl(newImageFileName);
 
@@ -108,26 +107,5 @@ public class NewServlet extends HttpServlet {
 	protected void doPost (HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		doGet(request, response);
-	}
-
-	protected String getNewImageFileName (Part image) {
-		String newFileName = "";
-		String contentDispotision = image.getHeader("Content-Disposition");
-		String[] contentDispotisions = contentDispotision.split(";");
-		for (String cd : contentDispotisions) {
-			if (cd.trim().startsWith("filename")) {
-				// generate file name
-				String filePath = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
-				int lastSeparatorIndex = filePath.lastIndexOf(File.separator);
-				String oldFileName = filePath.substring(lastSeparatorIndex + 1);
-				String[] oldFileString = oldFileName.split("\\.");
-				String oldFileExtension = oldFileString[oldFileString.length - 1];
-				Calendar cal = Calendar.getInstance();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-				newFileName = "image" + sdf.format(cal.getTime()) + "." + oldFileExtension;
-				return newFileName;
-			}
-		}
-		throw new IllegalStateException();
 	}
 }
