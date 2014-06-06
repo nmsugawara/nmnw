@@ -75,14 +75,14 @@
 				</td>
 			</tr>
 			<tr>
-				<th>販売開始日</th>
+				<th>販売期間(From）</th>
 				<td><input type="text" name="search_sales_period_from" value="<%
 				if ("search".equals(actionParam)) {
 					out.print(inputDataList.get("search_sales_period_from")[0]);
 				} %>"></td>
 			</tr>
 			<tr>
-				<th>販売終了日</th>
+				<th>販売期間(To）</th>
 				<td><input type="text" name="search_sales_period_to" value="<%
 				if ("search".equals(actionParam)) {
 					out.print(inputDataList.get("search_sales_period_to")[0]);

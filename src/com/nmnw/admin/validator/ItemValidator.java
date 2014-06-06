@@ -17,11 +17,6 @@ public class ItemValidator {
 	private static final String FIELD_SALES_PERIOD_FROM = "îÃîÑäJénì˙";
 	private static final String FIELD_SALES_PERIOD_TO = "îÃîÑèIóπì˙";
 	private static final String FIELD_STOCK = "ç›å…êî";
-	private static final String SEARCH_FIELD_ID = FIELD_ID;
-	private static final String SEARCH_FIELD_NAME = FIELD_NAME;
-	private static final String SEARCH_FIELD_CATEGORY = FIELD_CATEGORY;
-	private static final String SEARCH_FIELD_SALES_PERIOD_FROM = FIELD_SALES_PERIOD_FROM;
-	private static final String SEARCH_FIELD_SALES_PERIOD_TO = FIELD_SALES_PERIOD_TO;
 
 	private static final int MAX_SIZE_NAME = 200;
 	private static final int MIN_SIZE_PRICE = 0;
@@ -91,18 +86,6 @@ public class ItemValidator {
 		if (!v.requiredImage(image, FIELD_IMAGE)) {
 			v.maxSizeImage(image.getSize(), ConfigConstants.MAX_IMAGE_FILE_SIZE, FIELD_IMAGE);
 		}
-	}
-
-	public void checkSearchId(String value) {
-		v.isInt(value, SEARCH_FIELD_ID);
-	}
-
-	public void checkSearchDateFrom(String value) {
-		v.isDate(value, SEARCH_FIELD_SALES_PERIOD_FROM);
-	}
-
-	public void checkSearchDateTo(String value) {
-		v.isDate(value, SEARCH_FIELD_SALES_PERIOD_TO);
 	}
 
 	public List<String> getValidationList() {

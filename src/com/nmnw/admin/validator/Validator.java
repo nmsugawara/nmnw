@@ -5,6 +5,7 @@ import java.util.*;
 import javax.servlet.http.Part;
 
 import com.nmnw.admin.constant.ValidatorConstants;
+import com.nmnw.admin.utility.DateConversionUtility;
 
 public class Validator {
 	private static final String REQUIRED_SELECT = "0";
@@ -12,6 +13,12 @@ public class Validator {
 	private static final String MATCH_DATE = "^[0-9]{4}[-][01]?[0-9][-][0123]?[0-9]$";
 	private List<String> _errorMassageList = new ArrayList<String>();
 
+	/**
+	 * 必須チェック（入力）
+	 * @param value
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean required(String value, String fieldName) {
 		boolean hasError = false;
 		if(value == null || value.length() == 0) {
@@ -22,6 +29,12 @@ public class Validator {
 		return hasError;
 	}
 
+	/**
+	 * 必須チェック（プルダウン）
+	 * @param value
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean requiredSelect(String value, String fieldName) {
 		boolean hasError = false;
 		if(REQUIRED_SELECT.equals(value)) {
@@ -32,6 +45,12 @@ public class Validator {
 		return hasError;
 	}
 
+	/**
+	 * 必須チェック（画像アップロード）
+	 * @param image
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean requiredImage(Part image, String fieldName) {
 		boolean hasError = false;
 		long emptyValue = 0;
@@ -43,6 +62,12 @@ public class Validator {
 		return hasError;
 	}
 
+	/**
+	 * 形式チェック（数字）
+	 * @param value
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean isInt(String value, String fieldName) {
 		boolean hasError = false;
 		if (!value.matches(MATCH_NUMBER)) {
@@ -53,6 +78,12 @@ public class Validator {
 		return hasError;
 	}
 
+	/**
+	 * 形式チェック（日付）（YYYY-MM-DD）
+	 * @param value
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean isDate(String value, String fieldName) {
 		boolean hasError = false;		
 		try {
@@ -77,6 +108,36 @@ public class Validator {
 		}
 	}
 
+	/**
+	 * 期間整合性チェック
+	 * @param from
+	 * @param fieldNameFrom
+	 * @param to
+	 * @param fieldNameTo
+	 * @return hasError
+	 */
+	public boolean correctPeriod(String from, String fieldNameFrom, String to, String fieldNameTo) {
+		boolean hasError = false;
+		// from、toが日付形式か
+		if (!isDate(from, fieldNameFrom) && !isDate(to, fieldNameTo)) {
+			Calendar calFrom = DateConversionUtility.toDate(from);
+			Calendar calTo = DateConversionUtility.toDate(to);
+			int judge = calFrom.compareTo(calTo);
+			if ( judge > 0) {
+				String message = getMessage(ValidatorConstants.MESSAGE_CORRECT_PERIOD, fieldNameFrom, fieldNameTo);
+				addErrorMessageList(message);
+				hasError = true;
+			}
+		}
+		return hasError;
+	}
+	/**
+	 * 最大値チェック（数字）
+	 * @param value
+	 * @param maxSize
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean maxSizeInt(int value, int maxSize, String fieldName) {
 		boolean hasError = false;
 		if (value > maxSize) {
@@ -87,6 +148,13 @@ public class Validator {
 		return hasError;
 	}
 
+	/**
+	 * 最大値チェック（文字列）
+	 * @param value
+	 * @param maxSize
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean maxSizeString(String value, int maxSize, String fieldName) {
 		boolean hasError = false;
 		if (value.length() > maxSize) {
@@ -97,6 +165,13 @@ public class Validator {
 		return hasError;
 	}
 
+	/**
+	 * 最大値チェック（画像サイズ）
+	 * @param imageSize
+	 * @param maxSize
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean maxSizeImage(long imageSize, long maxSize, String fieldName) {
 		boolean hasError = false;
 		if (imageSize > maxSize) {
@@ -107,6 +182,13 @@ public class Validator {
 		return hasError;
 	}
 
+	/**
+	 * 最小値チェック（数字）
+	 * @param value
+	 * @param minSize
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean minSizeInt(int value, int minSize, String fieldName) {
 		boolean hasError = false;
 		if (value < minSize) {
@@ -117,6 +199,13 @@ public class Validator {
 		return hasError;
 	}
 
+	/**
+	 * 最小値チェック（文字列）
+	 * @param value
+	 * @param minSize
+	 * @param fieldName
+	 * @return hasError
+	 */
 	public boolean minSizeString(String value, int minSize, String fieldName) {
 		boolean hasError = false;
 		if (value.length() < minSize) {
@@ -127,6 +216,12 @@ public class Validator {
 		return hasError;
 	}
 
+	/**
+	 * チェックエラーメッセージ生成/取得
+	 * @param message
+	 * @param args
+	 * @return message
+	 */
 	public String getMessage(String message, String...args) {
 		for (int i = 0; i < args.length; i++) {
 			message = message.replace("{$" + (i+1) + "}", args[i]);
@@ -134,10 +229,18 @@ public class Validator {
 		return message;
 	}
 
+	/**
+	 * エラーメッセージ格納用Ｌｉｓｔへのメッセージ追加
+	 * @param e
+	 */
 	public void addErrorMessageList(String e) {
 		_errorMassageList.add(e);
 	}
 
+	/**
+	 * エラーメッセージリスト取得
+	 * @return
+	 */
 	public List<String> getErrorMessageList() {
 		return _errorMassageList;
 	}

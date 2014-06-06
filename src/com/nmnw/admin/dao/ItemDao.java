@@ -93,12 +93,12 @@ public class ItemDao {
 			if (to != null && to.length() > 0) {
 				// from & to
 				whereBuilder.append(" and sales_period_from <= ? and sales_period_to >= ?");
-				likeList.put("from", new ArrayList<Object>());
-				likeList.get("from").add("String");
-				likeList.get("from").add(from);
 				likeList.put("to", new ArrayList<Object>());
 				likeList.get("to").add("String");
 				likeList.get("to").add(to);
+				likeList.put("from", new ArrayList<Object>());
+				likeList.get("from").add("String");
+				likeList.get("from").add(from);
 			} else {
 				// from
 				whereBuilder.append(" and sales_period_to >= ?");

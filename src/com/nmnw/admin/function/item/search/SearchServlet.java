@@ -15,12 +15,15 @@ import javax.servlet.http.HttpSession;
 import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
-import com.nmnw.admin.validator.ItemValidator;
+import com.nmnw.admin.validator.Validator;
 import com.nmnw.admin.utility.RequestParameterUtility;
 
 @WebServlet(name="admin/item/search", urlPatterns={"/admin/item/search"})
 public class SearchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String SEARCH_FIELD_ID = "商品ID";
+	private static final String SEARCH_FIELD_SALES_PERIOD_FROM = "販売期間(From）";
+	private static final String SEARCH_FIELD_SALES_PERIOD_TO = "販売期間(To）";
 
 	/**
 	 * Construct
@@ -40,19 +43,27 @@ public class SearchServlet extends HttpServlet {
 		String page = ConfigConstants.JSP_DIR_ITEM_SEARCH + "Search.jsp";
 		if ("search".equals(action)) {
 			// validation
-			ItemValidator iv = new ItemValidator();
+			Validator v = new Validator();
 			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_id"))) {
-				iv.checkSearchId(request.getParameter("search_id"));
+				v.isInt(request.getParameter("search_id"), SEARCH_FIELD_ID);
 			}
 			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_from"))) {
-				iv.checkSearchDateFrom(request.getParameter("search_sales_period_from"));
-			}
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_to"))) {
-				iv.checkSearchDateTo(request.getParameter("search_sales_period_to"));
+				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_to"))) {
+					// from,to有
+					v.correctPeriod(request.getParameter("search_sales_period_from"), SEARCH_FIELD_SALES_PERIOD_FROM, request.getParameter("search_sales_period_to"), SEARCH_FIELD_SALES_PERIOD_TO);
+				} else {
+					// fromのみ
+					v.isDate(request.getParameter("search_sales_period_from"), SEARCH_FIELD_SALES_PERIOD_FROM);
+				}
+			} else {
+				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_to"))) {
+					// toのみ
+					v.isDate(request.getParameter("search_sales_period_to"), SEARCH_FIELD_SALES_PERIOD_TO);
+				}
 			}
 
-			errorMessageList = iv.getValidationList();
-			// has error: go back search page
+			errorMessageList = v.getErrorMessageList();
+			// 入力チェックに該当時、エラーメッセージ表示
 			if (errorMessageList.size() != 0) {
 				request.setAttribute("errorMessageList", errorMessageList);
 				request.setAttribute("inputDataList", inputDataList);
