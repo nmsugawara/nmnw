@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.nmnw.admin.constant.ConfigConstants;
+import com.nmnw.admin.utility.DateConversionUtility;
 import com.nmnw.admin.utility.DdConnector;
 
 public class OrderDao {
@@ -162,5 +163,31 @@ public class OrderDao {
 		statement.close();
 		connection.close();
 		return resultList;
+	}
+
+	/**
+	 * update(èoâ◊èÓïÒ)
+	 * @param orderId
+	 * @return id
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public int updateShippingStatus (int OrderId)
+			throws ClassNotFoundException, SQLException {
+		Connection connection = DdConnector.getConnection();
+		String sql = "update " + TABLE_NAME + " set"
+					+ " shipping_flg=?"
+					+ ", shipping_time=?"
+					+ " where order_id=?";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		String shippingTime = DateConversionUtility.getCurrentDateString();
+		statement.setInt(1, 1);
+		statement.setString(2, shippingTime);
+		statement.setInt(3, OrderId);
+		int updateCount = statement.executeUpdate();
+		statement.close();
+		connection.commit();
+		connection.close();
+		return OrderId;
 	}
 }

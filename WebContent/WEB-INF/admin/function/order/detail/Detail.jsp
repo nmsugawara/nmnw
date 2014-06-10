@@ -34,34 +34,31 @@
 		<td><% out.print(result.getOrderTime()); %></td>
 	</tr>
 	<tr>
-		<th>注文金額</th>
-		<td>￥<% out.print(result.getTotalPrice()); %></td>
-	</tr>
-	<tr>
 		<th>注文詳細</th>
 		<td>
 			<table class="table table-bordered table-condensed">
+				<tr>
+					<th>商品ID</th>
+					<th>商品名</th>
+					<th>商品単価</th>
+					<th>購入個数</th>
+					<th>小計</th>
+				</tr>
 <%
 	for(int i = 0; i < resultList.size(); i++) {
-		out.println("<tr><td colspan=\"2\">商品" + (i + 1) + "</td></tr>");
 		out.println("<tr>");
-			out.println("<th>商品ID</th>");
 			out.println("<td>" + resultList.get(i).getItemId() + "</td>");
-		out.println("</tr>");
-		out.println("<tr>");
-			out.println("<th>商品名</th>");
 			out.println("<td>" + resultList.get(i).getItemName() + "</td>");
-		out.println("</tr>");
-		out.println("<tr>");
-			out.println("<th>商品価格</th>");
-			out.println("<td>" + resultList.get(i).getItemPrice() + "</td>");
-		out.println("</tr>");
-		out.println("<tr>");
-			out.println("<th>商品個数</th>");
+			out.println("<td>￥" + resultList.get(i).getItemPrice() + "</td>");
 			out.println("<td>" + resultList.get(i).getItemNumber() + "</td>");
+			out.println("<td>￥" + (resultList.get(i).getItemPrice() * resultList.get(i).getItemNumber()) + "</td>");
 		out.println("</tr>");
 	}
 %>
+				<tr>
+					<th colspan="4">注文金額</th>
+					<td>￥<% out.print(result.getTotalPrice()); %></td>
+				</tr>
 			</table>
 		</td>
 	</tr>

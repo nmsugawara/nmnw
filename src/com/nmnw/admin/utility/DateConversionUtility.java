@@ -1,5 +1,6 @@
 package com.nmnw.admin.utility;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DateConversionUtility {
@@ -22,5 +23,14 @@ public class DateConversionUtility {
 		cal.set(year, month, day);
 		cal.getTime();
 		return cal;
+	}
+
+	/**
+	 * Œ»İ‚ğæ“¾
+	 */
+	public static String getCurrentDateString () {
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		return sdf.format(calendar.getTime());
 	}
 }
