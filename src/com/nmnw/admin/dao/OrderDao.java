@@ -19,7 +19,7 @@ public class OrderDao {
 
 	/**
 	 * select(order_idŽw’è)
-	 * @param id
+	 * @param orderId
 	 * @return Order
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
