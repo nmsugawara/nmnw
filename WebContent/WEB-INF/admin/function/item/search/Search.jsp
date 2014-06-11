@@ -22,8 +22,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/nmnw/commons/css/bootstrap.min.css" rel="stylesheet">
 <link href="/nmnw/commons/css/style.css" rel="stylesheet">
+<link href="/nmnw/commons/css/datepicker.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/nmnw/commons/js/bootstrap-datepicker.js"></script>
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#from").datepicker({
+		format: 'yyyy-mm-dd',
+		autoclose: true
+	});
+	$("#to").datepicker({
+		format: 'yyyy-mm-dd',
+		autoclose: true
+	});
+});
+</script>
 <title>No Music No Work | 商品検索</title>
 </head>
 <body>
@@ -77,14 +91,14 @@
 			</tr>
 			<tr>
 				<th>販売期間(From）</th>
-				<td><input type="text" name="search_sales_period_from" value="<%
+				<td><input type="text" id="from" name="search_sales_period_from" value="<%
 				if ("search".equals(actionParam)) {
 					out.print(inputDataList.get("search_sales_period_from")[0]);
 				} %>"></td>
 			</tr>
 			<tr>
 				<th>販売期間(To）</th>
-				<td><input type="text" name="search_sales_period_to" value="<%
+				<td><input type="text" id="to" name="search_sales_period_to" value="<%
 				if ("search".equals(actionParam)) {
 					out.print(inputDataList.get("search_sales_period_to")[0]);
 				} %>"></td>

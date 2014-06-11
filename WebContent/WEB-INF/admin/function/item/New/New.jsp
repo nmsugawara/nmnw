@@ -14,8 +14,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/nmnw/commons/css/bootstrap.min.css" rel="stylesheet">
 <link href="/nmnw/commons/css/style.css" rel="stylesheet">
+<link href="/nmnw/commons/css/datepicker.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/nmnw/commons/js/bootstrap-datepicker.js"></script>
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#from").datepicker({
+		format: 'yyyy-mm-dd',
+		autoclose: true
+	});
+	$("#to").datepicker({
+		format: 'yyyy-mm-dd',
+		autoclose: true
+	});
+});
+</script>
 <title>No Music No Work | 商品登録</title>
 </head>
 <body>
@@ -70,11 +84,11 @@
 		</tr>
 		<tr>
 			<th>販売開始日</th>
-			<td><input type="text" name="item_sales_period_from" size="20" value="${inputDataList.get('item_sales_period_from')[0]}"></td>
+			<td><input type="text" id="from" name="item_sales_period_from" size="20" value="${inputDataList.get('item_sales_period_from')[0]}"></td>
 		</tr>
 		<tr>
 			<th>販売終了日</th>
-			<td><input type="text" name="item_sales_period_to" size="20" value="${inputDataList.get('item_sales_period_to')[0]}"></td>
+			<td><input type="text" id="to" name="item_sales_period_to" size="20" value="${inputDataList.get('item_sales_period_to')[0]}"></td>
 		</tr>
 		<tr>
 			<th>在庫数</th>
