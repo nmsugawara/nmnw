@@ -20,11 +20,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/nmnw/commons/css/bootstrap.min.css" rel="stylesheet">
 <link href="/nmnw/commons/css/style.css" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="/commons/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | 会員検索</title>
 </head>
 <body>
+<jsp:include page="/commons/Menu.jsp"/>
 <div id="search_table">
 <form method="post" action="search?action=search">
 	<table class="table table-bordered">
@@ -85,7 +86,7 @@
 			<th>会員名フリガナ</th>
 			<th>メールアドレス</th>
 			<th>電話番号</th>
-			<th>削除フラグ</th>
+			<th>削除</th>
 		</tr>
 <%
 if ("search".equals(actionParam) && resultList != null && resultList.size() != 0) {
@@ -96,11 +97,11 @@ if ("search".equals(actionParam) && resultList != null && resultList.size() != 0
 		out.println("<td>" + resultList.get(i).getNameKanaConvertedHtml() + "</td>");
 		out.println("<td>" + resultList.get(i).getMailConvertedHtml() + "</td>");
 		out.println("<td>" + resultList.get(i).getPhoneNumberConvertedHtml() + "</td>");
-		String delFlg = "";
+		out.print("<td>");
 		if (resultList.get(i).getDelFlg() == 1) {
-			delFlg = "削除済";
+			out.print("削除済");
 		}
-		out.println("<td>" + delFlg + "</td>");
+		out.println("</td>");
 		out.println("</tr>");
 	}
 }

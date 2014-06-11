@@ -18,11 +18,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/nmnw/commons/css/bootstrap.min.css" rel="stylesheet">
 <link href="/nmnw/commons/css/style.css" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="/commons/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | 商品情報編集</title>
 </head>
 <body>
+<jsp:include page="/commons/Menu.jsp"/>
 <table>
 <tr>
 <td>

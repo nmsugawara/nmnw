@@ -13,11 +13,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/nmnw/commons/css/bootstrap.min.css" rel="stylesheet">
 <link href="/nmnw/commons/css/style.css" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="/commons/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | 会員情報詳細</title>
 </head>
 <body>
+<jsp:include page="/commons/Menu.jsp"/>
+<p>
+	<h1>会員詳細情報</h1>
+</p>
 <div id="data_table">
 <table class="table table-bordered table-condensed">
 	<tr>
@@ -45,8 +49,8 @@
 		<td><input type="hidden" name="phone_number" value="<% out.print(result.getPhoneNumberConvertedHtml()); %>"><% out.print(result.getPhoneNumberConvertedHtml()); %></td>
 	</tr>
 	<tr>
-		<th>削除フラグ</th>
-		<td><input type="hidden" name="del_flg" value="<% out.print(result.getDelFlg()); %>"><% out.print(result.getDelFlg()); %></td>
+		<th>削除</th>
+		<td><input type="hidden" name="del_flg" value="<% out.print(result.getDelFlg()); %>"><% if (result.getDelFlg() == 1) {out.print("削除済");} %></td>
 	</tr>
 </table>
 </div>
