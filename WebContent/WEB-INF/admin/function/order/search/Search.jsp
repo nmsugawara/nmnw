@@ -12,7 +12,6 @@
 	if (inputDataList.containsKey("action")) {
 		actionParam = inputDataList.get("action")[0];
 	}
-
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -104,10 +103,25 @@
 </div>
 <p>
 	<font color="red">
-<% for(int i=0; i < errorMessageList.size(); i++) {
-	String message = errorMessageList.get(i);
-	out.println(message);
-	out.println("<br>");
+<%
+	for(int i=0; i < errorMessageList.size(); i++) {
+		String message = errorMessageList.get(i);
+		out.println(message);
+		out.println("<br>");
+	}
+%>
+	</font>
+</p>
+<p>
+	<font color="red">
+<%
+	if ("bulkShip".equals(actionParam)) {
+		List<String> messageList = (List<String>)session.getAttribute("messageList");
+		for(int i=0; i < messageList.size(); i++) {
+			String message = messageList.get(i);
+			out.println(message);
+			out.println("<br>");
+		}
 	}
 %>
 	</font>
