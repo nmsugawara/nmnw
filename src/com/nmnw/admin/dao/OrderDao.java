@@ -76,7 +76,7 @@ public class OrderDao {
 		if (searchParameterList.get("order_date_from") != null) {
 			if (searchParameterList.get("order_date_to") != null) {
 				// from & to
-				whereBuilder.append(" and Date(order_time) <= ? and Date(order_time) >= ?");
+				whereBuilder.append(" and Date(order_time) >= ? and Date(order_time) <= ?");
 			} else {
 				// from
 				whereBuilder.append(" and Date(order_time) >= ?");
