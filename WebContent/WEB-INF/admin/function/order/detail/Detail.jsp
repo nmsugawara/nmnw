@@ -4,6 +4,7 @@
 <%@ page import="com.nmnw.admin.dao.Order"%>
 <%@ page import="com.nmnw.admin.dao.OrderDetail"%>
 <%@ page import="com.nmnw.admin.constant.ConfigConstants"%>
+<%@ page import="com.nmnw.admin.utility.DateConversionUtility"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 	Order result = (Order)request.getAttribute("result");
@@ -38,7 +39,7 @@
 	</tr>
 	<tr>
 		<th>注文日時</th>
-		<td><% out.print(result.getOrderTime().toString()); %></td>
+		<td><% out.print(DateConversionUtility.dateToString(result.getOrderTime())); %></td>
 	</tr>
 	<tr>
 		<th>注文詳細</th>
@@ -81,7 +82,7 @@
 		<th>キャンセル日時</th>
 		<td><%
 		if (result.getCancelTime() != null) {
-			out.print(result.getCancelTime().toString());	
+			out.print(DateConversionUtility.dateToString(result.getCancelTime()));	
 		}
 		%></td>
 	</tr>
@@ -97,7 +98,7 @@
 		<th>出荷日時</th>
 		<td><%
 		if (result.getShippingTime() != null) {
-			out.print(result.getShippingTime().toString());	
+			out.print(DateConversionUtility.dateToString(result.getShippingTime()));	
 		}
 		%></td>
 	</tr>

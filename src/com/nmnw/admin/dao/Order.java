@@ -1,4 +1,5 @@
 package com.nmnw.admin.dao;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import com.nmnw.admin.utility.HtmlHelper;
@@ -36,6 +37,15 @@ public class Order {
 
 	public void setOrderTime(Date orderTime) {
 		_orderTime = orderTime;
+	}
+
+	public void setOrderTime(Timestamp orderTime) {
+		try {
+			java.util.Date d = new java.util.Date(orderTime.getTime());
+			_orderTime = d;
+		} catch (NullPointerException e) {
+			_orderTime = orderTime;
+		}
 	}
 
 	public Date getOrderTime() {
@@ -154,6 +164,15 @@ public class Order {
 		_cancelTime = cancelTime;
 	}
 
+	public void setCancelTime(Timestamp cancelTime) {
+		try {
+			java.util.Date d = new java.util.Date(cancelTime.getTime());
+			_cancelTime = d;
+		} catch (NullPointerException e) {
+			_cancelTime = cancelTime;
+		}
+	}
+
 	public Date getCancelTime() {
 		return _cancelTime;
 	}
@@ -168,6 +187,15 @@ public class Order {
 
 	public void setShippingTime(Date shippingTime) {
 		_shippingTime = shippingTime;
+	}
+
+	public void setShippingTime(Timestamp shippingTime) {
+		try {
+			java.util.Date d = new java.util.Date(shippingTime.getTime());
+			_shippingTime = d;
+		} catch (NullPointerException e) {
+			_shippingTime = shippingTime;
+		}
 	}
 
 	public Date getShippingTime() {

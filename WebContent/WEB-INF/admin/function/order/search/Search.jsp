@@ -3,6 +3,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.nmnw.admin.dao.Order"%>
 <%@ page import="com.nmnw.admin.constant.ConfigConstants"%>
+<%@ page import="com.nmnw.admin.utility.DateConversionUtility"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 	List<String> errorMessageList = (List<String>)request.getAttribute("errorMessageList");
@@ -180,7 +181,7 @@ if ("search".equals(actionParam) && resultList != null && resultList.size() != 0
 		// 注文ID
 		out.println("<td><a href=\"detail?order_id=" + String.valueOf(resultList.get(i).getOrderId()) + "\">" + String.valueOf(resultList.get(i).getOrderId()) + "</td>");
 		// 注文日時
-		out.println("<td>" + resultList.get(i).getOrderTime().toString() + "</td>");
+		out.println("<td>" + DateConversionUtility.dateToString(resultList.get(i).getOrderTime()) + "</td>");
 		// 会員ID
 		out.println("<td>" + resultList.get(i).getAccountId() + "</td>");
 		// 会員名
@@ -202,7 +203,7 @@ if ("search".equals(actionParam) && resultList != null && resultList.size() != 0
 		// キャンセル日時
 		out.print("<td>");
 		if (resultList.get(i).getCancelTime() != null) {
-			out.print(resultList.get(i).getCancelTime().toString());
+			out.print(DateConversionUtility.dateToString(resultList.get(i).getCancelTime()));
 		}
 		out.println("</td>");
 		// 出荷状況
@@ -214,7 +215,7 @@ if ("search".equals(actionParam) && resultList != null && resultList.size() != 0
 		// 出荷日時
 		out.print("<td>");
 		if (resultList.get(i).getShippingTime() != null) {
-			out.print(resultList.get(i).getShippingTime().toString());	
+			out.print(DateConversionUtility.dateToString(resultList.get(i).getShippingTime()));	
 		}
 		out.println("</td>");
 		out.println("</tr>");

@@ -1,5 +1,6 @@
 package com.nmnw.admin.utility;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,11 +49,55 @@ public class DateConversionUtility {
 	}
 
 	/**
+	 * •¶š—ñ‚ğ“ú•t(DateŒ^j‚É•ÏŠ·
+	 * @param value
+	 * @return date
+	 */
+	public static Date stringToDateTime (String value) {
+		if (value == null || value == "") {
+			return null;
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
+		dateFormat.setLenient(false);
+		try {
+			return dateFormat.parse(value);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
+
+	/**
 	 * Œ»İ(StringŒ^)‚ğæ“¾
 	 */
 	public static String getCurrentDateString () {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
 		return dateFormat.format(calendar.getTime());
+	}
+
+	public static Date timestampToDate(Timestamp timestamp) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
+		dateFormat.setLenient(false);
+		try {
+			String date = dateFormat.format(timestamp);
+			return stringToDateTime(date);
+		} catch (NullPointerException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * “ú•t(DateŒ^j‚ğ•¶š—ñ‚É•ÏŠ·
+	 * @param value
+	 * @return date
+	 */
+	public static String dateToString (Date value) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
+		dateFormat.setLenient(false);
+		try {
+			return dateFormat.format(value);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

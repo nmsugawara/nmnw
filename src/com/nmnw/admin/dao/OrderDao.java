@@ -145,7 +145,7 @@ public class OrderDao {
 		while (result.next()) {
 			Order order = new Order();
 			order.setOrderId(result.getInt("order_id"));
-			order.setOrderTime(result.getTimestamp("order_time"));
+			order.setOrderTime(DateConversionUtility.timestampToDate(result.getTimestamp("order_time")));
 			order.setAccountId(result.getInt("account_id"));
 			order.setAccountName(result.getString("account_name"));
 			order.setAccountNameKana(result.getString("account_name_kana"));
@@ -155,9 +155,9 @@ public class OrderDao {
 			order.setAccountPhoneNumber(result.getString("account_phone_number"));
 			order.setTotalPrice(result.getInt("total_price"));
 			order.setCancelFlg(result.getBoolean("cancel_flg"));
-			order.setCancelTime(result.getTimestamp("cancel_time"));
+			order.setCancelTime(DateConversionUtility.timestampToDate(result.getTimestamp("cancel_time")));
 			order.setShippingFlg(result.getBoolean("shipping_flg"));
-			order.setShippingTime(result.getTimestamp("shipping_time"));
+			order.setShippingTime(DateConversionUtility.timestampToDate(result.getTimestamp("shipping_time")));
  			resultList.add(order);
 		}
 		result.close();
