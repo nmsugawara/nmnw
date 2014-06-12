@@ -16,6 +16,7 @@ import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
 import com.nmnw.admin.validator.Validator;
+import com.nmnw.admin.utility.ExceptionUtility;
 import com.nmnw.admin.utility.RequestParameterUtility;
 
 @WebServlet(name="admin/item/search", urlPatterns={"/admin/item/search"})
@@ -41,7 +42,14 @@ public class SearchServlet extends HttpServlet {
 		Map<String, String[]> inputDataList = request.getParameterMap();
 		String action = request.getParameter("action");
 		String page = ConfigConstants.JSP_DIR_ITEM_SEARCH + "Search.jsp";
-		if ("search".equals(action)) {
+		// åüçıâÊñ ï\é¶
+		if (!"search".equals(action)) {
+			errorMessageList.add("");
+			request.setAttribute("errorMessageList", errorMessageList);
+			request.setAttribute("inputDataList", inputDataList);
+			request.getRequestDispatcher(page).forward(request, response);
+		} else {
+		// åüçıèàóù
 			// validation
 			Validator v = new Validator();
 			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_id"))) {
@@ -102,18 +110,9 @@ public class SearchServlet extends HttpServlet {
 					request.getRequestDispatcher(page).forward(request, response);
 				} catch (Exception e) {
 					e.printStackTrace();
-					String exceptionMessage = e.getStackTrace().toString();
-					HttpSession session = request.getSession();
-					session.setAttribute("exceptionMessage", exceptionMessage);
-					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ERROR;
-					response.sendRedirect(url);
+					ExceptionUtility.redirectErrorPage(request, response, e);
 				}
 			}
-		} else {
-			errorMessageList.add("");
-			request.setAttribute("errorMessageList", errorMessageList);
-			request.setAttribute("inputDataList", inputDataList);
-			request.getRequestDispatcher(page).forward(request, response);
 		}
 	}
 

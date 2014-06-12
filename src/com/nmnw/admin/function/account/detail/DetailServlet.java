@@ -13,6 +13,7 @@ import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.constant.MessageConstants;
 import com.nmnw.admin.dao.Account;
 import com.nmnw.admin.dao.AccountDao;
+import com.nmnw.admin.utility.ExceptionUtility;
 
 @WebServlet(name="admin/account/detail", urlPatterns={"/admin/account/detail"})
 public class DetailServlet extends HttpServlet {
@@ -46,11 +47,7 @@ public class DetailServlet extends HttpServlet {
 			request.getRequestDispatcher(page).forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
-			String exceptionMessage = e.getStackTrace().toString();
-			HttpSession session = request.getSession();
-			session.setAttribute("exceptionMessage", exceptionMessage);
-			String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ERROR;
-			response.sendRedirect(url);
+			ExceptionUtility.redirectErrorPage(request, response, e);
 		}
 	}
 

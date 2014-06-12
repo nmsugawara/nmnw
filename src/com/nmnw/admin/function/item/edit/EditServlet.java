@@ -20,6 +20,7 @@ import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
 import com.nmnw.admin.validator.ItemValidator;
 import com.nmnw.admin.utility.DateConversionUtility;
+import com.nmnw.admin.utility.ExceptionUtility;
 import com.nmnw.admin.utility.RequestParameterUtility;
 import com.nmnw.admin.utility.FileUtility;
 
@@ -68,11 +69,7 @@ public class EditServlet extends HttpServlet {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				String exceptionMessage = e.getStackTrace().toString();
-				HttpSession session = request.getSession();
-				session.setAttribute("exceptionMessage", exceptionMessage);
-				String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ERROR;
-				response.sendRedirect(url);
+				ExceptionUtility.redirectErrorPage(request, response, e);
 			}
 		} else {
 		// ï“èWäÆóπ
@@ -124,11 +121,7 @@ public class EditServlet extends HttpServlet {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				String exceptionMessage = e.getStackTrace().toString();
-				HttpSession session = request.getSession();
-				session.setAttribute("exceptionMessage", exceptionMessage);
-				String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ERROR;
-				response.sendRedirect(url);
+				ExceptionUtility.redirectErrorPage(request, response, e);
 			}
 		}
 	}

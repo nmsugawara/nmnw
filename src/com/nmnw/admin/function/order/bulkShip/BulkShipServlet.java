@@ -17,6 +17,7 @@ import com.nmnw.admin.constant.MessageConstants;
 import com.nmnw.admin.constant.ValidatorConstants;
 import com.nmnw.admin.dao.Order;
 import com.nmnw.admin.dao.OrderDao;
+import com.nmnw.admin.utility.ExceptionUtility;
 import com.nmnw.admin.utility.RequestParameterUtility;
 import com.nmnw.admin.validator.Validator;
 
@@ -94,10 +95,7 @@ public class BulkShipServlet extends HttpServlet {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			String exceptionMessage = e.getStackTrace().toString();
-			session.setAttribute("exceptionMessage", exceptionMessage);
-			url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ERROR;
-			response.sendRedirect(url);
+			ExceptionUtility.redirectErrorPage(request, response, e);
 		}
 	}
 

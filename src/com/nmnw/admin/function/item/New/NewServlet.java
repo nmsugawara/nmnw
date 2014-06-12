@@ -15,6 +15,7 @@ import javax.servlet.http.Part;
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
 import com.nmnw.admin.utility.DateConversionUtility;
+import com.nmnw.admin.utility.ExceptionUtility;
 import com.nmnw.admin.utility.FileUtility;
 import com.nmnw.admin.validator.ItemValidator;
 import com.nmnw.admin.constant.ConfigConstants;
@@ -38,17 +39,16 @@ public class NewServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		List<String> errorMessageList = new ArrayList<String>();
 		Map<String, String[]> inputDataList = request.getParameterMap();
-		// get "action" parameter
 		String action = request.getParameter("action");
 		String page = ConfigConstants.JSP_DIR_ITEM_NEW + "New.jsp";
-		// new
+		// ì¸óÕâÊñ ï\é¶
 		if (!("new_end".equals(action))) {
 			errorMessageList.add("");
 			request.setAttribute("errorMessageList", errorMessageList);
 			request.setAttribute("inputDataList", inputDataList);
 			request.getRequestDispatcher(page).forward(request, response);
 		} else {
-		// new end
+		// êVãKìoò^
 			// validation
 			ItemValidator iv = new ItemValidator();
 			iv.checkName(request.getParameter("item_name"));
@@ -62,7 +62,7 @@ public class NewServlet extends HttpServlet {
 			iv.checkImage(image);
 
 			errorMessageList = iv.getValidationList();
-			// has error: go back new page
+			// ì¸óÕÉGÉâÅ[ÇÃèÍçá
 			if (errorMessageList.size() != 0) {
 				request.setAttribute("errorMessageList", errorMessageList);
 				request.setAttribute("inputDataList", inputDataList);
@@ -88,11 +88,7 @@ public class NewServlet extends HttpServlet {
 					response.sendRedirect(url);
 				} catch (Exception e) {
 					e.printStackTrace();
-					String exceptionMessage = e.getStackTrace().toString();
-					HttpSession session = request.getSession();
-					session.setAttribute("exceptionMessage", exceptionMessage);
-					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ERROR;
-					response.sendRedirect(url);
+					ExceptionUtility.redirectErrorPage(request, response, e);
 				}
 			}
 		}

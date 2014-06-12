@@ -22,7 +22,11 @@
 <table border=1>
 	<tr>
 		<td>メッセージ</td>
-		<td><%= exceptionMessage %></td>
+		<td>"${exceptionMessage}"</td>
+	</tr>
+	<tr>
+		<td>原因</td>
+		<td>"${exceptionCause}"</td>
 	</tr>
 </table>
 </p>
