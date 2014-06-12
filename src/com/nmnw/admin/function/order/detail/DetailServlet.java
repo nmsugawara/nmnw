@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.nmnw.admin.constant.ConfigConstants;
+import com.nmnw.admin.constant.MessageConstants;
 import com.nmnw.admin.dao.Order;
 import com.nmnw.admin.dao.OrderDetail;
 import com.nmnw.admin.dao.OrderDao;
@@ -41,6 +42,11 @@ public class DetailServlet extends HttpServlet {
 			OrderDao orderdao = new OrderDao();
 			Order result = orderdao.selectByOrderId(order.getOrderId());
 			request.setAttribute("result", result);
+			request.setAttribute("message", "");
+			// ŠY“–ƒf[ƒ^‚ª‚È‚¢ê‡
+			if (result.getOrderId() == 0) {
+				request.setAttribute("message", MessageConstants.MESSAGE_NO_DATA);
+			}
 			// ’•¶Ú×î•ñæ“¾
 			OrderDetail orderDetail = new OrderDetail();
 			orderDetail.setOrderId(Integer.parseInt(request.getParameter("order_id")));

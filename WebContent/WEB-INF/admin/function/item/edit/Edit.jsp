@@ -44,14 +44,19 @@ $(function(){
 <h1>商品編集</h1>
 <p>
 	<font color="red">
-<% for(int i=0; i < errorMessageList.size(); i++) {
-	String message = errorMessageList.get(i);
-	out.print(message);
-	out.print("<br>");
+<% 
+	for(int i=0; i < errorMessageList.size(); i++) {
+		String message = errorMessageList.get(i);
+		out.print(message);
+		out.print("<br>");
 	}
 %>
 	</font>
 </p>
+<%
+	// 該当データがある場合
+	if (result.getId() != 0) {
+%>
 <div id="data_table">
 <form method="post" action="edit?action=edit_end"  enctype="multipart/form-data">
 	<table class="table table-bordered table-condensed">
@@ -117,7 +122,7 @@ $(function(){
 			if ("edit_end".equals(actionParam)) {
 				out.print(inputDataList.get("item_sales_period_from")[0]);
  			} else {
-				out.print(result.getSalesPeriodFrom());
+				out.print(result.getSalesPeriodFrom().toString());
 			} %>"></td> 
 		</tr>
 		<tr>
@@ -126,7 +131,7 @@ $(function(){
 			if ("edit_end".equals(actionParam)) {
 				out.print(inputDataList.get("item_sales_period_to")[0]);
  			} else {
- 				out.print(result.getSalesPeriodTo());
+ 				out.print(result.getSalesPeriodTo().toString());
 			} %>"></td> 
 		</tr>
 		<tr>
@@ -152,6 +157,7 @@ $(function(){
 	</table>
 </form>
 </div>
+<%} %>
 </td>
 </tr>
 </table>

@@ -40,7 +40,7 @@ public class AccountDao {
 			account.setZipCode(result.getString("zip_code"));
 			account.setAddress(result.getString("address"));
 			account.setPhoneNumber(result.getString("phone_number"));
-			account.setDelFlg(result.getInt("del_flg"));
+			account.setDelFlg(result.getBoolean("del_flg"));
 			account.setToken(result.getString("token"));
 		}
 		result.close();
@@ -126,7 +126,7 @@ public class AccountDao {
 			account.setZipCode(result.getString("zip_code"));
 			account.setAddress(result.getString("address"));
 			account.setPhoneNumber(result.getString("phone_number"));
-			account.setDelFlg(result.getInt("del_flg"));
+			account.setDelFlg(result.getBoolean("del_flg"));
 			account.setToken(result.getString("token"));
 			resultList.add(account);
 		}

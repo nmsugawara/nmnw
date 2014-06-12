@@ -145,8 +145,8 @@ if ("search".equals(actionParam) && resultList != null && resultList.size() != 0
 		out.println("<td><img src='" + ConfigConstants.IMAGE_DIR_ITEM + resultList.get(i).getImageUrl() + "' width='50' height='50'></td>");
 		out.println("<td>￥" + resultList.get(i).getPrice() + "</td>");
 		out.println("<td>" + ItemCategoryEnum.getEnum(resultList.get(i).getCategory()).name() + "</td>");
-		out.println("<td>" + resultList.get(i).getSalesPeriodFrom() + "</td>");
-		out.println("<td>" + resultList.get(i).getSalesPeriodTo() + "</td>");
+		out.println("<td>" + resultList.get(i).getSalesPeriodFrom().toString() + "</td>");
+		out.println("<td>" + resultList.get(i).getSalesPeriodTo().toString() + "</td>");
 		out.println("<td>" + resultList.get(i).getStock() + "</td>");
 		out.println("</tr>");
 	}

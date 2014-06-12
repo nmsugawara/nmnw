@@ -10,14 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.nmnw.admin.constant.ConfigConstants;
+import com.nmnw.admin.constant.MessageConstants;
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
 
 @WebServlet(name="admin/item/detail", urlPatterns={"/admin/item/detail"})
 public class DetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String MESSAGE_NEW_END = "“o˜^‚ªŠ®—¹‚µ‚Ü‚µ‚½B";
-	private static final String MESSAGE_EDIT_END = "•ÒW‚ªŠ®—¹‚µ‚Ü‚µ‚½B";
 
 	/**
 	 * Construct
@@ -39,12 +38,19 @@ public class DetailServlet extends HttpServlet {
 			ItemDao itemdao = new ItemDao();
 			Item result = itemdao.selectByItemId(item.getId());
 			request.setAttribute("result", result);
-			// get message
 			request.setAttribute("message", "");
-			if ("new_end".equals(request.getParameter("action"))) {
-				request.setAttribute("message", MESSAGE_NEW_END);
-			} else if ("edit_end".equals(request.getParameter("action"))) {
-				request.setAttribute("message", MESSAGE_EDIT_END);
+			// ŠY“–ƒf[ƒ^‚ª‚È‚¢ê‡
+			if (result.getId() == 0) {
+				request.setAttribute("message", MessageConstants.MESSAGE_NO_DATA);
+			} else {
+			// ŠY“–ƒf[ƒ^‚ª‚ ‚éê‡
+				// V‹K“o˜^Š®—¹
+				if ("new_end".equals(request.getParameter("action"))) {
+					request.setAttribute("message", MessageConstants.MESSAGE_NEW_END);
+				// •ÒWŠ®—¹
+				} else if ("edit_end".equals(request.getParameter("action"))) {
+					request.setAttribute("message", MessageConstants.MESSAGE_EDIT_END);
+				}
 			}
 			request.getRequestDispatcher(page).forward(request, response);
 		} catch (Exception e) {

@@ -1,4 +1,6 @@
 package com.nmnw.admin.dao;
+import java.util.Date;
+
 import com.nmnw.admin.utility.HtmlHelper;
 
 public class Item {
@@ -9,8 +11,8 @@ public class Item {
 	private String _category = "";
 	private String _imageUrl = "";
 	private String _explanation = "";
-	private String _salesPeriodFrom = "";
-	private String _salesPeriodTo = "";
+	private Date _salesPeriodFrom;
+	private Date _salesPeriodTo;
 	private int _stock;
 
 	/**
@@ -79,19 +81,19 @@ public class Item {
 		return str;
 	}
 
-	public void setSalesPeriodFrom(String salesPeriodFrom) {
+	public void setSalesPeriodFrom(Date salesPeriodFrom) {
 		_salesPeriodFrom = salesPeriodFrom;
 	}
 
-	public String getSalesPeriodFrom() {
+	public Date getSalesPeriodFrom() {
 		return _salesPeriodFrom;
 	}
 
-	public void setSalesPeriodTo(String salesPeriodTo) {
+	public void setSalesPeriodTo(Date salesPeriodTo) {
 		_salesPeriodTo = salesPeriodTo;
 	}
 
-	public String getSalesPeriodTo() {
+	public Date getSalesPeriodTo() {
 		return _salesPeriodTo;
 	}
 

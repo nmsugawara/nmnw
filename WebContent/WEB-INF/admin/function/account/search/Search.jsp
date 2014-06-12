@@ -98,7 +98,7 @@ if ("search".equals(actionParam) && resultList != null && resultList.size() != 0
 		out.println("<td>" + resultList.get(i).getMailConvertedHtml() + "</td>");
 		out.println("<td>" + resultList.get(i).getPhoneNumberConvertedHtml() + "</td>");
 		out.print("<td>");
-		if (resultList.get(i).getDelFlg() == 1) {
+		if (resultList.get(i).getDelFlg() == true) {
 			out.print("削除済");
 		}
 		out.println("</td>");

@@ -15,9 +15,11 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.nmnw.admin.constant.ConfigConstants;
+import com.nmnw.admin.constant.MessageConstants;
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
 import com.nmnw.admin.validator.ItemValidator;
+import com.nmnw.admin.utility.DateConversionUtility;
 import com.nmnw.admin.utility.RequestParameterUtility;
 import com.nmnw.admin.utility.FileUtility;
 
@@ -41,9 +43,8 @@ public class EditServlet extends HttpServlet {
 		List<String> errorMessageList = new ArrayList<String>();
 		String action = request.getParameter("action");
 		Map<String, String[]> inputDataList = request.getParameterMap();
-		// get "action" parameter
 		String page = ConfigConstants.JSP_DIR_ITEM_EDIT + "Edit.jsp";
-		// edit
+		// 編集画面表示
 		if ("edit".equals(action)) {
 			try {
 				// parameter
@@ -51,11 +52,20 @@ public class EditServlet extends HttpServlet {
 				item.setId(Integer.parseInt(request.getParameter("item_id")));
 				ItemDao itemdao = new ItemDao();
 				Item result = itemdao.selectByItemId(item.getId());
-				request.setAttribute("result", result);
-				errorMessageList.add("");
-				request.setAttribute("errorMessageList", errorMessageList);
-				request.setAttribute("inputDataList", inputDataList);
-				request.getRequestDispatcher(page).forward(request, response);
+				// 該当データが存在しない場合
+				if (result.getId() == 0) {
+					request.setAttribute("result", result);
+					errorMessageList.add(MessageConstants.MESSAGE_NO_DATA);
+					request.setAttribute("errorMessageList", errorMessageList);
+					request.setAttribute("inputDataList", inputDataList);
+					request.getRequestDispatcher(page).forward(request, response);
+				} else {
+					request.setAttribute("result", result);
+					errorMessageList.add("");
+					request.setAttribute("errorMessageList", errorMessageList);
+					request.setAttribute("inputDataList", inputDataList);
+					request.getRequestDispatcher(page).forward(request, response);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				String exceptionMessage = e.getStackTrace().toString();
@@ -65,6 +75,7 @@ public class EditServlet extends HttpServlet {
 				response.sendRedirect(url);
 			}
 		} else {
+		// 編集完了
 			try {
 				// validation
 				ItemValidator iv = new ItemValidator();
@@ -81,21 +92,21 @@ public class EditServlet extends HttpServlet {
 				iv.checkStock(request.getParameter("item_stock"));
 
 				errorMessageList = iv.getValidationList();
-				// has error: go back new page
+				// 入力エラー時
 				if (errorMessageList.size() != 0) {
 					request.setAttribute("errorMessageList", errorMessageList);
 					request.setAttribute("inputDataList", inputDataList);
 					request.getRequestDispatcher(page).forward(request, response);
 				} else {
-					// set to data object
+					// データオブジェクトに値セット
 					Item item = new Item();
 					item.setId(Integer.parseInt(request.getParameter("item_id")));
 					item.setName(request.getParameter("item_name"));
 					item.setPrice(Integer.parseInt(request.getParameter("item_price")));
 					item.setCategory(request.getParameter("item_category"));
 					item.setExplanation(request.getParameter("item_explanation"));
-					item.setSalesPeriodFrom(request.getParameter("item_sales_period_from"));
-					item.setSalesPeriodTo(request.getParameter("item_sales_period_to"));
+					item.setSalesPeriodFrom(DateConversionUtility.stringToDate(request.getParameter("item_sales_period_from")));
+					item.setSalesPeriodTo(DateConversionUtility.stringToDate(request.getParameter("item_sales_period_to")));
 					item.setStock(Integer.parseInt(request.getParameter("item_stock")));
 					// 新規画像がアップロードされていなかったら現在登録の画像URL
 					if (RequestParameterUtility.isEmptyImage(image)) {
@@ -106,6 +117,7 @@ public class EditServlet extends HttpServlet {
 						item.setImageUrl(newImageFileName);
 					}
 					ItemDao itemdao = new ItemDao();
+					// 更新
 					String itemId = String.valueOf(itemdao.update(item));
 					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ITEM_DETAIL + "?item_id=" + itemId + "&action=edit_end";
 					response.sendRedirect(url);

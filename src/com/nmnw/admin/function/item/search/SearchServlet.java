@@ -63,12 +63,13 @@ public class SearchServlet extends HttpServlet {
 			}
 
 			errorMessageList = v.getErrorMessageList();
-			// 入力チェックに該当時、エラーメッセージ表示
+			// 入力エラー時
 			if (errorMessageList.size() != 0) {
 				request.setAttribute("errorMessageList", errorMessageList);
 				request.setAttribute("inputDataList", inputDataList);
 				request.getRequestDispatcher(page).forward(request, response);
 			} else {
+			// 検索
 				try {
 					int searchId = ConfigConstants.NULL_INT;
 					String searchName = "";

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.nmnw.admin.constant.ConfigConstants;
+import com.nmnw.admin.constant.MessageConstants;
 import com.nmnw.admin.constant.ValidatorConstants;
 import com.nmnw.admin.dao.Order;
 import com.nmnw.admin.dao.OrderDao;
@@ -23,8 +24,6 @@ import com.nmnw.admin.validator.Validator;
 public class BulkShipServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String FIELD_ORDER_ID = "注文ID";
-	private static final String MESSAGE_SUCCESS = "件、出荷情報更新が正常に完了しました。";
-	private static final String MESSAGE_ERROR = "件、出荷情報更新が行われませんでした。";
 
 	/**
 	 * Construct
@@ -67,8 +66,13 @@ public class BulkShipServlet extends HttpServlet {
 					// 出荷関連カラムデータ確認
 					OrderDao orderdao = new OrderDao();
 					Order result = orderdao.selectByOrderId(orderId);
-					// キャンセル済、出荷済の場合、処理しない
-					if (result.getCancelFlg() == 1 || result.getShippingFlg() == 1 ) {
+					// 該当データが存在しない場合、処理しない
+					if (result.getOrderId() == 0) {
+						errorOrderIdList.add(orderIdList[i]);
+						continue;
+					}
+ 					// キャンセル済、出荷済の場合、処理しない
+					if (result.getCancelFlg() == true || result.getShippingFlg() == true ) {
 						errorOrderIdList.add(orderIdList[i]);
 						continue;
 					}
@@ -78,11 +82,11 @@ public class BulkShipServlet extends HttpServlet {
 				}
 				if (!successOrderIdList.isEmpty()) {
 					int count = successOrderIdList.size();
-					messageList.add(count + MESSAGE_SUCCESS);
+					messageList.add(count + MessageConstants.MESSAGE_BULK_SHIPPING_SUCCESS);
 				}
 				if (!errorOrderIdList.isEmpty()) {
 					int count = errorOrderIdList.size();
-					messageList.add(count + MESSAGE_ERROR);
+					messageList.add(count + MessageConstants.MESSAGE_BULK_SHIPPING_ERROR);
 				}
 				session.setAttribute("messageList", messageList);
 				session.setAttribute("inputDataList", inputDataList);

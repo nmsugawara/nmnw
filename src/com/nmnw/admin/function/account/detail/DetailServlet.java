@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.nmnw.admin.constant.ConfigConstants;
+import com.nmnw.admin.constant.MessageConstants;
 import com.nmnw.admin.dao.Account;
 import com.nmnw.admin.dao.AccountDao;
 
 @WebServlet(name="admin/account/detail", urlPatterns={"/admin/account/detail"})
 public class DetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 
 	/**
 	 * Construct
@@ -38,6 +38,11 @@ public class DetailServlet extends HttpServlet {
 			AccountDao accountdao = new AccountDao();
 			Account result = accountdao.selectByAccountId(account.getId());
 			request.setAttribute("result", result);
+			request.setAttribute("message", "");
+			// äYìñÉfÅ[É^Ç™Ç»Ç¢èÍçá
+			if (result.getId() == 0) {
+				request.setAttribute("message", MessageConstants.MESSAGE_NO_DATA);
+			}
 			request.getRequestDispatcher(page).forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();

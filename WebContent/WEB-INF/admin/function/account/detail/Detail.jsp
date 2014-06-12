@@ -22,6 +22,12 @@
 <p>
 	<h1>会員詳細情報</h1>
 </p>
+<% 
+	// 該当データがない場合
+	if (result.getId() == 0) {
+		out.println("<font color=\"red\">" + request.getAttribute("message") + "</font>");
+	} else {
+%>
 <div id="data_table">
 <table class="table table-bordered table-condensed">
 	<tr>
@@ -50,10 +56,13 @@
 	</tr>
 	<tr>
 		<th>削除</th>
-		<td><input type="hidden" name="del_flg" value="<% out.print(result.getDelFlg()); %>"><% if (result.getDelFlg() == 1) {out.print("削除済");} %></td>
+		<td><input type="hidden" name="del_flg" value="<% out.print(result.getDelFlg()); %>"><% if (result.getDelFlg() == true) {out.print("削除済");} %></td>
 	</tr>
 </table>
 </div>
-<% out.println("<a href=\"search\">会員管理TOPへ</a>"); %>
+<%
+	}
+	out.println("<br><a href=\"search\">会員管理TOPへ</a>");
+%>
 </body>
 </html>

@@ -120,8 +120,8 @@ public class Validator {
 		boolean hasError = false;
 		// fromAto‚ª“ú•tŒ`Ž®‚©
 		if (!isDate(from, fieldNameFrom) && !isDate(to, fieldNameTo)) {
-			Calendar calFrom = DateConversionUtility.toDate(from);
-			Calendar calTo = DateConversionUtility.toDate(to);
+			Calendar calFrom = DateConversionUtility.stringToCalendar(from);
+			Calendar calTo = DateConversionUtility.stringToCalendar(to);
 			int judge = calFrom.compareTo(calTo);
 			if ( judge > 0) {
 				String message = getMessage(ValidatorConstants.MESSAGE_CORRECT_PERIOD, fieldNameFrom, fieldNameTo);

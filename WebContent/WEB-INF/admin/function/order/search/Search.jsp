@@ -173,14 +173,14 @@ if ("search".equals(actionParam) && resultList != null && resultList.size() != 0
 		out.println("<tr>");
 		// checkbox
 		out.print("<td>");
-		if (resultList.get(i).getCancelFlg() == 0 && resultList.get(i).getShippingFlg() == 0) {
+		if (resultList.get(i).getCancelFlg() == false && resultList.get(i).getShippingFlg() == false) {
 			out.print("<input type=\"checkbox\" name=\"bulkShip\" value=\"" + String.valueOf(resultList.get(i).getOrderId()) + "\" >");
 		}
 		out.println("</td>");
 		// 注文ID
 		out.println("<td><a href=\"detail?order_id=" + String.valueOf(resultList.get(i).getOrderId()) + "\">" + String.valueOf(resultList.get(i).getOrderId()) + "</td>");
 		// 注文日時
-		out.println("<td>" + resultList.get(i).getOrderTime() + "</td>");
+		out.println("<td>" + resultList.get(i).getOrderTime().toString() + "</td>");
 		// 会員ID
 		out.println("<td>" + resultList.get(i).getAccountId() + "</td>");
 		// 会員名
@@ -195,26 +195,26 @@ if ("search".equals(actionParam) && resultList != null && resultList.size() != 0
 		out.println("<td>￥" + resultList.get(i).getTotalPrice() + "</td>");
 		// キャンセル状況
 		out.print("<td>");
-		if (resultList.get(i).getCancelFlg() == 1) {
+		if (resultList.get(i).getCancelFlg() == true) {
 			out.print("キャンセル済");
 		}
 		out.println("</td>");
 		// キャンセル日時
 		out.print("<td>");
 		if (resultList.get(i).getCancelTime() != null) {
-			out.print(resultList.get(i).getCancelTime());	
+			out.print(resultList.get(i).getCancelTime().toString());
 		}
 		out.println("</td>");
 		// 出荷状況
 		out.print("<td>");
-		if (resultList.get(i).getShippingFlg() == 1) {
+		if (resultList.get(i).getShippingFlg() == true) {
 			out.print("出荷済");
 		}
 		out.println("</td>");
 		// 出荷日時
 		out.print("<td>");
 		if (resultList.get(i).getShippingTime() != null) {
-			out.print(resultList.get(i).getShippingTime());	
+			out.print(resultList.get(i).getShippingTime().toString());	
 		}
 		out.println("</td>");
 		out.println("</tr>");
@@ -222,7 +222,11 @@ if ("search".equals(actionParam) && resultList != null && resultList.size() != 0
 }
 %>
 	</table>
-	<button type="submit" class="btn btn-primary">一括出荷</button>
+<%
+	if ("search".equals(actionParam) && resultList != null && resultList.size() != 0) {
+		out.println("<button type=\"submit\" class=\"btn btn-primary\">一括出荷</button>");
+	}
+%>
 </form>
 </div>
 </body>

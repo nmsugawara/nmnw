@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -35,7 +36,7 @@ public class OrderDao {
 		Order order = new Order();
 		while (result.next()) {
 			order.setOrderId(result.getInt("order_id"));
-			order.setOrderTime(result.getString("order_time"));
+			order.setOrderTime(result.getTimestamp("order_time"));
 			order.setAccountId(result.getInt("account_id"));
 			order.setAccountName(result.getString("account_name"));
 			order.setAccountNameKana(result.getString("account_name_kana"));
@@ -44,10 +45,10 @@ public class OrderDao {
 			order.setAccountAddress(result.getString("account_address"));
 			order.setAccountPhoneNumber(result.getString("account_phone_number"));
 			order.setTotalPrice(result.getInt("total_price"));
-			order.setCancelFlg(result.getInt("cancel_flg"));
-			order.setCancelTime(result.getString("cancel_time"));
-			order.setShippingFlg(result.getInt("shipping_flg"));
-			order.setShippingTime(result.getString("shipping_time"));
+			order.setCancelFlg(result.getBoolean("cancel_flg"));
+			order.setCancelTime(result.getTimestamp("cancel_time"));
+			order.setShippingFlg(result.getBoolean("shipping_flg"));
+			order.setShippingTime(result.getTimestamp("shipping_time"));
 		}
 		result.close();
 		statement.close();
@@ -144,7 +145,7 @@ public class OrderDao {
 		while (result.next()) {
 			Order order = new Order();
 			order.setOrderId(result.getInt("order_id"));
-			order.setOrderTime(result.getString("order_time"));
+			order.setOrderTime(result.getTimestamp("order_time"));
 			order.setAccountId(result.getInt("account_id"));
 			order.setAccountName(result.getString("account_name"));
 			order.setAccountNameKana(result.getString("account_name_kana"));
@@ -153,11 +154,11 @@ public class OrderDao {
 			order.setAccountAddress(result.getString("account_address"));
 			order.setAccountPhoneNumber(result.getString("account_phone_number"));
 			order.setTotalPrice(result.getInt("total_price"));
-			order.setCancelFlg(result.getInt("cancel_flg"));
-			order.setCancelTime(result.getString("cancel_time"));
-			order.setShippingFlg(result.getInt("shipping_flg"));
-			order.setShippingTime(result.getString("shipping_time"));
-			resultList.add(order);
+			order.setCancelFlg(result.getBoolean("cancel_flg"));
+			order.setCancelTime(result.getTimestamp("cancel_time"));
+			order.setShippingFlg(result.getBoolean("shipping_flg"));
+			order.setShippingTime(result.getTimestamp("shipping_time"));
+ 			resultList.add(order);
 		}
 		result.close();
 		statement.close();
@@ -182,7 +183,7 @@ public class OrderDao {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		String shippingTime = DateConversionUtility.getCurrentDateString();
 		statement.setInt(1, 1);
-		statement.setString(2, shippingTime);
+		statement.setTimestamp(2, java.sql.Timestamp.valueOf(shippingTime));
 		statement.setInt(3, OrderId);
 		int updateCount = statement.executeUpdate();
 		statement.close();

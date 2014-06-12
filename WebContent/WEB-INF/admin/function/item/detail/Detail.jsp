@@ -24,6 +24,10 @@
 <p>
 	<h1>${message}</h1>
 </p>
+<% 
+	// 該当データがある場合
+	if (result.getId() != 0) {
+%>
 <div id="data_table">
 <form method="post" action="edit?item_id=<% out.print(result.getId()); %>&action=edit"  enctype="multipart/form-data">
 	<table class="table table-bordered table-condensed">
@@ -52,11 +56,11 @@
 		</tr>
 		<tr>
 			<th>販売開始日</th>
-			<td><input type="hidden" name="item_sales_period_from" value="<% out.print(result.getSalesPeriodFrom()); %>"><% out.print(result.getSalesPeriodFrom()); %></td>
+			<td><input type="hidden" name="item_sales_period_from" value="<% out.print(result.getSalesPeriodFrom().toString()); %>"><% out.print(result.getSalesPeriodFrom().toString()); %></td>
 		</tr>
 		<tr>
 			<th>販売終了日</th>
-			<td><input type="hidden" name="item_sales_period_to" value="<% out.print(result.getSalesPeriodTo()); %>"><% out.print(result.getSalesPeriodTo()); %></td>
+			<td><input type="hidden" name="item_sales_period_to" value="<% out.print(result.getSalesPeriodTo().toString()); %>"><% out.print(result.getSalesPeriodTo().toString()); %></td>
 		</tr>
 		<tr>
 			<th>在庫数</th>
@@ -73,9 +77,10 @@
 </form>
 </div>
 <%
-if("new_end".equals(action) || "edit_end".equals(action)) {
-	out.println("<a href=\"search\">商品管理TOPへ</a>");
-}
+	}
+	if("new_end".equals(action) || "edit_end".equals(action)) {
+		out.println("<a href=\"search\">商品管理TOPへ</a>");
+	}
 %>
 </body>
 </html>

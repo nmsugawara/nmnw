@@ -11,7 +11,7 @@ public class Account {
 	private String _zipCode = "";
 	private String _address = "";
 	private String _phoneNumber = "";
-	private int _delFlg;
+	private boolean _delFlg;
 	private String _token = "";
 
 	/**
@@ -126,11 +126,11 @@ public class Account {
 		return str;
 	}
 
-	public void setDelFlg(int delFlg) {
+	public void setDelFlg(boolean delFlg) {
 		_delFlg = delFlg;
 	}
 
-	public int getDelFlg() {
+	public boolean getDelFlg() {
 		return _delFlg;
 	}
 

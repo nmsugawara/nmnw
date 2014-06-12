@@ -1,10 +1,12 @@
 package com.nmnw.admin.dao;
+import java.util.Date;
+
 import com.nmnw.admin.utility.HtmlHelper;
 
 public class Order {
 
 	private int _orderId;
-	private String _orderTime = "";
+	private Date _orderTime;
 	private int _accountId;
 	private String _accountName = "";
 	private String _accountNameKana = "";
@@ -13,10 +15,10 @@ public class Order {
 	private String _accountAddress = "";
 	private String _accountPhoneNumber = "";
 	private int _totalPrice;
-	private int _cancelFlg;
-	private String _cancelTime = "";
-	private int _shippingFlg;
-	private String _shippingTime = "";
+	private boolean _cancelFlg;
+	private Date _cancelTime;
+	private boolean _shippingFlg;
+	private Date _shippingTime;
 
 	/**
 	 * Construct
@@ -32,11 +34,11 @@ public class Order {
 		return _orderId;
 	}
 
-	public void setOrderTime(String orderTime) {
+	public void setOrderTime(Date orderTime) {
 		_orderTime = orderTime;
 	}
 
-	public String getOrderTime() {
+	public Date getOrderTime() {
 		return _orderTime;
 	}
 
@@ -140,35 +142,35 @@ public class Order {
 		return _totalPrice;
 	}
 
-	public void setCancelFlg(int cancelFlg) {
+	public void setCancelFlg(boolean cancelFlg) {
 		_cancelFlg = cancelFlg;
 	}
 
-	public int getCancelFlg() {
+	public boolean getCancelFlg() {
 		return _cancelFlg;
 	}
 
-	public void setCancelTime(String cancelTime) {
+	public void setCancelTime(Date cancelTime) {
 		_cancelTime = cancelTime;
 	}
 
-	public String getCancelTime() {
+	public Date getCancelTime() {
 		return _cancelTime;
 	}
 
-	public void setShippingFlg(int shippingFlg) {
+	public void setShippingFlg(boolean shippingFlg) {
 		_shippingFlg = shippingFlg;
 	}
 
-	public int getShippingFlg() {
+	public boolean getShippingFlg() {
 		return _shippingFlg;
 	}
 
-	public void setShippingTime(String shippingTime) {
+	public void setShippingTime(Date shippingTime) {
 		_shippingTime = shippingTime;
 	}
 
-	public String getShippingTime() {
+	public Date getShippingTime() {
 		return _shippingTime;
 	}
 }

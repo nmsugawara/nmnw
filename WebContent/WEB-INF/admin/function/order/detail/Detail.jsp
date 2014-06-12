@@ -24,6 +24,12 @@
 <p>
 	<h1>商品詳細情報</h1>
 </p>
+<% 
+	// 該当データがない場合
+	if (result.getOrderId() == 0) {
+		out.println("<font color=\"red\">" + request.getAttribute("message") + "</font>");
+	} else {
+%>
 <div id="data_table">
 <table class="table table-bordered table-condensed">
 	<tr>
@@ -32,7 +38,7 @@
 	</tr>
 	<tr>
 		<th>注文日時</th>
-		<td><% out.print(result.getOrderTime()); %></td>
+		<td><% out.print(result.getOrderTime().toString()); %></td>
 	</tr>
 	<tr>
 		<th>注文詳細</th>
@@ -66,7 +72,7 @@
 	<tr>
 		<th>キャンセル状況</th>
 		<td><%
-		if (result.getCancelFlg() == 1) {
+		if (result.getCancelFlg() == true) {
 			out.print("キャンセル済");
 		}
 		%></td>
@@ -75,14 +81,14 @@
 		<th>キャンセル日時</th>
 		<td><%
 		if (result.getCancelTime() != null) {
-			out.print(result.getCancelTime());	
+			out.print(result.getCancelTime().toString());	
 		}
 		%></td>
 	</tr>
 	<tr>
 		<th>出荷状況</th>
 		<td><%
-		if (result.getShippingFlg() == 1) {
+		if (result.getShippingFlg() == true) {
 			out.print("出荷済");
 		}
 		%></td>
@@ -91,7 +97,7 @@
 		<th>出荷日時</th>
 		<td><%
 		if (result.getShippingTime() != null) {
-			out.print(result.getShippingTime());	
+			out.print(result.getShippingTime().toString());	
 		}
 		%></td>
 	</tr>
@@ -121,6 +127,9 @@
 	</tr>
 </table>
 </div>
-<% out.println("<a href=\"search\">注文管理TOPへ</a>"); %>
+<%
+	}
+	out.println("<br><a href=\"search\">注文管理TOPへ</a>");
+%>
 </body>
 </html>

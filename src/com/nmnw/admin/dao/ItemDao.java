@@ -38,8 +38,8 @@ public class ItemDao {
 			item.setCategory(result.getString("category"));
 			item.setImageUrl(result.getString("image_url"));
 			item.setExplanation(result.getString("explanation"));
-			item.setSalesPeriodFrom(result.getString("sales_period_from"));
-			item.setSalesPeriodTo(result.getString("sales_period_to"));
+			item.setSalesPeriodFrom(result.getDate("sales_period_from"));
+			item.setSalesPeriodTo(result.getDate("sales_period_to"));
 			item.setStock(result.getInt("stock"));
 		}
 		result.close();
@@ -148,8 +148,8 @@ public class ItemDao {
 			item.setPrice(result.getInt("price"));
 			item.setCategory(result.getString("category"));
 			item.setImageUrl(result.getString("image_url"));
-			item.setSalesPeriodFrom(result.getString("sales_period_from"));
-			item.setSalesPeriodTo(result.getString("sales_period_to"));
+			item.setSalesPeriodFrom(result.getDate("sales_period_from"));
+			item.setSalesPeriodTo(result.getDate("sales_period_to"));
 			item.setStock(result.getInt("stock"));
 			resultList.add(item);
 		}
@@ -176,8 +176,8 @@ public class ItemDao {
 		statement.setString(3, item.getCategory());
 		statement.setString(4, item.getImageUrl());
 		statement.setString(5, item.getExplanation());
-		statement.setString(6, item.getSalesPeriodFrom());
-		statement.setString(7, item.getSalesPeriodTo());
+		statement.setDate(6, new java.sql.Date(item.getSalesPeriodFrom().getTime()));
+		statement.setDate(7, new java.sql.Date(item.getSalesPeriodTo().getTime()));
 		statement.setInt(8, item.getStock());
 		int updateCount = statement.executeUpdate();
 		statement.close();
@@ -220,8 +220,8 @@ public class ItemDao {
 			statement.setString(3, item.getCategory());
 			statement.setString(4, item.getImageUrl());
 			statement.setString(5, item.getExplanation());
-			statement.setString(6, item.getSalesPeriodFrom());
-			statement.setString(7, item.getSalesPeriodTo());
+			statement.setDate(6, new java.sql.Date(item.getSalesPeriodFrom().getTime()));
+			statement.setDate(7, new java.sql.Date(item.getSalesPeriodTo().getTime()));
 			statement.setInt(8, item.getStock());
 			statement.setInt(9, item.getId());
 			int updateCount = statement.executeUpdate();

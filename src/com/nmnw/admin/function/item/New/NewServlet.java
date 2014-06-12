@@ -14,6 +14,7 @@ import javax.servlet.http.Part;
 
 import com.nmnw.admin.dao.Item;
 import com.nmnw.admin.dao.ItemDao;
+import com.nmnw.admin.utility.DateConversionUtility;
 import com.nmnw.admin.utility.FileUtility;
 import com.nmnw.admin.validator.ItemValidator;
 import com.nmnw.admin.constant.ConfigConstants;
@@ -74,8 +75,8 @@ public class NewServlet extends HttpServlet {
 					item.setPrice(Integer.parseInt(request.getParameter("item_price")));
 					item.setCategory(request.getParameter("item_category"));
 					item.setExplanation(request.getParameter("item_explanation"));
-					item.setSalesPeriodFrom(request.getParameter("item_sales_period_from"));
-					item.setSalesPeriodTo(request.getParameter("item_sales_period_to"));
+					item.setSalesPeriodFrom(DateConversionUtility.stringToDate(request.getParameter("item_sales_period_from")));
+					item.setSalesPeriodTo(DateConversionUtility.stringToDate(request.getParameter("item_sales_period_to")));
 					item.setStock(Integer.parseInt(request.getParameter("item_stock")));
 					String newImageFileName = FileUtility.getNewFileName(image, "item");
 					image.write(ConfigConstants.STORED_IMAGE_DIR_ITEM + newImageFileName);
