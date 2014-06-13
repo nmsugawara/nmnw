@@ -11,7 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.nmnw.admin.constant.ConfigConstants;
@@ -49,24 +48,18 @@ public class EditServlet extends HttpServlet {
 		if ("edit".equals(action)) {
 			try {
 				// parameter
-				Item item = new Item();
-				item.setId(Integer.parseInt(request.getParameter("item_id")));
 				ItemDao itemdao = new ItemDao();
-				Item result = itemdao.selectByItemId(item.getId());
+				Item result = itemdao.selectByItemId(Integer.parseInt(request.getParameter("item_id")));
 				// äYìñÉfÅ[É^Ç™ë∂ç›ÇµÇ»Ç¢èÍçá
 				if (result.getId() == 0) {
-					request.setAttribute("result", result);
 					errorMessageList.add(MessageConstants.MESSAGE_NO_DATA);
-					request.setAttribute("errorMessageList", errorMessageList);
-					request.setAttribute("inputDataList", inputDataList);
-					request.getRequestDispatcher(page).forward(request, response);
 				} else {
-					request.setAttribute("result", result);
 					errorMessageList.add("");
-					request.setAttribute("errorMessageList", errorMessageList);
-					request.setAttribute("inputDataList", inputDataList);
-					request.getRequestDispatcher(page).forward(request, response);
 				}
+				request.setAttribute("result", result);
+				request.setAttribute("errorMessageList", errorMessageList);
+				request.setAttribute("inputDataList", inputDataList);
+				request.getRequestDispatcher(page).forward(request, response);
 			} catch (Exception e) {
 				e.printStackTrace();
 				ExceptionUtility.redirectErrorPage(request, response, e);
