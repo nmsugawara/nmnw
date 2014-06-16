@@ -91,12 +91,27 @@ public class DateConversionUtility {
 	}
 
 	/**
+	 * 時間日付(Date型）を文字列に変換
+	 * @param value
+	 * @return date
+	 */
+	public static String dateTimeToString (Date value) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
+		dateFormat.setLenient(false);
+		try {
+			return dateFormat.format(value);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
 	 * 日付(Date型）を文字列に変換
 	 * @param value
 	 * @return date
 	 */
 	public static String dateToString (Date value) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE);
 		dateFormat.setLenient(false);
 		try {
 			return dateFormat.format(value);
@@ -152,5 +167,22 @@ public class DateConversionUtility {
 		cal.set(Calendar.DAY_OF_MONTH, days);
 		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
 		return sdf.format(cal.getTime());
+	}
+
+	/**
+	 * n日後の日付を文字列で返却
+	 * @param value
+	 * @return date
+	 */
+	public static String getdaysAgoString (int daysAgo) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH, -daysAgo);
+		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE);
+		dateFormat.setLenient(false);
+		try {
+			return dateFormat.format(cal.getTime());
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

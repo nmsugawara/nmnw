@@ -39,7 +39,7 @@
 	</tr>
 	<tr>
 		<th>注文日時</th>
-		<td><% out.print(DateConversionUtility.dateToString(result.getOrderTime())); %></td>
+		<td><% out.print(DateConversionUtility.dateTimeToString(result.getOrderTime())); %></td>
 	</tr>
 	<tr>
 		<th>注文詳細</th>
@@ -82,7 +82,7 @@
 		<th>キャンセル日時</th>
 		<td><%
 		if (result.getCancelTime() != null) {
-			out.print(DateConversionUtility.dateToString(result.getCancelTime()));	
+			out.print(DateConversionUtility.dateTimeToString(result.getCancelTime()));	
 		}
 		%></td>
 	</tr>
@@ -98,7 +98,7 @@
 		<th>出荷日時</th>
 		<td><%
 		if (result.getShippingTime() != null) {
-			out.print(DateConversionUtility.dateToString(result.getShippingTime()));	
+			out.print(DateConversionUtility.dateTimeToString(result.getShippingTime()));	
 		}
 		%></td>
 	</tr>
