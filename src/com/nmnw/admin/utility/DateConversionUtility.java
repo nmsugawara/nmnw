@@ -3,8 +3,12 @@ package com.nmnw.admin.utility;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DateConversionUtility {
 	private static final String FORMAT_DATE = "yyyy-MM-dd";
@@ -99,5 +103,54 @@ public class DateConversionUtility {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	/**
+	 * 第1引数の日付から過去第2引数ヶ月分の月初、月末の日付リストを取得
+	 * @param cal
+	 * @param months
+	 * @return
+	 */
+	public static List<Map<String, String>> getLastBeginningAndEndOfMonthList (Calendar cal, int months) {
+		List<Map<String, String>> dateList = new ArrayList<Map<String, String>>();
+		try {
+			for (int i = 0; i < months; i++) {
+				Calendar calc = (Calendar)cal.clone();
+				calc.add(Calendar.MONTH, -i);
+				String from = getBeginningOfMonth(calc);
+				String to = getEndOfMonth(calc);
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("from", from);
+				map.put("to", to);
+				dateList.add(map);
+			}
+			return dateList;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * 月初の日付取得
+	 * @param cal
+	 * @return
+	 */
+	private static String getBeginningOfMonth (Calendar cal) {
+		int days = cal.getActualMinimum(Calendar.DAY_OF_MONTH);
+		cal.set(Calendar.DAY_OF_MONTH, days);
+		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
+		return sdf.format(cal.getTime());
+	}
+
+	/**
+	 * 月末の日付取得
+	 * @param cal
+	 * @return
+	 */
+	private static String getEndOfMonth (Calendar cal) {
+		int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		cal.set(Calendar.DAY_OF_MONTH, days);
+		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
+		return sdf.format(cal.getTime());
 	}
 }
