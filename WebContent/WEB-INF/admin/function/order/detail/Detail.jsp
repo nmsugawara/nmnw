@@ -21,7 +21,7 @@
 <title>No Music No Work | 注文情報詳細</title>
 </head>
 <body>
-<jsp:include page="/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
 <p>
 	<h1>商品詳細情報</h1>
 </p>

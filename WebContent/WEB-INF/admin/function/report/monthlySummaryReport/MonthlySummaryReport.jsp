@@ -17,7 +17,7 @@
 <title>No Music No Work | 月別総合レポート</title>
 </head>
 <body>
-<jsp:include page="/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
 <p>
 	<h1>月別総合レポート</h1>
 </p>

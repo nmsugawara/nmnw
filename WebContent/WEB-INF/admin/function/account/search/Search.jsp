@@ -25,7 +25,7 @@
 <title>No Music No Work | 会員検索</title>
 </head>
 <body>
-<jsp:include page="/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
 <div id="search_table">
 <form method="post" action="search?action=search">
 	<table class="table table-bordered">

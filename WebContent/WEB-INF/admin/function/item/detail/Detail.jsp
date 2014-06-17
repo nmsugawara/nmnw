@@ -20,7 +20,7 @@
 <title>No Music No Work | 商品詳細</title>
 </head>
 <body>
-<jsp:include page="/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
 <p>
 	<h1>${message}</h1>
 </p>

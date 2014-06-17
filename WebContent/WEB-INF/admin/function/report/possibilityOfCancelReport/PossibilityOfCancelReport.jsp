@@ -17,7 +17,7 @@
 <title>No Music No Work | 未発送/発送後8日以内の注文一覧レポート</title>
 </head>
 <body>
-<jsp:include page="/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
 <p>
 	<h1>未発送/発送後8日以内の注文一覧レポート</h1>
 </p>

@@ -14,7 +14,7 @@
 <title>No Music No Work | レポートTOP</title>
 </head>
 <body>
-<jsp:include page="/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
 <ul class="unstyled">
 	<li><a href="monthlysummaryreport">月別総合レポート</a></li>
 	<li><a href="possibilityofcancelreport">未発送/発送後8日以内の注文一覧レポート</a></li>

@@ -15,7 +15,7 @@
 <title>No Music No Work | Error</title>
 </head>
 <body>
-<jsp:include page="/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
 エラーが発生しました。<br>
 下記メッセージを元にシステム管理者に問い合わせてください。<br>
 <p>

@@ -33,7 +33,7 @@ $(function(){
 <title>No Music No Work | 商品登録</title>
 </head>
 <body>
-<jsp:include page="/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
 <table>
 <tr>
 <td>
