@@ -35,7 +35,7 @@ public class OrderDetailDao {
 			orderDetail.setItemId(result.getInt("item_id"));
 			orderDetail.setItemName(result.getString("item_name"));
 			orderDetail.setItemPrice(result.getInt("item_price"));
-			orderDetail.setItemNumber(result.getInt("item_number"));
+			orderDetail.setItemNumber(result.getInt("item_count"));
 			resultList.add(orderDetail);
 		}
 		result.close();

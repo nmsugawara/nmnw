@@ -63,10 +63,10 @@ $(function(){
 			<td>
 				<select name="item_category">
 <% for(int i=0; i < itemCategoryList.size(); i++) {%>
-	<option value="<%= itemCategoryList.get(i).getCategoryCode()%>"
-	<% if(!inputDataList.isEmpty()) {
+	<option value="<%= itemCategoryList.get(i).getCategoryCode()%>"<%
+	 if(!inputDataList.isEmpty()) {
 			if (inputDataList.get("item_category")[0].equals(itemCategoryList.get(i).getCategoryCode())) {
-					out.println(" selected='selected'");
+					out.print(" selected='selected'");
 			}
 		}
 	%>><%= itemCategoryList.get(i).name()%></option>

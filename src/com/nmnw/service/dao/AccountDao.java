@@ -190,4 +190,34 @@ public class AccountDao {
 		connection.close();
 		return account.getId();
 	}
+
+	/**
+	 * ÉçÉOÉCÉìîFèÿ
+	 * @param mail
+	 * @param password
+	 * @return loginFlg
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public boolean authenticateLogin (String mail, String password)
+			throws ClassNotFoundException, SQLException {
+		Connection connection = DdConnector.getConnection();
+		boolean loginFlg = false;
+		String sql = "select id	from account where mail = ? and password = ?";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, mail);
+		statement.setString(2, password);
+		ResultSet result = statement.executeQuery();
+		String isLogin = "1";
+		while (result.next()) {
+			isLogin = String.valueOf(result.getInt("id"));
+		}
+		if (isLogin != null) {
+			loginFlg = true;
+		}
+		statement.close();
+		connection.commit();
+		connection.close();
+		return loginFlg;
+	}
 }

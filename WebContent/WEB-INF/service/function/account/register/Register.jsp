@@ -19,7 +19,6 @@
 <title>No Music No Work | 会員登録</title>
 </head>
 <body>
-<jsp:include page="/commons/Menu.jsp"/>
 <table>
 <tr>
 <td>

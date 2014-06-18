@@ -27,7 +27,7 @@ public class PossibilityOfCancelReportDao {
 		Connection connection = DdConnector.getConnection();
 		String withinDate = DateConversionUtility.getdaysAgoString(withinDays);
 		String sql = "select so1.order_id, so1.order_time, so1.total_price, so1.account_id,"
-				+ " case when so1.account_id = (select so2.account_id from " + TABLE_NAME_ORDER + " as so2 where so2.cancel_flg = true and so2.shipping_flg = true) then '—L' else '–³' end as cancel_experience"
+				+ " exists (select * from " + TABLE_NAME_ORDER + " as so2 where so1.account_id = so2.account_id and so2.cancel_flg = true and so2.shipping_flg = true) as cancel_experience"
 				+ " from " + TABLE_NAME_ORDER + " as so1"
 				+ " where so1.cancel_flg = false"
 				+ " and (so1.shipping_flg = false or (so1.shipping_flg = true and so1.shipping_time >= ?))"
