@@ -55,7 +55,7 @@ $(function(){
 </p>
 <%
 	// 該当データがある場合
-	if (result.getId() != 0) {
+	if (result != null || inputDataList != null) {
 %>
 <div id="data_table">
 <form method="post" action="edit?action=edit_end"  enctype="multipart/form-data">

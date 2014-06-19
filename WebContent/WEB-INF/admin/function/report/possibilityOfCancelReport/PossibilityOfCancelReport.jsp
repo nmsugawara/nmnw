@@ -37,7 +37,13 @@
 		out.println("<td>" + resultList.get(i).get("order_time") + "</td>");
 		out.println("<td>" + resultList.get(i).get("total_price") + "</td>");
 		out.println("<td><a href=\"/nmnw/admin/account/detail?account_id=" + resultList.get(i).get("account_id") + "\">" + resultList.get(i).get("account_id") + "</a></td>");
-		out.println("<td>" + resultList.get(i).get("cancel_experience") + "</td>");
+		if ("0".equals(resultList.get(i).get("cancel_experience"))) {
+			out.println("<td>無</td>");
+		} else if ("1".equals(resultList.get(i).get("cancel_experience"))) {
+			out.println("<td>有</td>");
+		} else {
+			out.println("<td></td>");
+		}
 		out.println("</tr>");
 	}
 %>

@@ -51,6 +51,33 @@ public class AccountDao {
 	}
 
 	/**
+	 * select(ログイン認証用)
+	 * @param mail
+	 * @return Account
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public Account selectLoginInfoByMail(String mail)
+			throws ClassNotFoundException, SQLException {
+		Connection connection = DdConnector.getConnection();
+		String sql = "select id, name, password, salt from " + TABLE_NAME + " where mail = ?";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, mail);
+		ResultSet result = statement.executeQuery();
+		Account account = new Account();
+		while (result.next()) {
+			account.setId(result.getInt("id"));
+			account.setName(result.getString("name"));
+			account.setPassWord(result.getString("password"));
+			account.setSalt(result.getString("salt"));
+		}
+		result.close();
+		statement.close();
+		connection.close();
+		return account;
+	}
+
+	/**
 	 * insert
 	 * @param account
 	 * @return

@@ -1,5 +1,5 @@
 package com.nmnw.service.dao;
-import com.nmnw.service.utility.HtmlHelper;
+import com.nmnw.admin.utility.HtmlHelper;
 
 public class Account {
 
@@ -13,6 +13,7 @@ public class Account {
 	private String _phoneNumber = "";
 	private boolean _delFlg;
 	private String _token = "";
+	private String _salt = "";
 
 	/**
 	 * Construct
@@ -140,5 +141,13 @@ public class Account {
 
 	public String getToken() {
 		return _token;
+	}
+
+	public void setSalt(String salt) {
+		_salt = salt;
+	}
+
+	public String getSalt() {
+		return _salt;
 	}
 }
