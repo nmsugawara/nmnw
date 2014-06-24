@@ -90,6 +90,7 @@ public class ConfigConstants {
 	public static final String JSP_DIR_ACCOUNT_DETAIL = JSP_DIR_ACCOUNT + "detail/";
 	public static final String JSP_DIR_ACCOUNT_EDIT = JSP_DIR_ACCOUNT + "edit/";
 	public static final String JSP_DIR_ACCOUNT_RESET_PASSWORD = JSP_DIR_ACCOUNT + "resetPassword/";
+	public static final String JSP_DIR_ACCOUNT_CHANGE_PASSWORD = JSP_DIR_ACCOUNT + "changePassword/";
 	// order
 	public static final String JSP_DIR_ORDER = "/WEB-INF/service/function/order/";
 	public static final String JSP_DIR_ORDER_SEARCH = JSP_DIR_ORDER + "search/";

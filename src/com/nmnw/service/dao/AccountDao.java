@@ -321,6 +321,6 @@ public class AccountDao {
 		statement.close();
 		connection.commit();
 		connection.close();
-		return account.getId();
+		return updateCount;
 	}
 }

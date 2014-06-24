@@ -43,7 +43,7 @@
 	<a href="/nmnw/account/register">会員登録へ</a>
 </p>
 <p align="center">
-	<a href="/nmnw/account/resetPassword">パスワードを忘れたらこちら</a>
+	<a href="/nmnw/account/resetPassword?action=reset">パスワードを忘れたらこちら</a>
 </p>
 </body>
 </html>
