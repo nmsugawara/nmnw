@@ -33,7 +33,7 @@
 	} else {
 %>
 <div id="data_table">
-<form method="post" action="edit?item_id=<% out.print(result.getId()); %>&action=edit"  enctype="application/x-www-form-urlencoded">
+<form method="post" action="edit?account_id=<% out.print(result.getId()); %>&action=edit"  enctype="application/x-www-form-urlencoded">
 <table class="table table-bordered table-condensed">
 	<tr>
 		<th>会員名</th>
@@ -59,13 +59,17 @@
 		<th>電話番号</th>
 		<td><input type="hidden" name="account_phone_number" value="<% out.print(result.getPhoneNumberConvertedHtml()); %>"><% out.print(result.getPhoneNumberConvertedHtml()); %></td>
 	</tr>
-<%  if(!("regist_end".equals(action)) && !("edit_end".equals(action))) { %>
+<%
+	if(!("regist_end".equals(action)) && !("edit_end".equals(action))) {
+%>
 		<tr>
 			<td colspan="2" align="center">
 				<button type="submit" class="btn btn-primary">編集</button>
 			</td>
 		</tr>
-<% }%>
+<%
+	}
+%>
 </table>
 </form>
 </div>

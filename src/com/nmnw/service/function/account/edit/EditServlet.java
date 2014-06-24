@@ -89,8 +89,16 @@ public class EditServlet extends HttpServlet {
 
 					AccountDao accountdao = new AccountDao();
 					// 更新
-					String accountId = String.valueOf(accountdao.update(account));
-					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ACCOUNT_DETAIL + "?account_id=" + accountId + "&action=edit_end";
+					int updateCount = accountdao.update(account);
+					if (updateCount != 1) {
+						// エラー
+						errorMessageList.add(MessageConstants.MESSAGE_EDIT_FAILED);
+						request.setAttribute("errorMessageList", errorMessageList);
+						request.setAttribute("inputDataList", inputDataList);
+						request.getRequestDispatcher(page).forward(request, response);
+						return;
+					}
+					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ACCOUNT_DETAIL + "?account_id=" + request.getParameter("account_id") + "&action=edit_end";
 					response.sendRedirect(url);
 				}
 			} catch (Exception e) {

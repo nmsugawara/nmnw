@@ -1,8 +1,6 @@
 package com.nmnw.service.function.account.detail;
 
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,9 +12,7 @@ import com.nmnw.service.constant.ConfigConstants;
 import com.nmnw.service.constant.MessageConstants;
 import com.nmnw.service.dao.Account;
 import com.nmnw.service.dao.AccountDao;
-import com.nmnw.service.utility.DateConversionUtility;
 import com.nmnw.service.utility.ExceptionUtility;
-import com.nmnw.service.utility.RandomStringUtility;
 
 @WebServlet(name="account/detail", urlPatterns={"/account/detail"})
 public class DetailServlet extends HttpServlet {
