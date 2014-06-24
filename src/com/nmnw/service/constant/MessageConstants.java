@@ -7,5 +7,6 @@ public class MessageConstants {
 	public static final String MESSAGE_EDIT_END = "編集が完了しました。";
 	public static final String MESSAGE_NO_DATA = "該当データは存在しません。";
 	public static final String MESSAGE_INVAILD_ACTION_PARAM = "もう1度初めからやり直してください。";
+	public static final String MESSAGE_MAIL_NOT_EXIST = "入力されたメールアドレスは登録されていません。";
 	public static final String MESSAGE_CHANGE_PASSWORD_FAILED = "パスワードの変更に失敗しました。もう1度最初からやり直してください。";
 }

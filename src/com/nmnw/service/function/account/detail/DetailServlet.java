@@ -55,17 +55,6 @@ public class DetailServlet extends HttpServlet {
 				} else if ("edit_end".equals(request.getParameter("action"))) {
 					request.setAttribute("message", MessageConstants.MESSAGE_EDIT_END);
 				}
-				// パスワード変更用ｔｏｋｅｎ生成
-				String token = RandomStringUtility.generateToken();
-				// token有効期限
-				Date tokenExpireTime = DateConversionUtility.getdaysAfterDate(ConfigConstants.TOKEN_EXPIRE_DAYS);
-				Account updateAccount = new Account();
-				updateAccount.setId(result.getId());
-				updateAccount.setToken(token);
-				updateAccount.setTokenExpireTime(tokenExpireTime);
-				// DB格納
-				int updateCount = accountdao.update(updateAccount);
-				request.setAttribute("token", token);
 			} 
 			request.getRequestDispatcher(page).forward(request, response);
 		} catch (Exception e) {
