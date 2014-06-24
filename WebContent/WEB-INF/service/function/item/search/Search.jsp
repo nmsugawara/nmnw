@@ -9,15 +9,8 @@
 	request.setCharacterEncoding("UTF-8");
 	List<ItemCategoryEnum> itemCategoryList = new ArrayList<ItemCategoryEnum>(Arrays.asList(ItemCategoryEnum.values()));
 	List<ItemSortEnum> itemSortList = new ArrayList<ItemSortEnum>(Arrays.asList(ItemSortEnum.values()));
-	List<String> errorMessageList = (List<String>)request.getAttribute("errorMessageList");
 	Map<String, String[]> inputDataList = (Map<String, String[]>)request.getAttribute("inputDataList");
 	List<Item> resultList = (List<Item>)request.getAttribute("result");
-	String action= "";
-	if (inputDataList != null) { 
-		if (inputDataList.containsKey("action")) {
-			action = inputDataList.get("action")[0];
-		}
-	}
 %>
 <!DOCTYPE html>
 <html>
@@ -34,12 +27,12 @@
 <body>
 <jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
 <div id="search_table">
-	<form method="post" action="search?action=search">
+	<form method="post" action="search">
 		<table class="table table-bordered">
 			<tr>
 				<th>商品名</th>
 				<td><input type="text" name="search_name" value="<%
-				if ("search".equals(action)) {
+				if (request.getAttribute("inputDataList") != null && inputDataList.containsKey("search_name")) {
 					out.print(inputDataList.get("search_name")[0]);
 				} %>"></td>
 				<th>ジャンル</th>
@@ -48,7 +41,7 @@
 <% 
 		for(int i=0; i < itemCategoryList.size(); i++) {
 			out.print("<option value='" + itemCategoryList.get(i).getCategoryCode() + "'");
-			if("search".equals(action)) {
+			if(request.getAttribute("inputDataList") != null && inputDataList.containsKey("search_category")) {
 				if (inputDataList.get("search_category")[0].equals(itemCategoryList.get(i).getCategoryCode())) {
 					out.print(" selected='selected'");
 				}
@@ -64,7 +57,7 @@
 <% 
 		for(int i=0; i < itemSortList.size(); i++) {
 			out.print("<option value='" + itemSortList.get(i).getSortCode() + "'");
-			if("search".equals(action)) {
+			if(request.getAttribute("inputDataList") != null && inputDataList.containsKey("search_sort")) {
 				if (inputDataList.get("search_sort")[0].equals(itemSortList.get(i).getSortCode())) {
 					out.print(" selected='selected'");
 				}
@@ -81,24 +74,11 @@
 		</table>
 	</form>
 </div>
-<p>
-	<font color="red">
-<% 
-	if (errorMessageList != null) {
-		for(int i=0; i < errorMessageList.size(); i++) {
-			String message = errorMessageList.get(i);
-			out.println(message);
-			out.println("<br>");
-		}
-	}
-%>
-	</font>
-</p>
 <div id="service_item_list">
 	<table>
 		<tr><td>
 <%
-if ("search".equals(action) && resultList != null && resultList.size() != 0) {
+if (resultList != null && resultList.size() != 0) {
 	out.println("<ul class=\"ul-list\">");
 	for(int i = 0; i < resultList.size(); i++) {
 		out.println("<li><dl>");

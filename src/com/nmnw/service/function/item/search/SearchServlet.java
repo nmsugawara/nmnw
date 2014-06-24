@@ -35,23 +35,9 @@ public class SearchServlet extends HttpServlet {
 			throws IOException, ServletException {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
-		List<String> errorMessageList = new ArrayList<String>();
 		Map<String, String[]> inputDataList = request.getParameterMap();
-		String action = request.getParameter("action");
 		String page = ConfigConstants.JSP_DIR_ITEM_SEARCH + "Search.jsp";
-		if (action != null && !"search".equals(action)) {
-			// ƒGƒ‰[
-			errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
-			request.setAttribute("errorMessageList", errorMessageList);
-			request.getRequestDispatcher(page).forward(request, response);
-			return;
-		}
-		// ‘SŒŸõ
-		if (action == null) {
-			request.getRequestDispatcher(page).forward(request, response);
-			return;
-		}
-		// ğŒŒŸõ
+		// ŒŸõ
 		try {
 			String currentDateTime = DateConversionUtility.getCurrentDateString();
 			String searchName = "";
