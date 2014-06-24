@@ -1,5 +1,6 @@
 package com.nmnw.service.validator;
 
+import java.util.Date;
 import java.util.List;
 
 import com.nmnw.service.validator.Validator;
@@ -20,7 +21,7 @@ public class AccountValidator {
 	private static final int MAX_SIZE_NAME_KANA = 200;
 	private static final int MAX_SIZE_MAIL = 200;
 	private static final int MIN_SIZE_PASS_WORD = 8;
-	private static final int MAX_SIZE_PASS_WORD = 50;
+	private static final int MAX_SIZE_PASS_WORD = 20;
 	private static final int MAX_SIZE_ADDRESS = 200;
 
 	private Validator v;
@@ -32,6 +33,10 @@ public class AccountValidator {
 		v = new Validator();
 	}
 
+	/**
+	 * 名前チェック
+	 * @param value
+	 */
 	public void checkName(String value) {
 		// 必須チェック
 		if (!v.required(value, FIELD_NAME)) {
@@ -40,6 +45,10 @@ public class AccountValidator {
 		}
 	}
 
+	/**
+	 * 名前フリガナチェック
+	 * @param value
+	 */
 	public void checkNameKana(String value) {
 		// 必須チェック
 		if (!v.required(value, FIELD_NAME_KANA)) {
@@ -51,6 +60,10 @@ public class AccountValidator {
 		}
 	}
 
+	/**
+	 * メールアドレスチェック
+	 * @param value
+	 */
 	public void checkMail(String value) {
 		// 必須チェック
 		if (!v.required(value, FIELD_MAIL)) {
@@ -59,6 +72,10 @@ public class AccountValidator {
 		}
 	}
 
+	/**
+	 * パスワードチェック
+	 * @param value
+	 */
 	public void checkPassWord(String value) {
 		// 必須チェック
 		if (!v.required(value, FIELD_PASS_WORD)) {
@@ -73,6 +90,19 @@ public class AccountValidator {
 		}
 	}
 
+	/**
+	 * パスワード再入力チェック
+	 * @param password
+	 * @param retypePassword
+	 */
+	public void checkPassWordAndRetypePassWord(String password, String retypePassword) {
+		v.compareToStrings(password, retypePassword, FIELD_PASS_WORD);
+	}
+
+	/**
+	 * 郵便番号チェック
+	 * @param value
+	 */
 	public void checkZipCode(String value) {
 		// 必須チェック
 		if (!v.required(value, FIELD_ZIP_CODE)) {
@@ -81,6 +111,10 @@ public class AccountValidator {
 		}
 	}
 
+	/**
+	 * 住所チェック
+	 * @param value
+	 */
 	public void checkAddress(String value) {
 		// 必須チェック
 		if (!v.required(value, FIELD_ADDRESS)) {
@@ -89,6 +123,10 @@ public class AccountValidator {
 		}
 	}
 
+	/**
+	 * 電話番号チェック
+	 * @param value
+	 */
 	public void checkPhoneNumber(String value) {
 		// 必須チェック
 		if (!v.required(value, FIELD_PHONE_NUMBER)) {
@@ -97,6 +135,10 @@ public class AccountValidator {
 		}
 	}
 
+	/**
+	 * 削除フラグチェック
+	 * @param value
+	 */
 	public void checkDelFlg(String value) {
 		// 必須チェック
 		if (!v.required(value, FIELD_DEL_FLG)) {
@@ -105,6 +147,20 @@ public class AccountValidator {
 		}
 	}
 
+	/**
+	 * トークン有効期限チェック
+	 * @param tokenExpireTime
+	 * @param currentDateTime
+	 */
+	public void checkTokenExpireTime(Date tokenExpireTime, Date currentDateTime) {
+		// 有効期限チェック
+		v.withinExpireDateTime(tokenExpireTime, currentDateTime, FIELD_TOKEN);
+	}
+
+	/**
+	 * エラーメッセージリスト取得
+	 * @return
+	 */
 	public List<String> getValidationList() {
 		return v.getErrorMessageList();
 	}

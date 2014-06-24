@@ -1,4 +1,7 @@
 package com.nmnw.service.dao;
+import java.sql.Timestamp;
+import java.util.Date;
+
 import com.nmnw.admin.utility.HtmlHelper;
 
 public class Account {
@@ -13,6 +16,7 @@ public class Account {
 	private String _phoneNumber = "";
 	private boolean _delFlg;
 	private String _token = "";
+	private Date _tokenExpireTime;
 	private String _salt = "";
 
 	/**
@@ -141,6 +145,23 @@ public class Account {
 
 	public String getToken() {
 		return _token;
+	}
+
+	public void setTokenExpireTime(Date tokenExpireTime) {
+		_tokenExpireTime = tokenExpireTime;
+	}
+
+	public void setCancelTime(Timestamp tokenExpireTime) {
+		try {
+			java.util.Date d = new java.util.Date(tokenExpireTime.getTime());
+			_tokenExpireTime = d;
+		} catch (NullPointerException e) {
+			_tokenExpireTime = tokenExpireTime;
+		}
+	}
+
+	public Date getTokenExpireTime() {
+		return _tokenExpireTime;
 	}
 
 	public void setSalt(String salt) {

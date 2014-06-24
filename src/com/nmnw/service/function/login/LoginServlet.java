@@ -1,4 +1,4 @@
-package com.nmnw.service.function.account.login;
+package com.nmnw.service.function.login;
 
 import java.io.IOException;
 
@@ -43,7 +43,7 @@ public class LoginServlet extends HttpServlet {
 			try {
 				AccountDao accountDao = new AccountDao();
 				// パスワード、salt取得
-				Account account = accountDao.selectLoginInfoByMail(request.getParameter("login_mail"));
+				Account account = accountDao.selectByMail(request.getParameter("login_mail"));
 				// saltが取得できていたら
 				if (account.getSalt() != null && account.getSalt().length() != 0) {
 					// 入力パスワードとsaltをハッシュ化

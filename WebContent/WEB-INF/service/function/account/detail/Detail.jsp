@@ -5,7 +5,14 @@
 <%@ page import="com.nmnw.service.constant.ConfigConstants"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String action = (String)request.getParameter("action");
+	String action = "";
+	if (request.getParameter("action") != null) {
+		action = (String)request.getParameter("action");
+	}
+	String token = "";
+	if (request.getAttribute("token") != null) {
+		token = (String)request.getAttribute("token");
+	}
 	Account result = (Account)request.getAttribute("result");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -67,10 +74,11 @@
 </div>
 <%
 	if(("regist_end".equals(action)) || ("edit_end".equals(action))) {
-		out.println("<a href=\"resetPassword\">パスワード登録/変更はこちら</a>");
+		out.println("<a href=\"resetPassword?action=reset&token=" + token + "&mail=" + result.getMail() + "\">パスワード登録・変更はこちら</a>");
 	}
 }
 %>
+<br>
 <a href="/nmnw/index">TOPへ</a>
 </body>
 </html>

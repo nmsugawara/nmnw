@@ -25,7 +25,7 @@ public class PossibilityOfCancelReportDao {
 	public List<Map<String, String>> selectUnShippingOrShippingWithinRecentDays(int withinDays)
 			throws ClassNotFoundException, SQLException {
 		Connection connection = DdConnector.getConnection();
-		String withinDate = DateConversionUtility.getdaysAgoString(withinDays);
+		String withinDate = DateConversionUtility.getdaysAfterString(withinDays);
 		String sql = "select so1.order_id, so1.order_time, so1.total_price, so1.account_id,"
 				+ " exists (select * from " + TABLE_NAME_ORDER + " as so2 where so1.account_id = so2.account_id and so2.cancel_flg = true and so2.shipping_flg = true) as cancel_experience"
 				+ " from " + TABLE_NAME_ORDER + " as so1"

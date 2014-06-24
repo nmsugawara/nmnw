@@ -14,18 +14,7 @@
 <title>No Music No Work | ログイン</title>
 </head>
 <body>
-<table class="menu">
-	<tr>
-		<td>
-			<div class="flip-3d">
-			<figure>
-			<img src="/nmnw/commons/images/logo.JPG" width="100" height="100">
-			<figcaption>No Music<br>No Work</figcaption>
-			</figure>
-			</div>
-		</td>
-	</tr>
-</table>
+<jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
 <form action="login" method="post">
 	<table>
 		<tr>
@@ -36,11 +25,11 @@
 		</tr>
 		<tr>
 			<td>メールアドレス</td>
-			<td><input type="text" name="login_mail" size="30"></td>
+			<td><input type="text" name="login_mail" class="input-small" placeholder="Email" size="30"></td>
 		</tr>
 		<tr>
 			<td>パスワード</td>
-			<td><input type="password" name="login_password" size="30"></td>
+			<td><input type="password" name="login_password" class="input-small" placeholder="Password" size="30"></td>
 		</tr>
 		<tr>
 			<td colspan="2" align="center">

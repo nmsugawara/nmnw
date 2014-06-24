@@ -18,4 +18,6 @@ public class ValidatorConstants {
 	public static final String MESSAGE_MAXSIZE_STRING = "{$1}は{$2}文字以内で入力してください。";
 	public static final String MESSAGE_MINSIZE_STRING = "{$1}は{$2}文字以上で入力してください。";
 	public static final String MESSAGE_MAXSIZE_IMAGE = "{$1}は{$2}MB以内のデータにしてください。";
+	public static final String MESSAGE_COMPARE_STRING = "再度入力した{$1}と相違があります。";
+	public static final String MESSAGE_EXPIRE_DATE = "{$1}の有効期限が切れています。";
 }

@@ -302,6 +302,40 @@ public class Validator {
 	}
 
 	/**
+	 * 同値チェック（文字列）
+	 * @param value
+	 * @param minSize
+	 * @param fieldName
+	 * @return hasError
+	 */
+	public boolean compareToStrings(String valueA, String valueB, String fieldName) {
+		boolean hasError = false;
+		if (!valueA.equals(valueB)) {
+			String message = getMessage(ValidatorConstants.MESSAGE_COMPARE_STRING, fieldName);
+			addErrorMessageList(message);
+			hasError = true;
+		}
+		return hasError;
+	}
+
+	/**
+	 * 有効期限チェック
+	 * @param expireDate　期限日
+	 * @param date　チェック対象日
+	 * @param fieldName
+	 * @return
+	 */
+	public boolean withinExpireDateTime(Date expireDate, Date date, String fieldName) {
+		boolean hasError = false;
+		if (expireDate.before(date)) {
+			String message = getMessage(ValidatorConstants.MESSAGE_EXPIRE_DATE, fieldName);
+			addErrorMessageList(message);
+			hasError = true;
+		}
+		return hasError;
+	}
+	
+	/**
 	 * チェックエラーメッセージ生成/取得
 	 * @param message
 	 * @param args

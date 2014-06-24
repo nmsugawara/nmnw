@@ -18,7 +18,7 @@ import com.nmnw.admin.utility.ExceptionUtility;
 @WebServlet(name="admin/report/possibilityofcancelreport", urlPatterns={"/admin/report/possibilityofcancelreport"})
 public class PossibilityOfCancelReportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final int WITHIN_DAYS = 8;
+	private static final int WITHIN_DAYS = -8;
 
 	/**
 	 * Construct

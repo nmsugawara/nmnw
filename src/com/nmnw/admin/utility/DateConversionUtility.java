@@ -174,13 +174,28 @@ public class DateConversionUtility {
 	 * @param value
 	 * @return date
 	 */
-	public static String getdaysAgoString (int daysAgo) {
+	public static String getdaysAfterString (int daysAfter) {
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, -daysAgo);
+		cal.add(Calendar.DAY_OF_MONTH, daysAfter);
 		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE);
 		dateFormat.setLenient(false);
 		try {
 			return dateFormat.format(cal.getTime());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
+	 * n“úŒã‚Ì“ú•t‚ðDateŒ^‚Å•Ô‹p
+	 * @param value
+	 * @return date
+	 */
+	public static Date getdaysAfterDate (int daysAfter) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH, daysAfter);
+		try {
+			return cal.getTime();
 		} catch (Exception e) {
 			return null;
 		}

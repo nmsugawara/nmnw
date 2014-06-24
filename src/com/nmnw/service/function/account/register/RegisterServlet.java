@@ -8,10 +8,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.nmnw.service.dao.Account;
 import com.nmnw.service.dao.AccountDao;
 import com.nmnw.service.utility.ExceptionUtility;
+import com.nmnw.service.utility.RandomStringUtility;
 import com.nmnw.service.validator.AccountValidator;
 import com.nmnw.service.constant.ConfigConstants;
 
@@ -35,6 +37,7 @@ public class RegisterServlet extends HttpServlet {
 		Map<String, String[]> inputDataList = request.getParameterMap();
 		String action = request.getParameter("action");
 		String page = ConfigConstants.JSP_DIR_ACCOUNT_REGISTER + "Register.jsp";
+		HttpSession session = request.getSession();
 		// “ü—Í‰æ–Ê•\Ž¦
 		if (!("regist_end".equals(action))) {
 			errorMessageList.add("");
@@ -70,6 +73,7 @@ public class RegisterServlet extends HttpServlet {
 					account.setPhoneNumber(request.getParameter("account_phone_number"));
 
 					AccountDao accountdao = new AccountDao();
+					// insert
 					String accountId = String.valueOf(accountdao.insert(account));
 					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ACCOUNT_DETAIL + "?account_id=" + accountId + "&action=regist_end";
 					response.sendRedirect(url);

@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.nmnw.service.constant.ConfigConstants;
@@ -43,6 +44,8 @@ public class AccountDao {
 			account.setPhoneNumber(result.getString("phone_number"));
 			account.setDelFlg(result.getBoolean("del_flg"));
 			account.setToken(result.getString("token"));
+			account.setTokenExpireTime(result.getTimestamp("token_expire_time"));
+			account.setSalt(result.getString("salt"));
 		}
 		result.close();
 		statement.close();
@@ -51,16 +54,16 @@ public class AccountDao {
 	}
 
 	/**
-	 * select(ログイン認証用)
+	 * select(mailをキーとして会員情報を取得)
 	 * @param mail
 	 * @return Account
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public Account selectLoginInfoByMail(String mail)
+	public Account selectByMail(String mail)
 			throws ClassNotFoundException, SQLException {
 		Connection connection = DdConnector.getConnection();
-		String sql = "select id, name, password, salt from " + TABLE_NAME + " where mail = ?";
+		String sql = "select * from " + TABLE_NAME + " where mail = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, mail);
 		ResultSet result = statement.executeQuery();
@@ -68,7 +71,88 @@ public class AccountDao {
 		while (result.next()) {
 			account.setId(result.getInt("id"));
 			account.setName(result.getString("name"));
+			account.setNameKana(result.getString("name_kana"));
+			account.setMail(result.getString("mail"));
 			account.setPassWord(result.getString("password"));
+			account.setZipCode(result.getString("zip_code"));
+			account.setAddress(result.getString("address"));
+			account.setPhoneNumber(result.getString("phone_number"));
+			account.setDelFlg(result.getBoolean("del_flg"));
+			account.setToken(result.getString("token"));
+			account.setTokenExpireTime(result.getTimestamp("token_expire_time"));
+			account.setSalt(result.getString("salt"));
+		}
+		result.close();
+		statement.close();
+		connection.close();
+		return account;
+	}
+
+	/**
+	 * select(token,token有効期限をキーとして会員情報を取得)
+	 * @param token
+	 * @param currentDate
+	 * @return Account
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public Account selectByTokenAndTokenExpireTime(String token, Calendar currentDateTime)
+			throws ClassNotFoundException, SQLException {
+		Connection connection = DdConnector.getConnection();
+		String sql = "select * from " + TABLE_NAME + " where token = ?"
+				+ " and token_expire_time > ?";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, token);
+		statement.setTimestamp(2, new Timestamp(currentDateTime.getTimeInMillis()));
+		ResultSet result = statement.executeQuery();
+		Account account = new Account();
+		while (result.next()) {
+			account.setId(result.getInt("id"));
+			account.setName(result.getString("name"));
+			account.setNameKana(result.getString("name_kana"));
+			account.setMail(result.getString("mail"));
+			account.setPassWord(result.getString("password"));
+			account.setZipCode(result.getString("zip_code"));
+			account.setAddress(result.getString("address"));
+			account.setPhoneNumber(result.getString("phone_number"));
+			account.setDelFlg(result.getBoolean("del_flg"));
+			account.setToken(result.getString("token"));
+			account.setTokenExpireTime(result.getTimestamp("token_expire_time"));
+			account.setSalt(result.getString("salt"));
+		}
+		result.close();
+		statement.close();
+		connection.close();
+		return account;
+	}
+
+	/**
+	 * select(文字列データをキーとして会員情報を取得)
+	 * @param String
+	 * @return Account
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	private Account selectByStringColumn(String value, String columnName)
+			throws ClassNotFoundException, SQLException {
+		Connection connection = DdConnector.getConnection();
+		String sql = "select * from " + TABLE_NAME + " where " + columnName + " = ?";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, value);
+		ResultSet result = statement.executeQuery();
+		Account account = new Account();
+		while (result.next()) {
+			account.setId(result.getInt("id"));
+			account.setName(result.getString("name"));
+			account.setNameKana(result.getString("name_kana"));
+			account.setMail(result.getString("mail"));
+			account.setPassWord(result.getString("password"));
+			account.setZipCode(result.getString("zip_code"));
+			account.setAddress(result.getString("address"));
+			account.setPhoneNumber(result.getString("phone_number"));
+			account.setDelFlg(result.getBoolean("del_flg"));
+			account.setToken(result.getString("token"));
+			account.setTokenExpireTime(result.getTimestamp("token_expire_time"));
 			account.setSalt(result.getString("salt"));
 		}
 		result.close();
@@ -125,67 +209,85 @@ public class AccountDao {
 		StringBuilder sqlBuilder = new StringBuilder();
 		sqlBuilder.append("update " + TABLE_NAME + " set");
 		StringBuilder paramBuilder = new StringBuilder();
-		Map<String, Map<String, String>> dataList = new LinkedHashMap<String, Map<String, String>>();
+		Map<String, Map<String, Object>> dataList = new LinkedHashMap<String, Map<String, Object>>();
 
 		if (!account.getName().isEmpty()) {
 			paramBuilder.append(", name=?");
-			dataList.put("name", new HashMap<String, String>());
+			dataList.put("name", new HashMap<String, Object>());
 			dataList.get("name").put("type", "String");
 			dataList.get("name").put("value", account.getName());
 		}
 		if (!account.getNameKana().isEmpty()) {
 			paramBuilder.append(", name_kana=?");
-			dataList.put("name_kana", new HashMap<String, String>());
+			dataList.put("name_kana", new HashMap<String, Object>());
 			dataList.get("name_kana").put("type", "String");
 			dataList.get("name_kana").put("value", account.getNameKana());
 		}
 		if (!account.getMail().isEmpty()) {
 			paramBuilder.append(", mail=?");
-			dataList.put("mail", new HashMap<String, String>());
+			dataList.put("mail", new HashMap<String, Object>());
 			dataList.get("mail").put("type", "String");
 			dataList.get("mail").put("value", account.getMail());
 		}
 		if (!account.getPassWord().isEmpty()) {
 			paramBuilder.append(", password=?");
-			dataList.put("password", new HashMap<String, String>());
+			dataList.put("password", new HashMap<String, Object>());
 			dataList.get("password").put("type", "String");
 			dataList.get("password").put("value", account.getPassWord());
 		}
 		if (!account.getZipCode().isEmpty()) {
 			paramBuilder.append(", zip_code=?");
-			dataList.put("zip_code", new HashMap<String, String>());
+			dataList.put("zip_code", new HashMap<String, Object>());
 			dataList.get("zip_code").put("type", "String");
 			dataList.get("zip_code").put("value", account.getZipCode());
 		}
 		if (!account.getAddress().isEmpty()) {
 			paramBuilder.append(", address=?");
-			dataList.put("address", new HashMap<String, String>());
+			dataList.put("address", new HashMap<String, Object>());
 			dataList.get("address").put("type", "String");
 			dataList.get("address").put("value", account.getAddress());
 		}
 		if (!account.getPhoneNumber().isEmpty()) {
 			paramBuilder.append(", phone_number=?");
-			dataList.put("phone_number", new HashMap<String, String>());
+			dataList.put("phone_number", new HashMap<String, Object>());
 			dataList.get("phone_number").put("type", "String");
 			dataList.get("phone_number").put("value", account.getPhoneNumber());
 		}
 		if (account.getDelFlg()) {
 			paramBuilder.append(", del_flg=?");
-			dataList.put("del_flg", new HashMap<String, String>());
+			dataList.put("del_flg", new HashMap<String, Object>());
 			dataList.get("del_flg").put("type", "boolean");
-			dataList.get("del_flg").put("value", String.valueOf(account.getDelFlg()));
+			dataList.get("del_flg").put("value", account.getDelFlg());
 		}
 		if (!account.getToken().isEmpty()) {
 			paramBuilder.append(", token=?");
-			dataList.put("token", new HashMap<String, String>());
+			dataList.put("token", new HashMap<String, Object>());
 			dataList.get("token").put("type", "String");
 			dataList.get("token").put("value", account.getToken());
 		}
+		boolean isDate = true;
+		try {
+			account.getTokenExpireTime().getTime();
+		} catch (Exception e) {
+			isDate = false;
+		}
+ 		if (isDate) {
+			paramBuilder.append(", token_expire_time=?");
+			dataList.put("token_expire_time", new HashMap<String, Object>());
+			dataList.get("token_expire_time").put("type", "DateTime");
+			dataList.get("token_expire_time").put("value", account.getTokenExpireTime());
+		}
+		if (!account.getSalt().isEmpty()) {
+			paramBuilder.append(", salt=?");
+			dataList.put("salt", new HashMap<String, Object>());
+			dataList.get("salt").put("type", "String");
+			dataList.get("salt").put("value", account.getSalt());
+		}
 		if (account.getId() != ConfigConstants.NULL_INT) {
 			paramBuilder.append(" where id=?");
-			dataList.put("id", new HashMap<String, String>());
+			dataList.put("id", new HashMap<String, Object>());
 			dataList.get("id").put("type", "int");
-			dataList.get("id").put("value", String.valueOf(account.getId()));
+			dataList.get("id").put("value", account.getId());
 		}
 
 		// 不要な,の除去、where句の追加
@@ -203,11 +305,15 @@ public class AccountDao {
 			String key = (String)iterator.next();
 			String type = (String)dataList.get(key).get("type");
 			if ("int".equals(type)) {
-				statement.setInt(count, Integer.parseInt(dataList.get(key).get("value")));
+				statement.setInt(count, (Integer)dataList.get(key).get("value"));
 			} else if ("String".equals(type)) {
-				statement.setString(count, dataList.get(key).get("value"));
+				statement.setString(count, (String)dataList.get(key).get("value"));
 			} else if ("boolean".equals(type)) {
-				statement.setBoolean(count, Boolean.valueOf(dataList.get(key).get("value")));
+				statement.setBoolean(count, (Boolean)dataList.get(key).get("value"));
+			} else if ("DateTime".equals(type)) {
+				java.util.Date d = (Date)dataList.get(key).get("value");
+				java.sql.Timestamp ts = new java.sql.Timestamp(d.getTime());
+				statement.setTimestamp(count, ts);
 			}
 			count++;
 		}
@@ -216,35 +322,5 @@ public class AccountDao {
 		connection.commit();
 		connection.close();
 		return account.getId();
-	}
-
-	/**
-	 * ログイン認証
-	 * @param mail
-	 * @param password
-	 * @return loginFlg
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 */
-	public boolean authenticateLogin (String mail, String password)
-			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
-		boolean loginFlg = false;
-		String sql = "select id	from account where mail = ? and password = ?";
-		PreparedStatement statement = connection.prepareStatement(sql);
-		statement.setString(1, mail);
-		statement.setString(2, password);
-		ResultSet result = statement.executeQuery();
-		String isLogin = "1";
-		while (result.next()) {
-			isLogin = String.valueOf(result.getInt("id"));
-		}
-		if (isLogin != null) {
-			loginFlg = true;
-		}
-		statement.close();
-		connection.commit();
-		connection.close();
-		return loginFlg;
 	}
 }
