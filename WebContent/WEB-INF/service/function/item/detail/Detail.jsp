@@ -56,10 +56,9 @@
 			<td>
 <%
 		if(accountId != 0) {
-
-%>
-			<button type="button" class="btn btn-primary">カートに入れる</button>
-<%
+			out.println("<button type=\"button\" class=\"btn btn-primary\">カートに入れる</button>");
+		} else {
+			out.println("<a href=\"/nmnw/account/register\"><button type=\"button\" class=\"btn btn-primary\">会員登録</button></a>");
 		}
 %>
 			</td>
