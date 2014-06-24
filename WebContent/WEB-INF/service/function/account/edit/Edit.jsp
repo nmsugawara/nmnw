@@ -26,6 +26,7 @@
 <title>No Music No Work | 会員情報編集</title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
 <table>
 <tr>
 <td>

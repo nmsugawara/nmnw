@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
 						HttpSession session = request.getSession();
 						session.setAttribute("id", account.getId());
 						session.setAttribute("name", account.getName());
-						String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ACCOUNT_REGISTER;
+						String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_INDEX;
 						response.sendRedirect(url);
 						return;
 					}

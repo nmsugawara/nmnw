@@ -42,6 +42,8 @@ public class ConfigConstants {
 	/**
 	 *  Servlet
 	 */
+	// index
+	public static final String SERVLET_DIR_INDEX = "/nmnw/index";
 	// login
 	public static final String SERVLET_DIR_LOGIN = "/nmnw/login/login";
 	// logout
@@ -97,4 +99,9 @@ public class ConfigConstants {
 	public static final String JSP_DIR_PURCHASE_CONFIRM = JSP_DIR_PURCHASE + "confirm/";
 	public static final String JSP_DIR_PURCHASE_COMPLETE = JSP_DIR_PURCHASE + "complete/";
 
+	/**
+	 *  image
+	 */
+	public static final String IMAGE_DIR = "/nmnw/commons/images/";
+	public static final String IMAGE_DIR_ITEM = IMAGE_DIR + "item/";
 }
