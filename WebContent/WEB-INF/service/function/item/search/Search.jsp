@@ -26,7 +26,9 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
-<div id="search_table">
+<table id="canvas">
+<tr>
+<td>
 	<form method="post" action="search">
 		<table class="table table-bordered">
 			<tr>
@@ -73,7 +75,6 @@
 			</tr>
 		</table>
 	</form>
-</div>
 <div id="service_item_list">
 	<table>
 		<tr><td>
@@ -96,5 +97,8 @@ if (resultList != null && resultList.size() != 0) {
 		</tr></td>
 	</table>
 </div>
+</td>
+</tr>
+</table>
 </body>
 </html>

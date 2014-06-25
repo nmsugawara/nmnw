@@ -26,6 +26,10 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
+<table id="canvas">
+<tr>
+<td>
+
 <p>
 	<h1>${message}</h1>
 </p>
@@ -37,7 +41,9 @@
 	<table class="table table-bordered table-condensed">
 		<tr>
 			<td rowspan="6" width="300">
-				<img src="<% out.print(ConfigConstants.IMAGE_DIR_ITEM + result.getImageUrl()); %>" width="250" height="250">
+				<div class="image">
+					<img src="<% out.print(ConfigConstants.IMAGE_DIR_ITEM + result.getImageUrl()); %>" width="250" height="250">
+				</div>
 			</td>
 		</tr>
 		<tr>
@@ -75,5 +81,8 @@
 %>
 </div>
 	<a href="search">商品検索へ</a>
+</td>
+</tr>
+</table>
 </body>
 </html>
