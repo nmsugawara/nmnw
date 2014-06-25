@@ -27,8 +27,11 @@
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | パスワード<%= title %></title>
 </head>
-<body>
+<body class="service_body">
 <jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
+<table id="canvas">
+<tr>
+<td>
 <%
 	// エラー画面表示
 	if ("".equals(action)) {
@@ -93,5 +96,8 @@
 <%
 	}
 %>
+</td>
+</tr>
+</table>
 </body>
 </html>

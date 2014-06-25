@@ -1,4 +1,4 @@
-package com.nmnw.admin.dao;
+package com.nmnw.service.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nmnw.admin.constant.ConfigConstants;
-import com.nmnw.admin.utility.DdConnector;
+import com.nmnw.service.constant.ConfigConstants;
+import com.nmnw.service.utility.DdConnector;
 
 public class OrderDetailDao {
 	private static final String TABLE_NAME = "sales_order_detail";

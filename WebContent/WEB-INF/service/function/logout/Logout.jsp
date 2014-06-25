@@ -13,8 +13,11 @@
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | ログアウト</title>
 </head>
-<body>
+<body class="service_body">
 <jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
+<table id="canvas">
+<tr>
+<td>
 <table>
 	<tr>
 		<td colspan="2" align="center">ログアウトしました。</td>
@@ -23,5 +26,8 @@
 <p align="center">
 	<a href="/nmnw/index">TOPへ</a>
 </p>
+</td>
+</tr>
+</table>
 </body>
 </html>

@@ -21,8 +21,11 @@
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | 会員情報詳細</title>
 </head>
-<body>
+<body class="service_body">
 <jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
+<table id="canvas">
+<tr>
+<td>
 <p>
 	<h1>${message}</h1>
 </p>
@@ -81,5 +84,8 @@
 %>
 <br>
 <a href="/nmnw/index">TOPへ</a>
+</td>
+</tr>
+</table>
 </body>
 </html>

@@ -13,8 +13,11 @@
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | ログイン</title>
 </head>
-<body>
+<body class="service_body">
 <jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
+<table id="canvas">
+<tr>
+<td>
 <form action="login" method="post">
 	<table>
 		<tr>
@@ -45,5 +48,8 @@
 <p align="center">
 	<a href="/nmnw/account/resetPassword?action=reset">パスワードを忘れたらこちら</a>
 </p>
+</td>
+</tr>
+</table>
 </body>
 </html>

@@ -1,5 +1,5 @@
-package com.nmnw.admin.dao;
-import com.nmnw.admin.utility.HtmlHelper;
+package com.nmnw.service.dao;
+import com.nmnw.service.utility.HtmlHelper;
 
 public class OrderDetail {
 

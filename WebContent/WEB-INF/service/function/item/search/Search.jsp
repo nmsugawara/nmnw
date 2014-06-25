@@ -24,7 +24,7 @@
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | 商品検索</title>
 </head>
-<body>
+<body class="service_body">
 <jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
 <table id="canvas">
 <tr>
@@ -91,7 +91,7 @@ if (resultList != null && resultList.size() != 0) {
 		out.println("<dd>￥" + resultList.get(i).getPrice() + "</dd>");
 		out.println("</li></dl>");
 	}
-	out.println("</ul");
+	out.println("</ul>");
 }
 %>
 		</tr></td>

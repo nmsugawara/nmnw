@@ -13,8 +13,14 @@
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | Error</title>
 </head>
-<body>
+<body class="service_body">
 <jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
+<table id="canvas">
+<tr>
+<td>
 指定されたページは存在しません。
+</td>
+</tr>
+</table>
 </body>
 </html>

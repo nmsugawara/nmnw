@@ -13,7 +13,7 @@
 		action = inputDataList.get("action")[0];
 	}
 %> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,12 +25,16 @@
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
 <title>No Music No Work | 会員情報編集</title>
 </head>
-<body>
+<body class="service_body">
 <jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
-<table>
+<table id="canvas">
 <tr>
 <td>
 <h1>会員情報編集</h1>
+</td>
+</tr>
+<tr>
+<td>
 <p>
 	<font color="red">
 <% 
