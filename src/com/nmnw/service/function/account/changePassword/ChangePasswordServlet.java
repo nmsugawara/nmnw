@@ -119,9 +119,9 @@ public class ChangePasswordServlet extends HttpServlet {
 				updateAccount.setSalt(salt);
 				// update
 				AccountDao accountDao = new AccountDao();
-				int accountId = accountDao.update(updateAccount);
+				int updateCount = accountDao.update(updateAccount);
 				// ³í‚É1ŒXV‚³‚ê‚Ä‚¢‚½ê‡
-				if (accountId == 1) {
+				if (updateCount == 1) {
 					request.setAttribute("action", "edit_end");
 					request.setAttribute("title", DISPLAY_TITLE_EDIT_END);
 					request.getRequestDispatcher(page).forward(request, response);

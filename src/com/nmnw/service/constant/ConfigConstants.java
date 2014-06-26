@@ -98,7 +98,7 @@ public class ConfigConstants {
 	// order
 	public static final String JSP_DIR_ORDER = "/WEB-INF/service/function/order/";
 	public static final String JSP_DIR_ORDER_SEARCH = JSP_DIR_ORDER + "search/";
-	public static final String JSP_DIR_ORDER_DETAIL = JSP_DIR_ORDER + "detail/";
+	public static final String JSP_DIR_ORDER_CANCEL = JSP_DIR_ORDER + "cancel/";
 	// purchase
 	public static final String JSP_DIR_PURCHASE = "/WEB-INF/service/function/purchase/";
 	public static final String JSP_DIR_PURCHASE_CONFIRM = JSP_DIR_PURCHASE + "confirm/";

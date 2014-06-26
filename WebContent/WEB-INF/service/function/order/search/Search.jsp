@@ -23,6 +23,17 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="/nmnw/commons/js/bootstrap-datepicker.js"></script>
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+<!--
+function check() {
+	if (window.confirm('注文をキャンセルします。よろしいですか？')) {
+		return true;
+	} else {
+		return false;
+	}
+}
+-->
+</script>
 <title>No Music No Work | 購入履歴</title>
 </head>
 <body class="service_body">
@@ -108,8 +119,9 @@ if (resultList != null && resultList.size() != 0) {
 		out.println("</td>");
 		out.println("<td>");
 		if ("注文済".equals((String)resultList.get(i).get("orderStatus"))) {
-			out.println("<form method=\"get\" action=\"cancel?order_id=" + o.getOrderId() + "\">");
-			out.println("<button type=\"submit\" class=\"btn btn-danger\">注文取消</button>");
+			out.println("<form method=\"get\" action=\"cancel\" onSubmit=\"return check()\">");
+			out.println("<input type=\"hidden\" name=\"order_id\" value=\"" + o.getOrderId() + "\">");
+			out.println("<button type=\"submit\" class=\"btn btn-danger\">注文キャンセル</button>");
 			out.println("</form>");
 		}
 		out.println("</td></tr>");
