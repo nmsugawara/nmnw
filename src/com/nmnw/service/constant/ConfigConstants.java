@@ -45,9 +45,11 @@ public class ConfigConstants {
 	// index
 	public static final String SERVLET_DIR_INDEX = "/nmnw/index";
 	// login
-	public static final String SERVLET_DIR_LOGIN = "/nmnw/login/login";
+	public static final String SERVLET_DIR_LOGIN = "/nmnw/login";
 	// logout
-	public static final String SERVLET_DIR_LOGOUT = "/nmnw/logout/logout";
+	public static final String SERVLET_DIR_LOGOUT = "/nmnw/logout";
+	// cart
+	public static final String SERVLET_DIR_CART = "/nmnw/cart";
 	// error
 	public static final String SERVLET_DIR_ERROR = "/nmnw/error/error";
 	// item
@@ -78,6 +80,8 @@ public class ConfigConstants {
 	public static final String JSP_DIR_LOGIN = "/WEB-INF/service/function/login/";
 	// logout
 	public static final String JSP_DIR_LOGOUT = "/WEB-INF/service/function/logout/";
+	// cart
+	public static final String JSP_DIR_CART = "/WEB-INF/service/function/cart/";
 	// error
 	public static final String JSP_DIR_ERROR = "/WEB-INF/service/function/error/";
 	// item

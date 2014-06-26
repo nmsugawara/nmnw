@@ -1,0 +1,261 @@
+package com.nmnw.service.function.cart;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.net.URLEncoder;
+
+import com.nmnw.service.constant.ConfigConstants;
+import com.nmnw.service.constant.MessageConstants;
+import com.nmnw.service.utility.ExceptionUtility;
+import com.nmnw.service.dao.Cart;
+import com.nmnw.service.dao.Item;
+import com.nmnw.service.dao.ItemDao;
+import com.nmnw.service.validator.Validator;
+
+@WebServlet(name="cart", urlPatterns={"/cart"})
+public class CartServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private static final String FIELD_ITEM_ID = "商品ID";
+	private static final String FIELD_ITEM_COUNT = "商品個数";
+	private static final String ACTION_ADD = "add";
+	private static final String ACTION_DELETE = "delete";
+	private static final String ACTION_MODIFY = "modify";
+	private static final String SESSION_KEY_CART = "cart";
+	private static final String SESSION_KEY_REFURL = "refUrl";
+	private static final String SESSION_KEY_MESSAGE = "messageCode";
+	private static final String SESSION_KEY_ERROR_MESSAGE = "errorMessageList";
+
+	/**
+	 * Construct
+	 */
+	public CartServlet () {
+		super();
+	}
+
+	@Override
+	protected void doGet (HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		response.setContentType("text/html; charset=UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		String page = ConfigConstants.JSP_DIR_CART + "Cart.jsp";
+		String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_CART;
+		String action = request.getParameter("action");
+		String messageCode = "";
+		if (request.getParameter("message_code") != null) {
+			messageCode = (String)request.getParameter("message_code");
+		}
+		String refUrl = request.getParameter("ref_url");
+		String encodeRefUrl = "";
+		List<String> errorMessageList = new ArrayList<String>();
+		try {
+			////////////////
+			// ログインチェック
+			////////////////
+			HttpSession session = request.getSession();
+			Integer loginId;
+			// ログインしてない場合
+			if (session.getAttribute("id") == null) {
+				// エラー
+				errorMessageList.add(MessageConstants.MESSAGE_NOT_LOGIN);
+				request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
+				request.setAttribute(SESSION_KEY_REFURL, refUrl);
+				request.getRequestDispatcher(page).forward(request, response);
+				return;
+			}
+			loginId = (Integer)session.getAttribute("id");
+
+			// actionパラメータがない場合
+			if (action == null) {
+				// 画面表示
+				request.setAttribute(SESSION_KEY_REFURL, refUrl);
+				request.setAttribute(SESSION_KEY_MESSAGE, messageCode);
+				request.getRequestDispatcher(page).forward(request, response);
+				return;
+			}
+			// actionパラメータが意図しない値の場合
+			String[] vaildActionParam = {ACTION_ADD, ACTION_DELETE, ACTION_MODIFY};
+			if (!Arrays.asList(vaildActionParam).contains(action)) {
+				// エラー
+				errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
+				request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
+				request.setAttribute(SESSION_KEY_REFURL, refUrl);
+				request.getRequestDispatcher(page).forward(request, response);
+				return;
+			}
+			////////////////////////////
+			// 商品追加
+			////////////////////////////
+			if (ACTION_ADD.equals(action)) {
+				// 商品パラメータチェック
+				Validator v = new Validator();
+				// 商品ID
+				v.required(request.getParameter("item_id"), FIELD_ITEM_ID);
+				v.isInt(request.getParameter("item_id"), FIELD_ITEM_ID);
+				// 個数
+				v.required(request.getParameter("item_count"), FIELD_ITEM_COUNT);
+				v.isInt(request.getParameter("item_count"), FIELD_ITEM_COUNT);
+
+				errorMessageList = v.getErrorMessageList();
+				if (errorMessageList.size() != 0) {
+					// エラー
+					request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
+					request.setAttribute(SESSION_KEY_REFURL, refUrl);
+					request.getRequestDispatcher(page).forward(request, response);
+					return;
+				}
+				// 商品情報をDBより取得
+				ItemDao itemDao = new ItemDao();
+				Item item = itemDao.selectByItemId(Integer.valueOf(request.getParameter("item_id")));
+				if (item.getId() == 0) {
+					// エラー
+					errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
+					request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
+					request.setAttribute(SESSION_KEY_REFURL, refUrl);
+					request.getRequestDispatcher(page).forward(request, response);
+					return;
+				}
+				// セッション内のCartオブジェクト有無確認
+				Boolean hasObject = false;
+				Enumeration<String> en = session.getAttributeNames();
+				while (en.hasMoreElements()) {
+					String key = (String)en.nextElement();
+					if (SESSION_KEY_CART.equals(key)) {
+						hasObject = true;
+					}
+				}
+				// Cartオブジェクトがなければ新規生成
+				Cart cart = hasObject ? (Cart)session.getAttribute(SESSION_KEY_CART) : new Cart();
+				// データセット
+				cart.addItem(item.getId(), item.getName(), item.getPrice(), Integer.valueOf(request.getParameter("item_count")));
+				// セッションへ保存
+				session.setAttribute(SESSION_KEY_CART, cart);
+				encodeRefUrl = URLEncoder.encode(refUrl, "UTF-8");
+				response.sendRedirect(url + "?ref_url=" + encodeRefUrl + "&message_code=" + ACTION_ADD);
+				return;
+			}
+			////////////////////////////
+			// 商品削除
+			////////////////////////////
+			if (ACTION_DELETE.equals(action)) {
+				// 商品パラメータチェック
+				Validator v = new Validator();
+				// 商品ID
+				v.required(request.getParameter("item_id"), FIELD_ITEM_ID);
+				v.isInt(request.getParameter("item_id"), FIELD_ITEM_ID);
+
+				errorMessageList = v.getErrorMessageList();
+				if (errorMessageList.size() != 0) {
+					// エラー
+					request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
+					request.setAttribute(SESSION_KEY_REFURL, refUrl);
+					request.getRequestDispatcher(page).forward(request, response);
+					return;
+				}
+				// セッション内のCartオブジェクト有無確認
+				Boolean hasObject = false;
+				Enumeration<String> en = session.getAttributeNames();
+				while (en.hasMoreElements()) {
+					String key = (String)en.nextElement();
+					if (SESSION_KEY_CART.equals(key)) {
+						hasObject = true;
+					}
+				}
+				// Cartオブジェクトがなければ
+				if (!hasObject) {
+					// エラー
+					errorMessageList.add(MessageConstants.MESSAGE_NO_DATA);
+					request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
+					request.setAttribute(SESSION_KEY_REFURL, refUrl);
+					request.getRequestDispatcher(page).forward(request, response);
+					return;
+				}
+				Cart cart = (Cart)session.getAttribute(SESSION_KEY_CART);
+				// データ削除
+				cart.deleteItem(Integer.valueOf(request.getParameter("item_id")));
+				// セッションへ保存
+				session.setAttribute(SESSION_KEY_CART, cart);
+				encodeRefUrl = URLEncoder.encode(refUrl, "utf-8");
+				response.sendRedirect(url + "?ref_url=" + encodeRefUrl + "&message_code=" + ACTION_DELETE);
+				return;
+			}
+			////////////////////////////
+			// 商品個数変更
+			////////////////////////////
+			if (ACTION_MODIFY.equals(action)) {
+				// 商品パラメータチェック
+				Validator v = new Validator();
+				// 商品ID
+				v.required(request.getParameter("item_id"), FIELD_ITEM_ID);
+				v.isInt(request.getParameter("item_id"), FIELD_ITEM_ID);
+				// 個数
+				v.required(request.getParameter("item_count"), FIELD_ITEM_COUNT);
+				v.isInt(request.getParameter("item_count"), FIELD_ITEM_COUNT);
+
+				errorMessageList = v.getErrorMessageList();
+				if (errorMessageList.size() != 0) {
+					// エラー
+					request.setAttribute("errorMessageList", errorMessageList);
+					request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
+					request.setAttribute(SESSION_KEY_REFURL, refUrl);
+					return;
+				}
+				// 商品情報をDBより取得
+				ItemDao itemDao = new ItemDao();
+				Item item = itemDao.selectByItemId(Integer.valueOf(request.getParameter("item_id")));
+				if (item.getId() == 0) {
+					// エラー
+					errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
+					request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
+					request.setAttribute(SESSION_KEY_REFURL, refUrl);
+					request.getRequestDispatcher(page).forward(request, response);
+					return;
+				}
+				// セッション内のCartオブジェクト有無確認
+				Boolean hasObject = false;
+				Enumeration<String> en = session.getAttributeNames();
+				while (en.hasMoreElements()) {
+					String key = (String)en.nextElement();
+					if (SESSION_KEY_CART.equals(key)) {
+						hasObject = true;
+					}
+				}
+				// Cartオブジェクトがなければ
+				if (!hasObject) {
+					// エラー
+					errorMessageList.add(MessageConstants.MESSAGE_NO_DATA);
+					request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
+					request.setAttribute(SESSION_KEY_REFURL, refUrl);
+					request.getRequestDispatcher(page).forward(request, response);
+					return;
+				}
+				Cart cart = (Cart)session.getAttribute(SESSION_KEY_CART);
+				// データ変更
+				cart.modifyItemCount(item.getId(), Integer.valueOf(request.getParameter("item_count")));
+				// セッションへ保存
+				session.setAttribute(SESSION_KEY_CART, cart);
+				encodeRefUrl = URLEncoder.encode(refUrl, "utf-8");
+				response.sendRedirect(url + "?ref_url=" + encodeRefUrl + "&message_code=" + ACTION_MODIFY);
+				return;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ExceptionUtility.redirectErrorPage(request, response, e);
+		}
+	}
+
+	@Override
+	protected void doPost (HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		doGet(request, response);
+	}
+}

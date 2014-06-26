@@ -1,15 +1,15 @@
 package com.nmnw.service.Enum;
 
 public enum ItemCategoryEnum {
-	‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢("0"),
-	–MŠyPOP("1"),
-	–MŠyHIPHOP("2"),
-	–MŠyƒŒƒQƒG("3"),
-	–MŠyƒŠƒ~ƒbƒNƒX("4"),
-	—mŠyHIPHOP("5"),
-	—mŠyƒŒƒQƒG("6"),
-	—mŠyƒŠƒ~ƒbƒNƒX("7"),
-	‚»‚Ì‘¼("99");
+	é¸æŠã—ã¦ãã ã•ã„("0"),
+	é‚¦æ¥½POP("1"),
+	é‚¦æ¥½HIPHOP("2"),
+	é‚¦æ¥½ãƒ¬ã‚²ã‚¨("3"),
+	é‚¦æ¥½ãƒªãƒŸãƒƒã‚¯ã‚¹("4"),
+	æ´‹æ¥½HIPHOP("5"),
+	æ´‹æ¥½ãƒ¬ã‚²ã‚¨("6"),
+	æ´‹æ¥½ãƒªãƒŸãƒƒã‚¯ã‚¹("7"),
+	ãã®ä»–("99");
 
 	private final String code;
 
@@ -24,7 +24,6 @@ public enum ItemCategoryEnum {
 	public static ItemCategoryEnum getEnum(String str) {
 		ItemCategoryEnum[] enumArray = ItemCategoryEnum.values();
 		for(ItemCategoryEnum enumStr : enumArray) {
-			// ˆø”‚ÆenumŒ^‚Ì•¶š—ñ‚ğ”äŠr
 			if (str.equals(enumStr.code.toString())){
 				return enumStr;
 			}

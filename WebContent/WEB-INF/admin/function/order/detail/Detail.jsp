@@ -58,8 +58,8 @@
 			out.println("<td>" + resultList.get(i).getItemId() + "</td>");
 			out.println("<td>" + resultList.get(i).getItemName() + "</td>");
 			out.println("<td>￥" + resultList.get(i).getItemPrice() + "</td>");
-			out.println("<td>" + resultList.get(i).getItemNumber() + "</td>");
-			out.println("<td>￥" + (resultList.get(i).getItemPrice() * resultList.get(i).getItemNumber()) + "</td>");
+			out.println("<td>" + resultList.get(i).getItemCount() + "</td>");
+			out.println("<td>￥" + (resultList.get(i).getItemPrice() * resultList.get(i).getItemCount()) + "</td>");
 		out.println("</tr>");
 	}
 %>

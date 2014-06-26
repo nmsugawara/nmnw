@@ -62,7 +62,13 @@
 			<td>
 <%
 		if(accountId != 0) {
-			out.println("<button type=\"button\" class=\"btn btn-primary\">カートに入れる</button>");
+			out.println("<form method=\"post\" action=\"/nmnw/cart\">");
+			out.println("<input type=\"text\" name=\"item_count\" value=\"\">");
+			out.println("<input type=\"hidden\" name=\"item_id\" value=\"" + result.getId() + "\">");
+			out.println("<input type=\"hidden\" name=\"action\" value=\"add\">");
+			out.println("<input type=\"hidden\" name=\"ref_url\" value=\"/nmnw/item/detail?item_id=" + result.getId() + "\">");
+			out.println("<button type=\"submit\" class=\"btn btn-primary\">カートに入れる</button>");
+			out.println("</form>");
 		} else {
 			out.println("<a href=\"/nmnw/account/register\"><button type=\"button\" class=\"btn btn-primary\">会員登録</button></a>");
 		}
