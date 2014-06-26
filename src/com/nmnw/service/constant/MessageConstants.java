@@ -11,8 +11,4 @@ public class MessageConstants {
 	public static final String MESSAGE_INVAILD_ACTION_PARAM = "もう1度初めからやり直してください。";
 	public static final String MESSAGE_MAIL_NOT_EXIST = "入力されたメールアドレスは登録されていません。";
 	public static final String MESSAGE_CHANGE_PASSWORD_FAILED = "パスワードの変更に失敗しました。もう1度最初からやり直してください。";
-
-	public static final String MESSAGE_CART_ADD_END = "カートに商品を追加しました。";
-	public static final String MESSAGE_CART_DELETE_END = "カートから商品を削除しました。";
-	public static final String MESSAGE_CART_MODIFY_END = "商品数を変更しました。";
 }

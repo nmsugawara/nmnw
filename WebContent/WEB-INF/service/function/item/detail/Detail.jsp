@@ -8,11 +8,8 @@
 	request.setCharacterEncoding("UTF-8");
 	String action = (String)request.getParameter("action");
 	Item result = (Item)request.getAttribute("result");
-	HttpSession loginInfo = request.getSession();
-	int accountId = 0;
-	if (loginInfo.getAttribute("id") != null) {
-		accountId = (Integer)loginInfo.getAttribute("id");
-	}
+	// ログイン情報
+	Integer id = (Integer)session.getAttribute("id");
 %>
 <!DOCTYPE html>
 <html>
@@ -61,9 +58,14 @@
 		<tr>
 			<td>
 <%
-		if(accountId != 0) {
+		if(id != null) {
 			out.println("<form method=\"post\" action=\"/nmnw/cart\">");
-			out.println("<input type=\"text\" name=\"item_count\" value=\"\">");
+			out.print("個数　");
+			out.println("<select name=\"item_count\">");
+			for (int i = 0; i < result.getStock(); i++) {
+				out.println("<option value=\"" + (i+1) + "\">" + (i+1) + "</option>");
+			}
+			out.println("</select>");
 			out.println("<input type=\"hidden\" name=\"item_id\" value=\"" + result.getId() + "\">");
 			out.println("<input type=\"hidden\" name=\"action\" value=\"add\">");
 			out.println("<input type=\"hidden\" name=\"ref_url\" value=\"/nmnw/item/detail?item_id=" + result.getId() + "\">");
