@@ -14,6 +14,8 @@
 		Cart cart = (Cart)session.getAttribute("cart");
 		cartItemList = cart.getItemList();
 	}
+	// cart内商品の在庫情報
+	Map<Integer, Integer> stockList = (Map<Integer, Integer>)request.getAttribute("stockList");
 	// 遷移元URL
 	String refUrl = "/nmnw/item/search";
 	if (request.getAttribute("refUrl") != null) {
@@ -80,10 +82,28 @@
 		for(int i = 0; i < cartItemList.size(); i++) {
 			Cart.CartItem cartItem = (Cart.CartItem)cartItemList.get(i);
 			out.println("<tr>");
+			// 商品名
 			out.println("<td>" + cartItem.getItemName() + "</td>");
+			// 価格
 			out.println("<td>￥" + cartItem.getItemPrice() + "</td>");
-			out.println("<td>" + cartItem.getItemCount() + "</td>");
+			// 商品個数
+			out.println("<td>");
+			out.println("<form method=\"post\" action=\"cart?action=modify&item_id=" + cartItem.getItemId() + "\">");
+			out.println("<select name=\"item_count\" onchange=\"submit(this.form)\">");
+			for (int j = 0; j < stockList.get(cartItem.getItemId()); j++) {
+				out.print("<option value=\"" + (j+1) + "\"");
+				if ((j+1) == cartItem.getItemCount()) {
+					out.print(" selected=\"selected\"");
+				}
+				out.println(">" + (j+1) + "</option>");
+			}
+			out.println("</select>");
+			out.println("<input type=\"hidden\" name=\"ref_url\" value=\"" + refUrl + "\">");
+			out.println("</form>");
+			out.println("</td>");
+			// 小計
 			out.println("<td>￥" + (cartItem.getItemPrice() * cartItem.getItemCount()) + "</td>");
+			// 注文キャンセル
 			out.println("<td>");
 				out.println("<form method=\"post\" action=\"cart?action=delete&item_id=" + cartItem.getItemId() + "\">");
 				out.println("<input type=\"hidden\" name=\"ref_url\" value=\"" + refUrl + "\">");

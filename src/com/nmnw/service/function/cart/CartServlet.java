@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.net.URLEncoder;
 
 import com.nmnw.service.constant.ConfigConstants;
@@ -33,6 +36,7 @@ public class CartServlet extends HttpServlet {
 	private static final String SESSION_KEY_CART = "cart";
 	private static final String SESSION_KEY_REFURL = "refUrl";
 	private static final String SESSION_KEY_MESSAGE = "messageCode";
+	private static final String SESSION_KEY_ITEM_STOCK = "stockList";
 	private static final String SESSION_KEY_ERROR_MESSAGE = "errorMessageList";
 
 	/**
@@ -74,21 +78,52 @@ public class CartServlet extends HttpServlet {
 			}
 			loginId = (Integer)session.getAttribute("id");
 
-			// actionパラメータがない場合
-			if (action == null) {
-				// 画面表示
-				request.setAttribute(SESSION_KEY_REFURL, refUrl);
-				request.setAttribute(SESSION_KEY_MESSAGE, messageCode);
-				request.getRequestDispatcher(page).forward(request, response);
-				return;
-			}
 			// actionパラメータが意図しない値の場合
 			String[] vaildActionParam = {ACTION_ADD, ACTION_DELETE, ACTION_MODIFY};
-			if (!Arrays.asList(vaildActionParam).contains(action)) {
+			if (action != null && !Arrays.asList(vaildActionParam).contains(action)) {
 				// エラー
 				errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
 				request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);
 				request.setAttribute(SESSION_KEY_REFURL, refUrl);
+				request.getRequestDispatcher(page).forward(request, response);
+				return;
+			}
+
+			////////////////////////////
+			// カート画面表示
+			////////////////////////////
+			// actionパラメータがない場合
+			if (action == null) {
+				// セッション内のCartオブジェクト有無確認
+				Boolean hasObject = false;
+				Enumeration<String> en = session.getAttributeNames();
+				while (en.hasMoreElements()) {
+					String key = (String)en.nextElement();
+					if (SESSION_KEY_CART.equals(key)) {
+						hasObject = true;
+					}
+				}
+				Map<Integer, Integer> stockList = new LinkedHashMap<Integer, Integer>();
+				// Cartオブジェクトがなければ
+				if (!hasObject) {
+					// 何もしない
+				} else {
+					// session内のcart情報取得
+					List<Cart.CartItem> cartItemList = new ArrayList<Cart.CartItem>();
+					Cart cart = (Cart)session.getAttribute(SESSION_KEY_CART);
+					cartItemList = cart.getItemList();
+					// cart内の商品ID、商品在庫を取得
+					for(int i = 0; i < cartItemList.size(); i++) {
+						Cart.CartItem cartItem = (Cart.CartItem)cartItemList.get(i);
+						ItemDao itemDao = new ItemDao();
+						Item item = itemDao.selectByItemId(cartItem.getItemId());
+						stockList.put(item.getId(), item.getStock());
+					}
+				}
+				// 画面表示
+				request.setAttribute(SESSION_KEY_ITEM_STOCK, stockList);
+				request.setAttribute(SESSION_KEY_REFURL, refUrl);
+				request.setAttribute(SESSION_KEY_MESSAGE, messageCode);
 				request.getRequestDispatcher(page).forward(request, response);
 				return;
 			}
@@ -139,7 +174,9 @@ public class CartServlet extends HttpServlet {
 				cart.addItem(item.getId(), item.getName(), item.getPrice(), Integer.valueOf(request.getParameter("item_count")));
 				// セッションへ保存
 				session.setAttribute(SESSION_KEY_CART, cart);
-				encodeRefUrl = URLEncoder.encode(refUrl, "UTF-8");
+				if (refUrl != null) {
+					encodeRefUrl = URLEncoder.encode(refUrl, "UTF-8");
+				}
 				response.sendRedirect(url + "?ref_url=" + encodeRefUrl + "&message_code=" + ACTION_ADD);
 				return;
 			}
@@ -184,7 +221,9 @@ public class CartServlet extends HttpServlet {
 				cart.deleteItem(Integer.valueOf(request.getParameter("item_id")));
 				// セッションへ保存
 				session.setAttribute(SESSION_KEY_CART, cart);
-				encodeRefUrl = URLEncoder.encode(refUrl, "utf-8");
+				if (refUrl != null) {
+					encodeRefUrl = URLEncoder.encode(refUrl, "UTF-8");
+				}
 				response.sendRedirect(url + "?ref_url=" + encodeRefUrl + "&message_code=" + ACTION_DELETE);
 				return;
 			}
@@ -243,7 +282,9 @@ public class CartServlet extends HttpServlet {
 				cart.modifyItemCount(item.getId(), Integer.valueOf(request.getParameter("item_count")));
 				// セッションへ保存
 				session.setAttribute(SESSION_KEY_CART, cart);
-				encodeRefUrl = URLEncoder.encode(refUrl, "utf-8");
+				if (refUrl != null) {
+					encodeRefUrl = URLEncoder.encode(refUrl, "UTF-8");
+				}
 				response.sendRedirect(url + "?ref_url=" + encodeRefUrl + "&message_code=" + ACTION_MODIFY);
 				return;
 			}
