@@ -112,6 +112,45 @@ public class OrderDao {
 	}
 
 	/**
+	 * íçï∂åüçı
+	 * @param orderId
+	 * @param accountId
+	 * @return List<Order>
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public Order selectByOrderIdAndAccountId(int orderId, int accountId)
+			throws ClassNotFoundException, SQLException {
+		Connection connection = DdConnector.getConnection();
+		String sql = "select * from " + TABLE_NAME_ORDER + " where order_id = ? and account_id = ?";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setInt(1, orderId);
+		statement.setInt(2, accountId);
+		ResultSet result = statement.executeQuery();
+		Order order = new Order();
+		while (result.next()) {
+			order.setOrderId(result.getInt("order_id"));
+			order.setOrderTime(DateConversionUtility.timestampToDate(result.getTimestamp("order_time")));
+			order.setAccountId(result.getInt("account_id"));
+			order.setAccountName(result.getString("account_name"));
+			order.setAccountNameKana(result.getString("account_name_kana"));
+			order.setAccountMail(result.getString("account_mail"));
+			order.setAccountZipCode(result.getString("account_zip_code"));
+			order.setAccountAddress(result.getString("account_address"));
+			order.setAccountPhoneNumber(result.getString("account_phone_number"));
+			order.setTotalPrice(result.getInt("total_price"));
+			order.setCancelFlg(result.getBoolean("cancel_flg"));
+			order.setCancelTime(DateConversionUtility.timestampToDate(result.getTimestamp("cancel_time")));
+			order.setShippingFlg(result.getBoolean("shipping_flg"));
+			order.setShippingTime(DateConversionUtility.timestampToDate(result.getTimestamp("shipping_time")));
+		}
+		result.close();
+		statement.close();
+		connection.close();
+		return order;
+	}
+
+	/**
 	 * íçï∂ÉLÉÉÉìÉZÉã
 	 * @param orderId
 	 * @return id

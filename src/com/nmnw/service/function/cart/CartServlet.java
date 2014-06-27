@@ -134,12 +134,13 @@ public class CartServlet extends HttpServlet {
 				// 商品パラメータチェック
 				Validator v = new Validator();
 				// 商品ID
-				v.required(request.getParameter("item_id"), FIELD_ITEM_ID);
-				v.isInt(request.getParameter("item_id"), FIELD_ITEM_ID);
+				if(!v.required(request.getParameter("item_id"), FIELD_ITEM_ID)) {
+					v.isInt(request.getParameter("item_id"), FIELD_ITEM_ID);
+				}
 				// 個数
-				v.required(request.getParameter("item_count"), FIELD_ITEM_COUNT);
-				v.isInt(request.getParameter("item_count"), FIELD_ITEM_COUNT);
-
+				if(!v.required(request.getParameter("item_count"), FIELD_ITEM_COUNT)) {
+					v.isInt(request.getParameter("item_count"), FIELD_ITEM_COUNT);
+				}
 				errorMessageList = v.getErrorMessageList();
 				if (errorMessageList.size() != 0) {
 					// エラー

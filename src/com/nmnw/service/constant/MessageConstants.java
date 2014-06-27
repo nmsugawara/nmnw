@@ -12,4 +12,5 @@ public class MessageConstants {
 	public static final String MESSAGE_MAIL_NOT_EXIST = "入力されたメールアドレスは登録されていません。";
 	public static final String MESSAGE_CHANGE_PASSWORD_FAILED = "パスワードの変更に失敗しました。もう1度最初からやり直してください。";
 	public static final String MESSAGE_CANCEL_ORDER_FAILED = "注文キャンセルに失敗しました。";
+	public static final String MESSAGE_NO_CART_DATA = "カートに商品が入っていません。";
 }
