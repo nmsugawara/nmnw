@@ -1,20 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
-<%@ page import="com.nmnw.service.dao.Cart"%>
-<%@ page import="com.nmnw.service.dao.Account"%>
-<%@ page import="com.nmnw.service.dao.Item"%>
+<%@ page import="com.nmnw.service.dao.Order"%>
+<%@ page import="com.nmnw.service.dao.OrderDetail"%>
 <%@ page import="com.nmnw.service.constant.ConfigConstants"%>
 <%@ page import="com.nmnw.service.utility.DateConversionUtility"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	Account account = (Account)request.getAttribute("account");
-	// cart情報
-	List<Cart.CartItem> cartItemList = new ArrayList<Cart.CartItem>();
-	if (session.getAttribute("cart") != null) {
-		Cart cart = (Cart)session.getAttribute("cart");
-		cartItemList = cart.getItemList();
-	}
+	Order order = (Order)request.getAttribute("order");
+	List<OrderDetail> orderDetailList = (List<OrderDetail>)request.getAttribute("orderDetail");
 	List<String> errorMessageList = (List<String>)request.getAttribute("errorMessageList");
 %>
 <!DOCTYPE html>
@@ -25,10 +19,10 @@
 <link href="/nmnw/commons/css/style.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
-<title>No Music No Work | 購入確認</title>
+<title>No Music No Work | 購入完了</title>
 </head>
 <body class="service_body">
-<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
 <table id="canvas">
 <tr>
 <td>
@@ -49,9 +43,16 @@
 	if (errorMessageList == null) {
 %>
 <div id="data_table">
-下記内容で注文します。よろしいですか？
-<form method="post" action="complete">
+購入が完了しました。
 <table class="table table-bordered table-condensed">
+	<tr>
+		<th>注文ID</th>
+		<td><% out.print(order.getOrderId()); %></td>
+	</tr>
+	<tr>
+		<th>注文日時</th>
+		<td><% out.print(DateConversionUtility.dateTimeToString(order.getOrderTime())); %></td>
+	</tr>
 	<tr>
 		<th>注文内容</th>
 		<td>
@@ -63,62 +64,52 @@
 					<th>小計</th>
 				</tr>
 <%
-	int totalPrice = 0;
-	for(int i = 0; i < cartItemList.size(); i++) {
+	for(int i = 0; i < orderDetailList.size(); i++) {
 		out.println("<tr>");
-			out.println("<td>" + cartItemList.get(i).getItemName() + "</td>");
-			out.println("<td>￥" + cartItemList.get(i).getItemPrice() + "</td>");
-			out.println("<td>" + cartItemList.get(i).getItemCount() + "</td>");
-			out.println("<td>￥" + (cartItemList.get(i).getItemPrice() * cartItemList.get(i).getItemCount()) + "</td>");
+			out.println("<td>" + orderDetailList.get(i).getItemName() + "</td>");
+			out.println("<td>￥" + orderDetailList.get(i).getItemPrice() + "</td>");
+			out.println("<td>" + orderDetailList.get(i).getItemCount() + "</td>");
+			out.println("<td>￥" + (orderDetailList.get(i).getItemPrice() * orderDetailList.get(i).getItemCount()) + "</td>");
 		out.println("</tr>");
-		totalPrice += cartItemList.get(i).getItemPrice() * cartItemList.get(i).getItemCount();
 	}
 %>
 				<tr>
 					<th colspan="3">合計金額</th>
-					<td>￥<% out.print(totalPrice); %></td>
+					<td>￥<% out.print(order.getTotalPrice()); %></td>
 				</tr>
 			</table>
 		</td>
 	</tr>
 	<tr>
 		<th>会員名</th>
-		<td><% out.print(account.getNameConvertedHtml()); %></td>
+		<td><% out.print(order.getAccountNameConvertedHtml()); %></td>
 	</tr>
 	<tr>
 		<th>会員名フリガナ</th>
-		<td><% out.print(account.getNameKanaConvertedHtml()); %></td>
+		<td><% out.print(order.getAccountNameKanaConvertedHtml()); %></td>
 	</tr>
 	<tr>
 		<th>メールアドレス</th>
-		<td><% out.print(account.getMailConvertedHtml()); %></td>
+		<td><% out.print(order.getAccountMailConvertedHtml()); %></td>
 	</tr>
 	<tr>
 		<th>郵便番号</th>
-		<td><% out.print(account.getZipCodeConvertedHtml()); %></td>
+		<td><% out.print(order.getAccountZipCodeConvertedHtml()); %></td>
 	</tr>
 	<tr>
 		<th>住所</th>
-		<td><% out.print(account.getAddressConvertedHtml()); %></td>
+		<td><% out.print(order.getAccountAddressConvertedHtml()); %></td>
 	</tr>
 	<tr>
 		<th>電話番号</th>
-		<td><% out.print(account.getPhoneNumberConvertedHtml()); %></td>
-	</tr>
-	<tr>
-		<td colspan="2" align="center">
-			<input type="hidden" name="action" value="complete">
-			<a href="/nmnw/cart"><button type="button" class="btn btn-primary">戻る</button></a>
-			&nbsp;&nbsp;
-			<button type="submit" class="btn btn-danger">購入する</button>
-		</td>
+		<td><% out.print(order.getAccountPhoneNumberConvertedHtml()); %></td>
 	</tr>
 </table>
-</form>
 </div>
 <%
 	}
 %>
+<a href="/nmnw/index">TOPへ</a>
 </td>
 </tr>
 </table>

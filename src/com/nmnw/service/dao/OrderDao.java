@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nmnw.admin.dao.Item;
 import com.nmnw.service.dao.Order;
 import com.nmnw.service.constant.ConfigConstants;
 import com.nmnw.service.utility.DateConversionUtility;
@@ -148,6 +149,48 @@ public class OrderDao {
 		statement.close();
 		connection.close();
 		return order;
+	}
+
+	/**
+	 * insert
+	 * @param accout
+	 * @param totalPrice
+	 * @return auto_increment_id
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public int insert (Account account, int totalPrice)
+		throws ClassNotFoundException, SQLException {
+		Connection connection = DdConnector.getConnection();
+		String sql = "insert into " + TABLE_NAME_ORDER
+				+ " (order_time, account_id, account_name, "
+				+ "account_name_kana, account_mail, account_zip_code, "
+				+ "account_address, account_phone_number, total_price) values "
+				+ "(?,?,?,?,?,?,?,?,?)";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		String orderTime = DateConversionUtility.getCurrentDateString();
+		statement.setTimestamp(1, java.sql.Timestamp.valueOf(orderTime));
+		statement.setInt(2, account.getId());
+		statement.setString(3, account.getName());
+		statement.setString(4, account.getNameKana());
+		statement.setString(5, account.getMail());	
+		statement.setString(6, account.getZipCode());
+		statement.setString(7, account.getAddress());
+		statement.setString(8, account.getPhoneNumber());
+		statement.setInt(9, totalPrice);
+		int updateCount = statement.executeUpdate();
+		statement.close();
+		connection.commit();
+
+		String getIdSql = "select last_insert_id() as id";
+		statement = connection.prepareStatement(getIdSql);
+		ResultSet result = statement.executeQuery();
+		int id = 0; 
+		while (result.next()) {
+			id = result.getInt("id");
+		}
+		connection.close();
+		return id;
 	}
 
 	/**

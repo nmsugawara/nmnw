@@ -344,7 +344,7 @@ public class Validator {
 	public String getMessage(String message, String...args) {
 		for (int i = 0; i < args.length; i++) {
 			message = message.replace("{$" + (i+1) + "}", args[i]);
-		}
+	}
 		return message;
 	}
 

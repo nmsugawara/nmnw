@@ -23,19 +23,21 @@ import com.nmnw.service.utility.RandomStringUtility;
 import com.nmnw.service.validator.AccountValidator;
 import com.nmnw.service.dao.Account;
 import com.nmnw.service.dao.AccountDao;
+import com.nmnw.service.dao.Mail;
+import com.nmnw.service.dao.MailDao;
 
 @WebServlet(name="account/resetPassword", urlPatterns={"/account/resetPassword"})
 public class ResetPasswordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	// subject
-	private static final String SUBJECT = "[No Music, No Work]パスワード変更用URL";
 	private static final String CHANGE_PASSWORD_URL = "http://localhost:8080/nmnw/account/changePassword?action=edit&token=";
-	private static final String ERROR_SEND_MAIL = "メール送信に失敗しました。";
+	private static final String MAIL_CODE = "reset_password";
 	private static final String DISPLAY_TITLE_ERROR = "エラー";
 	private static final String DISPLAY_TITLE_RESET = "リセット";
 	private static final String DISPLAY_TITLE_RESET_END = "リセット完了";
 	private static final String DISPLAY_TITLE_EDIT = "変更";
 	private static final String DISPLAY_TITLE_EDIT_END = "変更完了";
+	
 	/**
 	 * Construct
 	 */
@@ -50,7 +52,7 @@ public class ResetPasswordServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		String page = ConfigConstants.JSP_DIR_ACCOUNT_RESET_PASSWORD + "ResetPassword.jsp";
 		String action = request.getParameter("action");
-		String mail = request.getParameter("mail");
+		String mailTo = request.getParameter("mail");
 		String token = request.getParameter("token");
 		List<String> errorMessageList = new ArrayList<String>();
 		Calendar currentDateTime = Calendar.getInstance();
@@ -70,7 +72,7 @@ public class ResetPasswordServlet extends HttpServlet {
 			// パスワード変更用メール送信画面表示
 			////////////////////////////
 			if ("reset".equals(action)) {
-				request.setAttribute("mail", mail);
+				request.setAttribute("mail", mailTo);
 				request.setAttribute("action", "reset");
 				request.setAttribute("title", DISPLAY_TITLE_RESET);
 				request.getRequestDispatcher(page).forward(request, response);
@@ -118,11 +120,14 @@ public class ResetPasswordServlet extends HttpServlet {
 				// DB格納
 				int updateCount = accountDao.update(updateAccount);
 
-				String message = CHANGE_PASSWORD_URL + token;
 				// メール送信
-				boolean sendResult = MailUtility.sendMail(mail, SUBJECT, message);
+				MailDao mailDao = new MailDao();
+				Mail mail = mailDao.selectByCode(MAIL_CODE);
+				String message = mail.getMessage().replace("{Url}", CHANGE_PASSWORD_URL + token);
+
+				boolean sendResult = MailUtility.sendMail(mailTo, mail.getSubject(), message);
 				if (sendResult == false) {
-					errorMessageList.add(ERROR_SEND_MAIL);
+					errorMessageList.add(MessageConstants.ERROR_SEND_MAIL);
 				}
 				request.setAttribute("errorMessageList", errorMessageList);
 				request.setAttribute("action", "reset_end");

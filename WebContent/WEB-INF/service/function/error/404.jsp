@@ -14,7 +14,7 @@
 <title>No Music No Work | Error</title>
 </head>
 <body class="service_body">
-<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
 <table id="canvas">
 <tr>
 <td>
