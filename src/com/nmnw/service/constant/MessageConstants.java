@@ -4,6 +4,7 @@ public class MessageConstants {
 	public static final String MESSAGE_LOGIN_FAILED = "ログインに失敗しました。";
 	public static final String MESSAGE_NOT_LOGIN = "ログインし直してください。";
 	public static final String MESSAGE_ILLEGAL_PARAMETER = "もう1度最初からやり直してください。";
+	public static final String MESSAGE_DUPLICATION_MAIL = "そのメールアドレスは既に登録されています。";
 	public static final String MESSAGE_REGIST_END = "登録が完了しました。";
 	public static final String MESSAGE_EDIT_END = "編集が完了しました。";
 	public static final String MESSAGE_EDIT_FAILED = "編集に失敗しました。";

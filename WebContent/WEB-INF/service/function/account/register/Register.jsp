@@ -16,6 +16,31 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="/nmnw/commons/js/bootstrap-datepicker.js"></script>
 <script src="/nmnw/commons/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+<!--
+function duplicationCheck(obj) {
+	var httpObject = new XMLHttpRequest();
+	if (httpObject == null) {
+		return;
+	}
+	var value = obj.value;
+	if (value == "") {
+		return;
+	}
+	var url = "register?action=duplication_check&account_mail=" + value;
+	httpObject.open("Get", url, true);
+	httpObject.onreadystatechange = function() {
+		if (httpObject.readyState == 4) {
+			if (httpObject.status == 200) {
+				var alert = document.getElementById("mail_alert");
+				alert.innerHTML = httpObject.responseText;
+			}
+		}
+	}
+	httpObject.send(null);
+}
+-->
+</script>
 <title>No Music No Work | 会員登録</title>
 </head>
 <body class="service_body">
@@ -26,15 +51,18 @@
 <h1>会員登録</h1>
 <p>
 	<font color="red">
-<% for(int i=0; i < errorMessageList.size(); i++) {
-	String message = errorMessageList.get(i);
-	out.println(message);
-	out.println("<br>");
+<%
+	if (errorMessageList != null) {
+		for(int i=0; i < errorMessageList.size(); i++) {
+			String errorMessage = errorMessageList.get(i);
+			out.println(errorMessage);
+			out.println("<br>");
+		}
 	}
 %>
 	</font>
 </p>
-<form method="post" action="register?action=regist_end" enctype="application/x-www-form-urlencoded">
+<form name="account" method="post" action="register?action=regist_end" enctype="application/x-www-form-urlencoded">
 	<table class="table table-bordered table-condensed">
 		<tr>
 			<th>会員名</th>
@@ -46,7 +74,10 @@
 		</tr>
 		<tr>
 			<th>メールアドレス</th>
-			<td><input type="text" name="account_mail" size="50" value="${inputDataList.get('account_mail')[0]}"></td>
+			<td>
+				<input type="text" name="account_mail" size="50" value="${inputDataList.get('account_mail')[0]}" onBlur="duplicationCheck(this)">
+				<span id="mail_alert"></span>
+			</td>
 		</tr>
 		<tr>
 			<th>郵便番号<br>(xxx-xxxx)</th>
