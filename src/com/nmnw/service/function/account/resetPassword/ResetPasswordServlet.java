@@ -32,11 +32,15 @@ public class ResetPasswordServlet extends HttpServlet {
 	// subject
 	private static final String CHANGE_PASSWORD_URL = "http://localhost:8080/nmnw/account/changePassword?action=edit&token=";
 	private static final String MAIL_CODE = "reset_password";
+	private static final String KEY_MAIL = "mail";
+	private static final String KEY_ERROR_MESSAGE = "errorMessageList";
+	private static final String KEY_ACTION = "action";
+	private static final String VALUE_ACTION_RESET = "reset";
+	private static final String VALUE_ACTION_RESET_END = "reset_end";
+	private static final String KEY_TITLE = "title";
 	private static final String DISPLAY_TITLE_ERROR = "エラー";
 	private static final String DISPLAY_TITLE_RESET = "リセット";
 	private static final String DISPLAY_TITLE_RESET_END = "リセット完了";
-	private static final String DISPLAY_TITLE_EDIT = "変更";
-	private static final String DISPLAY_TITLE_EDIT_END = "変更完了";
 	
 	/**
 	 * Construct
@@ -51,66 +55,62 @@ public class ResetPasswordServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		String page = ConfigConstants.JSP_DIR_ACCOUNT_RESET_PASSWORD + "ResetPassword.jsp";
-		String action = request.getParameter("action");
-		String mailTo = request.getParameter("mail");
-		String token = request.getParameter("token");
 		List<String> errorMessageList = new ArrayList<String>();
-		Calendar currentDateTime = Calendar.getInstance();
 
 		try {
 			// actionパラメータがない、または意図しない値の場合
-			String[] vaildActionParam = {"reset", "reset_end", "edit", "edit_end"};
-			if (action == null || !Arrays.asList(vaildActionParam).contains(action)) {
+			String[] vaildActionParam = {VALUE_ACTION_RESET, VALUE_ACTION_RESET_END};
+			if (request.getParameter(KEY_ACTION) == null || !Arrays.asList(vaildActionParam).contains(request.getParameter(KEY_ACTION))) {
 				// エラー
 				errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
-				request.setAttribute("errorMessageList", errorMessageList);
-				request.setAttribute("title", DISPLAY_TITLE_ERROR);
+				request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
+				request.setAttribute(KEY_TITLE, DISPLAY_TITLE_ERROR);
 				request.getRequestDispatcher(page).forward(request, response);
 				return;
 			}
 			////////////////////////////
 			// パスワード変更用メール送信画面表示
 			////////////////////////////
-			if ("reset".equals(action)) {
-				request.setAttribute("mail", mailTo);
-				request.setAttribute("action", "reset");
-				request.setAttribute("title", DISPLAY_TITLE_RESET);
+			if (VALUE_ACTION_RESET.equals(request.getParameter(KEY_ACTION))) {
+				request.setAttribute(KEY_MAIL, request.getParameter(KEY_MAIL));
+				request.setAttribute(KEY_ACTION, VALUE_ACTION_RESET);
+				request.setAttribute(KEY_TITLE, DISPLAY_TITLE_RESET);
 				request.getRequestDispatcher(page).forward(request, response);
 				return;
 			}
 			////////////////////////////
 			// パスワード変更用メール送信
 			////////////////////////////
-			if ("reset_end".equals(action)) {
+			if (VALUE_ACTION_RESET_END.equals(request.getParameter(KEY_ACTION))) {
 				// 入力チェック
 				AccountValidator av = new AccountValidator();
-				av.checkMail(request.getParameter("mail"));
+				av.checkMail(request.getParameter(KEY_MAIL));
 	
 				errorMessageList = av.getValidationList();
 				// 入力エラーの場合
 				if (errorMessageList.size() != 0) {
 					// エラー
-					request.setAttribute("action", "reset");
-					request.setAttribute("errorMessageList", errorMessageList);
-					request.setAttribute("title", DISPLAY_TITLE_RESET);
+					request.setAttribute(KEY_ACTION, VALUE_ACTION_RESET);
+					request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
+					request.setAttribute(KEY_TITLE, DISPLAY_TITLE_RESET);
 					request.getRequestDispatcher(page).forward(request, response);
 					return;
 				}
 				// 入力チェックOKの場合
 				// 入力メールよりアカウント情報取得
 				AccountDao accountDao = new AccountDao();
-				Account account = accountDao.selectByMail(request.getParameter("mail"));
+				Account account = accountDao.selectByMail(request.getParameter(KEY_MAIL));
 				if (account.getId() == 0) {
 					// エラー
-					request.setAttribute("action", "reset");
+					request.setAttribute(KEY_ACTION, VALUE_ACTION_RESET);
 					errorMessageList.add(MessageConstants.MESSAGE_MAIL_NOT_EXIST);
-					request.setAttribute("errorMessageList", errorMessageList);
-					request.setAttribute("title", DISPLAY_TITLE_RESET);
+					request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
+					request.setAttribute(KEY_TITLE, DISPLAY_TITLE_RESET);
 					request.getRequestDispatcher(page).forward(request, response);
 					return;
 				}
 				// パスワード変更用ｔｏｋｅｎ生成
-				token = RandomStringUtility.generateToken();
+				String token = RandomStringUtility.generateToken();
 				// token有効期限
 				Date tokenExpireTime = DateConversionUtility.getdaysAfterDate(ConfigConstants.TOKEN_EXPIRE_DAYS);
 				Account updateAccount = new Account();
@@ -125,90 +125,13 @@ public class ResetPasswordServlet extends HttpServlet {
 				Mail mail = mailDao.selectByCode(MAIL_CODE);
 				String message = mail.getMessage().replace("{Url}", CHANGE_PASSWORD_URL + token);
 
-				boolean sendResult = MailUtility.sendMail(mailTo, mail.getSubject(), message);
+				boolean sendResult = MailUtility.sendMail(request.getParameter(KEY_MAIL), mail.getSubject(), message);
 				if (sendResult == false) {
 					errorMessageList.add(MessageConstants.ERROR_SEND_MAIL);
 				}
-				request.setAttribute("errorMessageList", errorMessageList);
-				request.setAttribute("action", "reset_end");
-				request.setAttribute("title", DISPLAY_TITLE_RESET_END);
-				request.getRequestDispatcher(page).forward(request, response);
-				return;
-			}
-			////////////////////////////
-			// パスワード変更用画面表示
-			////////////////////////////
-			if ("edit".equals(action)) {
-				// tokenパラメータチェック
-				Account account = getAccountByToken(token, currentDateTime);
-				if (account == null) {
-					// エラー
-					errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
-					request.setAttribute("errorMessageList", errorMessageList);
-					request.setAttribute("title", DISPLAY_TITLE_ERROR);
-					request.getRequestDispatcher(page).forward(request, response);
-					return;
-				}
-				request.setAttribute("token", token);
-				request.setAttribute("action", "edit");
-				request.setAttribute("title", DISPLAY_TITLE_EDIT);
-				request.getRequestDispatcher(page).forward(request, response);
-				return;
-			}
-			////////////////////////////
-			// パスワード変更
-			////////////////////////////
-			if ("edit_end".equals(action)) {
-				// tokenパラメータチェック
-				Account account = getAccountByToken(token, currentDateTime);
-				if (account == null) {
-					// エラー
-					errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
-					request.setAttribute("errorMessageList", errorMessageList);
-					request.setAttribute("title", DISPLAY_TITLE_ERROR);
-					request.getRequestDispatcher(page).forward(request, response);
-					return;
-				}
-				// 入力チェック
-				AccountValidator av = new AccountValidator();
-				av.checkPassWord(request.getParameter("password"));
-				av.checkPassWord(request.getParameter("retype_password"));
-				av.checkPassWordAndRetypePassWord(request.getParameter("password"), request.getParameter("retype_password"));
-
-				errorMessageList = av.getValidationList();
-				// 入力エラーの場合
-				if (errorMessageList.size() != 0) {
-					// 再度変更画面表示
-					request.setAttribute("token", token);
-					request.setAttribute("action", "edit");
-					request.setAttribute("errorMessageList", errorMessageList);
-					request.setAttribute("title", DISPLAY_TITLE_EDIT);
-					request.getRequestDispatcher(page).forward(request, response);
-					return;
-				}
-				// 変更
-				// salt生成
-				String salt = RandomStringUtility.generateSalt();
-				// 入力パスワードとsaltを組み合わせてハッシュ化
-				String enctyptPassword = CipherUtility.enctypt(request.getParameter("password") + salt);
-				Account updateAccount = new Account();
-				updateAccount.setId(account.getId());
-				updateAccount.setPassWord(enctyptPassword);
-				updateAccount.setSalt(salt);
-				// update
-				AccountDao accountDao = new AccountDao();
-				int accountId = accountDao.update(updateAccount);
-				// 正常に1件更新されていた場合
-				if (accountId == 1) {
-					request.setAttribute("action", "edit_end");
-					request.setAttribute("title", DISPLAY_TITLE_EDIT_END);
-					request.getRequestDispatcher(page).forward(request, response);
-					return;
-				}
-				// エラー
-				errorMessageList.add(MessageConstants.MESSAGE_CHANGE_PASSWORD_FAILED);
-				request.setAttribute("errorMessageList", errorMessageList);
-				request.setAttribute("title", DISPLAY_TITLE_ERROR);
+				request.setAttribute(KEY_ACTION, VALUE_ACTION_RESET_END);
+				request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
+				request.setAttribute(KEY_TITLE, DISPLAY_TITLE_RESET_END);
 				request.getRequestDispatcher(page).forward(request, response);
 				return;
 			}
@@ -222,29 +145,5 @@ public class ResetPasswordServlet extends HttpServlet {
 	protected void doPost (HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		doGet(request, response);
-	}
-
-	/**
-	 * actionパラメータチェック
-	 * @param token
-	 * @return Account
-	 */
-	private Account getAccountByToken (String token, Calendar currentDateTime) {
-		if (token == null) {
-			return null;
-		}
-		try {
-			// 会員情報取得
-			AccountDao accountDao = new AccountDao();
-			Account account = accountDao.selectByTokenAndTokenExpireTime(token, currentDateTime);
-			// tokenが不正
-			if (account == null) {
-				// エラー
-				return null;
-			}
-			return account;
-		} catch (Exception e) {
-			return null;
-		}
 	}
 }

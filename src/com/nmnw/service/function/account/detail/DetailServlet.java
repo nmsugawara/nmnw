@@ -17,6 +17,12 @@ import com.nmnw.service.utility.ExceptionUtility;
 @WebServlet(name="account/detail", urlPatterns={"/account/detail"})
 public class DetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String KEY_RESULT = "result";
+	private static final String KEY_MESSAGE = "message";
+	private static final String KEY_ACTION = "action";
+	private static final String VALUE_ACTION_REGIST_END = "regist_end";
+	private static final String VALUE_ACTION_EDIT_END = "edit_end";
+	private static final String KEY_ID = "account_id";
 
 	/**
 	 * Construct
@@ -34,22 +40,22 @@ public class DetailServlet extends HttpServlet {
 
 		try {
 			Account account = new Account();
-			account.setId(Integer.parseInt(request.getParameter("account_id")));
+			account.setId(Integer.parseInt(request.getParameter(KEY_ID)));
 			AccountDao accountdao = new AccountDao();
 			Account result = accountdao.selectByAccountId(account.getId());
-			request.setAttribute("result", result);
-			request.setAttribute("message", "");
+			request.setAttribute(KEY_RESULT, result);
+			request.setAttribute(KEY_MESSAGE, "");
 			// äYìñÉfÅ[É^Ç™Ç»Ç¢èÍçá
 			if (result.getId() == 0) {
-				request.setAttribute("message", MessageConstants.MESSAGE_NO_DATA);
+				request.setAttribute(KEY_MESSAGE, MessageConstants.MESSAGE_NO_DATA);
 			} else {
 			// äYìñÉfÅ[É^Ç™Ç†ÇÈèÍçá
 				// êVãKìoò^äÆóπ
-				if ("regist_end".equals(request.getParameter("action"))) {
-					request.setAttribute("message", MessageConstants.MESSAGE_REGIST_END);
+				if (VALUE_ACTION_REGIST_END.equals(request.getParameter(KEY_ACTION))) {
+					request.setAttribute(KEY_MESSAGE, MessageConstants.MESSAGE_REGIST_END);
 				// ï“èWäÆóπ
-				} else if ("edit_end".equals(request.getParameter("action"))) {
-					request.setAttribute("message", MessageConstants.MESSAGE_EDIT_END);
+				} else if (VALUE_ACTION_EDIT_END.equals(request.getParameter(KEY_ACTION))) {
+					request.setAttribute(KEY_MESSAGE, MessageConstants.MESSAGE_EDIT_END);
 				}
 			} 
 			request.getRequestDispatcher(page).forward(request, response);
