@@ -1,7 +1,6 @@
 package com.nmnw.service.function.item.search;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.nmnw.service.constant.ConfigConstants;
-import com.nmnw.service.constant.MessageConstants;
 import com.nmnw.service.dao.Item;
 import com.nmnw.service.dao.ItemDao;
 import com.nmnw.service.utility.DateConversionUtility;
@@ -22,6 +20,11 @@ import com.nmnw.service.utility.RequestParameterUtility;
 @WebServlet(name="item/search", urlPatterns={"/item/search"})
 public class SearchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String KEY_RESULT = "result";
+	private static final String KEY_INPUT_DATA_LIST = "inputDataList";
+	private static final String KEY_SEARCH_NAME = "search_name";
+	private static final String KEY_SEARCH_CATEGORY = "search_category";
+	private static final String KEY_SEARCH_SORT = "search_sort";
 
 	/**
 	 * Construct
@@ -46,20 +49,20 @@ public class SearchServlet extends HttpServlet {
 			String searchDateFrom = currentDateTime;
 			String searchDateTo = currentDateTime;
 			// parameter
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_name"))) {
-				searchName = request.getParameter("search_name");
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(KEY_SEARCH_NAME))) {
+				searchName = request.getParameter(KEY_SEARCH_NAME);
 			}
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_category"))) {
-				searchCategory = request.getParameter("search_category");
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(KEY_SEARCH_CATEGORY))) {
+				searchCategory = request.getParameter(KEY_SEARCH_CATEGORY);
 			}
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sort"))) {
-				searchSort = request.getParameter("search_sort");
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(KEY_SEARCH_SORT))) {
+				searchSort = request.getParameter(KEY_SEARCH_SORT);
 			}
 			ItemDao itemdao = new ItemDao();
 			List<Item> itemList = itemdao.selectBySearch(searchName, searchCategory, searchDateFrom, searchDateTo, searchSort);
 
-			request.setAttribute("result", itemList);
-			request.setAttribute("inputDataList", inputDataList);
+			request.setAttribute(KEY_RESULT, itemList);
+			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
 			request.getRequestDispatcher(page).forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();

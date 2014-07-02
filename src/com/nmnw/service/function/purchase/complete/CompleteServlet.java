@@ -30,7 +30,7 @@ public class CompleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String KEY_ACCOUNT_ID = "id";
 	private static final String KEY_CART = "cart";
-	private static final String KEY_ACTION = "action";
+	private static final String REQUEST_KEY_ACTION = "action";
 	private static final String VALUE_ACTION = "complete";
 	private static final String KEY_ORDER = "order";
 	private static final String KEY_ORDER_DETAIL = "orderDetail";
@@ -78,7 +78,7 @@ public class CompleteServlet extends HttpServlet {
 			///////////////////
 			// actionパラメータチェック
 			///////////////////
-			if (request.getParameter(KEY_ACTION) == null || !VALUE_ACTION.equals((String)request.getParameter(KEY_ACTION))) {
+			if (request.getParameter(REQUEST_KEY_ACTION) == null || !VALUE_ACTION.equals((String)request.getParameter(REQUEST_KEY_ACTION))) {
 				// エラー
 				errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
 				request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);

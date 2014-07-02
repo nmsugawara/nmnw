@@ -24,15 +24,15 @@ import com.nmnw.service.dao.AccountDao;
 @WebServlet(name="account/changePassword", urlPatterns={"/account/changePassword"})
 public class ChangePasswordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String KEY_TOKEN = "token";
+	private static final String REQUEST_KEY_TOKEN = "token";
 	private static final String KEY_ERROR_MESSAGE = "errorMessageList";
-	private static final String KEY_ACTION = "action";
+	private static final String REQUEST_KEY_ACTION = "action";
 	private static final String VALUE_ACTION_EDIT = "edit";
 	private static final String VALUE_ACTION_EDIT_END = "edit_end";
 	private static final String KEY_TITLE = "title";
-	private static final String DISPLAY_TITLE_ERROR = "エラー";
-	private static final String DISPLAY_TITLE_EDIT = "変更";
-	private static final String DISPLAY_TITLE_EDIT_END = "変更完了";
+	private static final String VALUE_TITLE_ERROR = "エラー";
+	private static final String VALUE_TITLE_EDIT = "変更";
+	private static final String VALUE_TITLE_EDIT_END = "変更完了";
 	private static final String KEY_PASSWORD = "password";
 	private static final String KEY_RETYPE_PASSWORD = "retype_password";
 
@@ -49,52 +49,52 @@ public class ChangePasswordServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		String page = ConfigConstants.JSP_DIR_ACCOUNT_CHANGE_PASSWORD + "ChangePassword.jsp";
-		String token = request.getParameter(KEY_TOKEN);
+		String token = request.getParameter(REQUEST_KEY_TOKEN);
 		List<String> errorMessageList = new ArrayList<String>();
 		Calendar currentDateTime = Calendar.getInstance();
 
 		try {
 			// actionパラメータがない、または意図しない値の場合
 			String[] vaildActionParam = {VALUE_ACTION_EDIT, VALUE_ACTION_EDIT_END};
-			if (request.getParameter(KEY_ACTION) == null || !Arrays.asList(vaildActionParam).contains(request.getParameter(KEY_ACTION))) {
+			if (request.getParameter(REQUEST_KEY_ACTION) == null || !Arrays.asList(vaildActionParam).contains(request.getParameter(REQUEST_KEY_ACTION))) {
 				// エラー
 				errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
 				request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
-				request.setAttribute(KEY_TITLE, DISPLAY_TITLE_ERROR);
+				request.setAttribute(KEY_TITLE, VALUE_TITLE_ERROR);
 				request.getRequestDispatcher(page).forward(request, response);
 				return;
 			}
 			////////////////////////////
 			// パスワード変更用画面表示
 			////////////////////////////
-			if (VALUE_ACTION_EDIT.equals(request.getParameter(KEY_ACTION))) {
+			if (VALUE_ACTION_EDIT.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 				// tokenパラメータチェック
 				Account account = getAccountByToken(token, currentDateTime);
 				if (account == null) {
 					// エラー
 					errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
 					request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
-					request.setAttribute(KEY_TITLE, DISPLAY_TITLE_ERROR);
+					request.setAttribute(KEY_TITLE, VALUE_TITLE_ERROR);
 					request.getRequestDispatcher(page).forward(request, response);
 					return;
 				}
-				request.setAttribute(KEY_TOKEN, token);
-				request.setAttribute(KEY_ACTION, VALUE_ACTION_EDIT);
-				request.setAttribute(KEY_TITLE, DISPLAY_TITLE_EDIT);
+				request.setAttribute(REQUEST_KEY_TOKEN, token);
+				request.setAttribute(REQUEST_KEY_ACTION, VALUE_ACTION_EDIT);
+				request.setAttribute(KEY_TITLE, VALUE_TITLE_EDIT);
 				request.getRequestDispatcher(page).forward(request, response);
 				return;
 			}
 			////////////////////////////
 			// パスワード変更
 			////////////////////////////
-			if (VALUE_ACTION_EDIT_END.equals(request.getParameter(KEY_ACTION))) {
+			if (VALUE_ACTION_EDIT_END.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 				// tokenパラメータチェック
 				Account account = getAccountByToken(token, currentDateTime);
 				if (account == null) {
 					// エラー
 					errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
 					request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
-					request.setAttribute(KEY_TITLE, DISPLAY_TITLE_ERROR);
+					request.setAttribute(KEY_TITLE, VALUE_TITLE_ERROR);
 					request.getRequestDispatcher(page).forward(request, response);
 					return;
 				}
@@ -108,9 +108,9 @@ public class ChangePasswordServlet extends HttpServlet {
 				// 入力エラーの場合
 				if (errorMessageList.size() != 0) {
 					// 再度変更画面表示
-					request.setAttribute(KEY_TOKEN, token);
-					request.setAttribute(KEY_ACTION, VALUE_ACTION_EDIT);
-					request.setAttribute(KEY_TITLE, DISPLAY_TITLE_EDIT);
+					request.setAttribute(REQUEST_KEY_TOKEN, token);
+					request.setAttribute(REQUEST_KEY_ACTION, VALUE_ACTION_EDIT);
+					request.setAttribute(KEY_TITLE, VALUE_TITLE_EDIT);
 					request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
 					request.getRequestDispatcher(page).forward(request, response);
 					return;
@@ -129,15 +129,15 @@ public class ChangePasswordServlet extends HttpServlet {
 				int updateCount = accountDao.update(updateAccount);
 				// 正常に1件更新されていた場合
 				if (updateCount == 1) {
-					request.setAttribute(KEY_ACTION, VALUE_ACTION_EDIT_END);
-					request.setAttribute(KEY_TITLE, DISPLAY_TITLE_EDIT_END);
+					request.setAttribute(REQUEST_KEY_ACTION, VALUE_ACTION_EDIT_END);
+					request.setAttribute(KEY_TITLE, VALUE_TITLE_EDIT_END);
 					request.getRequestDispatcher(page).forward(request, response);
 					return;
 				}
 				// エラー
 				errorMessageList.add(MessageConstants.MESSAGE_CHANGE_PASSWORD_FAILED);
 				request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
-				request.setAttribute(KEY_TITLE, DISPLAY_TITLE_ERROR);
+				request.setAttribute(KEY_TITLE, VALUE_TITLE_ERROR);
 				request.getRequestDispatcher(page).forward(request, response);
 				return;
 			}

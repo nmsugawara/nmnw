@@ -19,7 +19,13 @@ import com.nmnw.service.dao.AccountDao;
 @WebServlet(name="login", urlPatterns={"/login"})
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private static final String REQUEST_REQUEST_KEY_ACTION = "action";
+	private static final String VALUE_ACTION_LOGIN = "login";
+	private static final String KEY_MESSAGE = "message";
+	private static final String REQUEST_KEY_MAIL = "login_mail";
+	private static final String REQUEST_KEY_PASSWORD = "login_password";
+	private static final String KEY_LOGIN_ID = "id";
+	private static final String KEY_LOGIN_NAME = "name";
 	/**
 	 * Construct
 	 */
@@ -33,27 +39,26 @@ public class LoginServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		String page = ConfigConstants.JSP_DIR_LOGIN + "Login.jsp";
-		String action = request.getParameter("action");
 		String message = "";
 		// ログイン画面表示
-		if (!"login".equals(action)) {
+		if (!VALUE_ACTION_LOGIN.equals(request.getParameter(REQUEST_REQUEST_KEY_ACTION))) {
 			request.getRequestDispatcher(page).forward(request, response);
 		} else {
 		// ログイン処理
 			try {
 				AccountDao accountDao = new AccountDao();
 				// パスワード、salt取得
-				Account account = accountDao.selectByMail(request.getParameter("login_mail"));
+				Account account = accountDao.selectByMail(request.getParameter(REQUEST_KEY_MAIL));
 				// saltが取得できていたら
 				if (account.getSalt() != null && account.getSalt().length() != 0) {
 					// 入力パスワードとsaltをハッシュ化
-					String password = CipherUtility.enctypt(request.getParameter("login_password") + account.getSalt());
+					String password = CipherUtility.enctypt(request.getParameter(REQUEST_KEY_PASSWORD) + account.getSalt());
 					// 保存されているパスワードとの比較
 					if (password.equals(account.getPassWord())) {
 						// ログイン成功
 						HttpSession session = request.getSession();
-						session.setAttribute("id", account.getId());
-						session.setAttribute("name", account.getName());
+						session.setAttribute(KEY_LOGIN_ID, account.getId());
+						session.setAttribute(KEY_LOGIN_NAME, account.getName());
 						String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_INDEX;
 						response.sendRedirect(url);
 						return;
@@ -61,7 +66,7 @@ public class LoginServlet extends HttpServlet {
 				}
 				// ログイン失敗
 				message = MessageConstants.MESSAGE_LOGIN_FAILED;
-				request.setAttribute("message", message);
+				request.setAttribute(KEY_MESSAGE, message);
 				request.getRequestDispatcher(page).forward(request, response);
 			} catch (Exception e) {
 				e.printStackTrace();

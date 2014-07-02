@@ -24,7 +24,7 @@ public class EditServlet extends HttpServlet {
 	private static final String KEY_RESULT = "result";
 	private static final String KEY_ERROR_MESSAGE = "errorMessageList";
 	private static final String KEY_INPUT_DATA_LIST = "inputDataList";
-	private static final String KEY_ACTION = "action";
+	private static final String REQUEST_KEY_ACTION = "action";
 	private static final String VALUE_ACTION_EDIT = "edit";
 	private static final String VALUE_ACTION_EDIT_END = "edit_end";
 	private static final String KEY_ID = "account_id";
@@ -51,7 +51,7 @@ public class EditServlet extends HttpServlet {
 		Map<String, String[]> inputDataList = request.getParameterMap();
 		String page = ConfigConstants.JSP_DIR_ACCOUNT_EDIT + "Edit.jsp";
 		// ï“èWâÊñ ï\é¶
-		if (VALUE_ACTION_EDIT.equals(request.getParameter(KEY_ACTION))) {
+		if (VALUE_ACTION_EDIT.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 			try {
 				// parameter
 				AccountDao accountdao = new AccountDao();
@@ -73,7 +73,7 @@ public class EditServlet extends HttpServlet {
 				return;
 			}
 		}
-		if (VALUE_ACTION_EDIT_END.equals(request.getParameter(KEY_ACTION))) {
+		if (VALUE_ACTION_EDIT_END.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 		// ï“èWäÆóπ
 			try {
 				// validation

@@ -34,7 +34,7 @@ public class ResetPasswordServlet extends HttpServlet {
 	private static final String MAIL_CODE = "reset_password";
 	private static final String KEY_MAIL = "mail";
 	private static final String KEY_ERROR_MESSAGE = "errorMessageList";
-	private static final String KEY_ACTION = "action";
+	private static final String REQUEST_KEY_ACTION = "action";
 	private static final String VALUE_ACTION_RESET = "reset";
 	private static final String VALUE_ACTION_RESET_END = "reset_end";
 	private static final String KEY_TITLE = "title";
@@ -60,7 +60,7 @@ public class ResetPasswordServlet extends HttpServlet {
 		try {
 			// actionパラメータがない、または意図しない値の場合
 			String[] vaildActionParam = {VALUE_ACTION_RESET, VALUE_ACTION_RESET_END};
-			if (request.getParameter(KEY_ACTION) == null || !Arrays.asList(vaildActionParam).contains(request.getParameter(KEY_ACTION))) {
+			if (request.getParameter(REQUEST_KEY_ACTION) == null || !Arrays.asList(vaildActionParam).contains(request.getParameter(REQUEST_KEY_ACTION))) {
 				// エラー
 				errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
 				request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
@@ -71,9 +71,9 @@ public class ResetPasswordServlet extends HttpServlet {
 			////////////////////////////
 			// パスワード変更用メール送信画面表示
 			////////////////////////////
-			if (VALUE_ACTION_RESET.equals(request.getParameter(KEY_ACTION))) {
+			if (VALUE_ACTION_RESET.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 				request.setAttribute(KEY_MAIL, request.getParameter(KEY_MAIL));
-				request.setAttribute(KEY_ACTION, VALUE_ACTION_RESET);
+				request.setAttribute(REQUEST_KEY_ACTION, VALUE_ACTION_RESET);
 				request.setAttribute(KEY_TITLE, DISPLAY_TITLE_RESET);
 				request.getRequestDispatcher(page).forward(request, response);
 				return;
@@ -81,7 +81,7 @@ public class ResetPasswordServlet extends HttpServlet {
 			////////////////////////////
 			// パスワード変更用メール送信
 			////////////////////////////
-			if (VALUE_ACTION_RESET_END.equals(request.getParameter(KEY_ACTION))) {
+			if (VALUE_ACTION_RESET_END.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 				// 入力チェック
 				AccountValidator av = new AccountValidator();
 				av.checkMail(request.getParameter(KEY_MAIL));
@@ -90,7 +90,7 @@ public class ResetPasswordServlet extends HttpServlet {
 				// 入力エラーの場合
 				if (errorMessageList.size() != 0) {
 					// エラー
-					request.setAttribute(KEY_ACTION, VALUE_ACTION_RESET);
+					request.setAttribute(REQUEST_KEY_ACTION, VALUE_ACTION_RESET);
 					request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
 					request.setAttribute(KEY_TITLE, DISPLAY_TITLE_RESET);
 					request.getRequestDispatcher(page).forward(request, response);
@@ -102,7 +102,7 @@ public class ResetPasswordServlet extends HttpServlet {
 				Account account = accountDao.selectByMail(request.getParameter(KEY_MAIL));
 				if (account.getId() == 0) {
 					// エラー
-					request.setAttribute(KEY_ACTION, VALUE_ACTION_RESET);
+					request.setAttribute(REQUEST_KEY_ACTION, VALUE_ACTION_RESET);
 					errorMessageList.add(MessageConstants.MESSAGE_MAIL_NOT_EXIST);
 					request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
 					request.setAttribute(KEY_TITLE, DISPLAY_TITLE_RESET);
@@ -129,7 +129,7 @@ public class ResetPasswordServlet extends HttpServlet {
 				if (sendResult == false) {
 					errorMessageList.add(MessageConstants.ERROR_SEND_MAIL);
 				}
-				request.setAttribute(KEY_ACTION, VALUE_ACTION_RESET_END);
+				request.setAttribute(REQUEST_KEY_ACTION, VALUE_ACTION_RESET_END);
 				request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
 				request.setAttribute(KEY_TITLE, DISPLAY_TITLE_RESET_END);
 				request.getRequestDispatcher(page).forward(request, response);

@@ -1,7 +1,6 @@
 package com.nmnw.service.function.account.register;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 
 import javax.servlet.ServletException;
@@ -9,16 +8,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
 
 import com.nmnw.service.dao.Account;
 import com.nmnw.service.dao.AccountDao;
 import com.nmnw.service.utility.ExceptionUtility;
-import com.nmnw.service.utility.RandomStringUtility;
 import com.nmnw.service.validator.AccountValidator;
 import com.nmnw.service.constant.ConfigConstants;
 import com.nmnw.service.constant.MessageConstants;
@@ -28,7 +21,7 @@ public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String KEY_ERROR_MESSAGE = "errorMessageList";
 	private static final String KEY_INPUT_DATA_LIST = "inputDataList";
-	private static final String KEY_ACTION = "action";
+	private static final String REQUEST_KEY_ACTION = "action";
 	private static final String VALUE_ACTION_REGIST_END = "regist_end";
 	private static final String VALUE_ACTION_DUPLICATION_CHECK = "duplication_check";
 	private static final String KEY_NAME = "account_name";
@@ -56,14 +49,14 @@ public class RegisterServlet extends HttpServlet {
 		String page = ConfigConstants.JSP_DIR_ACCOUNT_REGISTER + "Register.jsp";
 		AccountDao accountDao = new AccountDao();
 		// 入力画面表示
-		if (request.getParameter(KEY_ACTION) == null) {
+		if (request.getParameter(REQUEST_KEY_ACTION) == null) {
 			request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
 			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
 			request.getRequestDispatcher(page).forward(request, response);
 			return;
 		}
 		// メール重複チェック
-		if (VALUE_ACTION_DUPLICATION_CHECK.equals(request.getParameter(KEY_ACTION))) {
+		if (VALUE_ACTION_DUPLICATION_CHECK.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 			try {
 				AccountValidator av = new AccountValidator();
 				av.checkMail(request.getParameter(KEY_MAIL));
@@ -84,7 +77,7 @@ public class RegisterServlet extends HttpServlet {
 			}
 		}
 		// 新規登録
-		if (VALUE_ACTION_REGIST_END.equals(request.getParameter(KEY_ACTION))) {
+		if (VALUE_ACTION_REGIST_END.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 			try {
 				// validation
 				AccountValidator av = new AccountValidator();
