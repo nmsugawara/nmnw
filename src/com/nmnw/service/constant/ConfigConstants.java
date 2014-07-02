@@ -4,15 +4,23 @@ public class ConfigConstants {
 
 	public static final int NULL_INT = -1;
 
-	// DB
+	/**
+	 *  Service
+	 */
+	// 開発用
+	//public static final String DOMAIN = "localhost:8080";
+	// 本番用
+	public static final String DOMAIN = "54.199.190.207:8080";
+
+	/**
+	 *  DB
+	 */
 	public static final String DB_DRIVER_NAME = "com.mysql.jdbc.Driver";
 	public static final String DB_SERVER_NAME = "localhost";
 	public static final String DB_NAME = "nmnw";
 	public static final String DB_USER_NAME = "root";
 	public static final String DB_PASSWORD = "";
 	public static final String JDBC_URL = "jdbc:mysql://" + DB_SERVER_NAME + "/" + DB_NAME + "?useUnicode=true&characterEncoding=UTF-8";
-
-	public static final String DOMAIN = "localhost:8080";
 
 	/**
 	 *  mail

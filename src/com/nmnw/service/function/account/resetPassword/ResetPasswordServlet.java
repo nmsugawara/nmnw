@@ -30,7 +30,7 @@ import com.nmnw.service.dao.MailDao;
 public class ResetPasswordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	// subject
-	private static final String CHANGE_PASSWORD_URL = "http://localhost:8080/nmnw/account/changePassword?action=edit&token=";
+	private static final String CHANGE_PASSWORD_URL = "http://" + ConfigConstants.DOMAIN + "/nmnw/account/changePassword?action=edit&token=";
 	private static final String MAIL_CODE = "reset_password";
 	private static final String KEY_MAIL = "mail";
 	private static final String KEY_ERROR_MESSAGE = "errorMessageList";
