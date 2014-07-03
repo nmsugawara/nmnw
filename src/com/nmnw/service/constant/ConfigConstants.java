@@ -5,12 +5,9 @@ public class ConfigConstants {
 	public static final int NULL_INT = -1;
 
 	/**
-	 *  Service
+	 *  本番環境と開発環境で異なる情報定義ファイル
 	 */
-	// 開発用
-	//public static final String DOMAIN = "localhost:8080";
-	// 本番用
-	public static final String DOMAIN = "54.199.190.207:8080";
+	public static final String PROPERTIY_FILE_PATH = "/webapps/conf/nmnw/property.txt";
 
 	/**
 	 *  DB
@@ -28,6 +25,7 @@ public class ConfigConstants {
 	// character-set
 	public static final String CHARACTER_CODE = "iso-2022-jp";
 	// smtp
+
 	public static final String SMTP_HOST = "203.138.167.48";
 	public static final String SMTP_PORT = "587";
 	public static final String SMTP_AUTH = "true";
@@ -39,7 +37,7 @@ public class ConfigConstants {
 	public static final String SMTP_PORT = "587";
 	public static final String SMTP_AUTH = "true";
 	public static final String SMTP_USER = "c3VnYXdhcmFAaXAtMTcyLTMxLTQtMzQuYXAtbm9ydGhlYXN0LTEuY29tcHV0ZS5pbnRlcm5hbA==";
-	public static final String SMTP_PASSWORD = "bmV0bWFya2V0aW5n";
+	public static final String SMTP_PASSWORD = "bmV0bWFya2V0aW5nCg==";
 */
 	// from
 	public static final String MAIL_FROM = "ssugawara@net-marketing.co.jp";

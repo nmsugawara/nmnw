@@ -22,6 +22,7 @@ import com.nmnw.admin.utility.DateConversionUtility;
 import com.nmnw.admin.utility.ExceptionUtility;
 import com.nmnw.admin.utility.RequestParameterUtility;
 import com.nmnw.admin.utility.FileUtility;
+import static com.nmnw.admin.utility.PropertyUtility.getPropertyValue;
 
 @WebServlet(name="admin/item/edit", urlPatterns={"/admin/item/edit"})
 @MultipartConfig(location = ConfigConstants.TMP_IMAGE_DIR)
@@ -103,13 +104,13 @@ public class EditServlet extends HttpServlet {
 						item.setImageUrl(request.getParameter("old_item_image"));
 					} else {
 						String newImageFileName = FileUtility.getNewFileName(image, "item");
-						image.write(ConfigConstants.STORED_IMAGE_DIR_ITEM + newImageFileName);
+						image.write(getPropertyValue("STORED_IMAGE_DIR_ITEM") + newImageFileName);
 						item.setImageUrl(newImageFileName);
 					}
 					ItemDao itemdao = new ItemDao();
 					// çXêV
 					String itemId = String.valueOf(itemdao.update(item));
-					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ITEM_DETAIL + "?item_id=" + itemId + "&action=edit_end";
+					String url = "http://" + getPropertyValue("DOMAIN") + ConfigConstants.SERVLET_DIR_ITEM_DETAIL + "?item_id=" + itemId + "&action=edit_end";
 					response.sendRedirect(url);
 				}
 			} catch (Exception e) {

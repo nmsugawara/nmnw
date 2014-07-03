@@ -24,6 +24,7 @@ import com.nmnw.service.dao.Cart;
 import com.nmnw.service.dao.Item;
 import com.nmnw.service.dao.ItemDao;
 import com.nmnw.service.validator.Validator;
+import static com.nmnw.service.utility.PropertyUtility.getPropertyValue;
 
 @WebServlet(name="cart", urlPatterns={"/cart"})
 public class CartServlet extends HttpServlet {
@@ -58,7 +59,7 @@ public class CartServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		String page = ConfigConstants.JSP_DIR_CART + "Cart.jsp";
-		String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_CART;
+		String url = "http://" + getPropertyValue("DOMAIN") + ConfigConstants.SERVLET_DIR_CART;
 		String messageCode = "";
 		if (request.getParameter(REQUEST_KEY_MESSAGE) != null) {
 			messageCode = (String)request.getParameter(REQUEST_KEY_MESSAGE);

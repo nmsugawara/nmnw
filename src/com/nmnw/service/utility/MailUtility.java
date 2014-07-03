@@ -40,6 +40,7 @@ public class MailUtility {
 			//@‘—M
 			Transport.send(msg);
 		} catch (Exception e) {
+			e.printStackTrace();
 			sendResult = false;
 		}
 		return sendResult;

@@ -19,6 +19,7 @@ import com.nmnw.admin.utility.ExceptionUtility;
 import com.nmnw.admin.utility.FileUtility;
 import com.nmnw.admin.validator.ItemValidator;
 import com.nmnw.admin.constant.ConfigConstants;
+import static com.nmnw.admin.utility.PropertyUtility.getPropertyValue;
 
 @WebServlet(name="admin/item/new", urlPatterns={"/admin/item/new"})
 @MultipartConfig(location = ConfigConstants.TMP_IMAGE_DIR)
@@ -79,12 +80,12 @@ public class NewServlet extends HttpServlet {
 					item.setSalesPeriodTo(DateConversionUtility.stringToDate(request.getParameter("item_sales_period_to")));
 					item.setStock(Integer.parseInt(request.getParameter("item_stock")));
 					String newImageFileName = FileUtility.getNewFileName(image, "item");
-					image.write(ConfigConstants.STORED_IMAGE_DIR_ITEM + newImageFileName);
+					image.write(getPropertyValue("STORED_IMAGE_DIR_ITEM") + newImageFileName);
 					item.setImageUrl(newImageFileName);
 
 					ItemDao itemdao = new ItemDao();
 					String itemId = String.valueOf(itemdao.insert(item));
-					String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ITEM_DETAIL + "?item_id=" + itemId + "&action=new_end";
+					String url = "http://" + getPropertyValue("DOMAIN") + ConfigConstants.SERVLET_DIR_ITEM_DETAIL + "?item_id=" + itemId + "&action=new_end";
 					response.sendRedirect(url);
 				} catch (Exception e) {
 					e.printStackTrace();

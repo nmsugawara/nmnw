@@ -15,6 +15,7 @@ import com.nmnw.service.utility.CipherUtility;
 import com.nmnw.service.utility.ExceptionUtility;
 import com.nmnw.service.dao.Account;
 import com.nmnw.service.dao.AccountDao;
+import static com.nmnw.service.utility.PropertyUtility.getPropertyValue;
 
 @WebServlet(name="login", urlPatterns={"/login"})
 public class LoginServlet extends HttpServlet {
@@ -59,7 +60,7 @@ public class LoginServlet extends HttpServlet {
 						HttpSession session = request.getSession();
 						session.setAttribute(KEY_LOGIN_ID, account.getId());
 						session.setAttribute(KEY_LOGIN_NAME, account.getName());
-						String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_INDEX;
+						String url = "http://" + getPropertyValue("DOMAIN") + ConfigConstants.SERVLET_DIR_INDEX;
 						response.sendRedirect(url);
 						return;
 					}

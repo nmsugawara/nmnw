@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.nmnw.admin.constant.ConfigConstants;
+import com.nmnw.service.constant.ConfigConstants;
 
 public class DdConnector {
 	public static Connection getConnection()

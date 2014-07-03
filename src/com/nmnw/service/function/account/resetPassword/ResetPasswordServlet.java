@@ -3,7 +3,6 @@ package com.nmnw.service.function.account.resetPassword;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.nmnw.service.constant.ConfigConstants;
 import com.nmnw.service.constant.MessageConstants;
-import com.nmnw.service.utility.CipherUtility;
 import com.nmnw.service.utility.DateConversionUtility;
 import com.nmnw.service.utility.ExceptionUtility;
 import com.nmnw.service.utility.MailUtility;
@@ -25,12 +23,13 @@ import com.nmnw.service.dao.Account;
 import com.nmnw.service.dao.AccountDao;
 import com.nmnw.service.dao.Mail;
 import com.nmnw.service.dao.MailDao;
+import static com.nmnw.service.utility.PropertyUtility.getPropertyValue;
 
 @WebServlet(name="account/resetPassword", urlPatterns={"/account/resetPassword"})
 public class ResetPasswordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	// subject
-	private static final String CHANGE_PASSWORD_URL = "http://" + ConfigConstants.DOMAIN + "/nmnw/account/changePassword?action=edit&token=";
+	private static final String CHANGE_PASSWORD_URL = "http://" + getPropertyValue("DOMAIN") + "/nmnw/account/changePassword?action=edit&token=";
 	private static final String MAIL_CODE = "reset_password";
 	private static final String KEY_MAIL = "mail";
 	private static final String KEY_ERROR_MESSAGE = "errorMessageList";

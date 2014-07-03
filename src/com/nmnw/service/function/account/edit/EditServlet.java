@@ -17,6 +17,7 @@ import com.nmnw.service.dao.Account;
 import com.nmnw.service.dao.AccountDao;
 import com.nmnw.service.validator.AccountValidator;
 import com.nmnw.service.utility.ExceptionUtility;
+import static com.nmnw.service.utility.PropertyUtility.getPropertyValue;
 
 @WebServlet(name="account/edit", urlPatterns={"/account/edit"})
 public class EditServlet extends HttpServlet {
@@ -114,7 +115,7 @@ public class EditServlet extends HttpServlet {
 					request.getRequestDispatcher(page).forward(request, response);
 					return;
 				}
-				String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ACCOUNT_DETAIL + "?account_id=" + request.getParameter("account_id") + "&action=edit_end";
+				String url = "http://" + getPropertyValue("DOMAIN") + ConfigConstants.SERVLET_DIR_ACCOUNT_DETAIL + "?account_id=" + request.getParameter("account_id") + "&action=edit_end";
 				response.sendRedirect(url);
 				return;
 			} catch (Exception e) {

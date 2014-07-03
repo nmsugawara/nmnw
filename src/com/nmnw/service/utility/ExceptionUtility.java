@@ -6,7 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.nmnw.admin.constant.ConfigConstants;
+import com.nmnw.service.constant.ConfigConstants;
+import static com.nmnw.service.utility.PropertyUtility.getPropertyValue;
 
 public class ExceptionUtility {
 
@@ -32,7 +33,7 @@ public class ExceptionUtility {
 		HttpSession session = request.getSession();
 		session.setAttribute("exceptionMessage", exceptionMessage);
 		session.setAttribute("exceptionCause", exceptionCause);
-		String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ERROR;
+		String url = "http://" + getPropertyValue("DOMAIN") + ConfigConstants.SERVLET_DIR_ERROR;
 		response.sendRedirect(url);
 	}
 

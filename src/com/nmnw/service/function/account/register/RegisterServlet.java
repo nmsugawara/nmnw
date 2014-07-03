@@ -15,6 +15,7 @@ import com.nmnw.service.utility.ExceptionUtility;
 import com.nmnw.service.validator.AccountValidator;
 import com.nmnw.service.constant.ConfigConstants;
 import com.nmnw.service.constant.MessageConstants;
+import static com.nmnw.service.utility.PropertyUtility.getPropertyValue;
 
 @WebServlet(name="account/register", urlPatterns={"/account/register"})
 public class RegisterServlet extends HttpServlet {
@@ -117,7 +118,7 @@ public class RegisterServlet extends HttpServlet {
 	
 				// insert
 				String accountId = String.valueOf(accountDao.insert(account));
-				String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ACCOUNT_DETAIL + "?account_id=" + accountId + "&action=regist_end";
+				String url = "http://" + getPropertyValue("DOMAIN") + ConfigConstants.SERVLET_DIR_ACCOUNT_DETAIL + "?account_id=" + accountId + "&action=regist_end";
 				response.sendRedirect(url);
 				return;
 			} catch (Exception e) {

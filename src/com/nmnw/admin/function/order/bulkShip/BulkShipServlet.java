@@ -18,8 +18,8 @@ import com.nmnw.admin.constant.ValidatorConstants;
 import com.nmnw.admin.dao.Order;
 import com.nmnw.admin.dao.OrderDao;
 import com.nmnw.admin.utility.ExceptionUtility;
-import com.nmnw.admin.utility.RequestParameterUtility;
 import com.nmnw.admin.validator.Validator;
+import static com.nmnw.admin.utility.PropertyUtility.getPropertyValue;
 
 @WebServlet(name="admin/order/bulkShip", urlPatterns={"/admin/order/bulkShip"})
 public class BulkShipServlet extends HttpServlet {
@@ -38,7 +38,7 @@ public class BulkShipServlet extends HttpServlet {
 			throws IOException, ServletException {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
-		String url = "http://" + ConfigConstants.DOMAIN + ConfigConstants.SERVLET_DIR_ORDER_SEARCH + "?action=bulkShip";
+		String url = "http://" + getPropertyValue("DOMAIN") + ConfigConstants.SERVLET_DIR_ORDER_SEARCH + "?action=bulkShip";
 		HttpSession session = request.getSession();
 		List<String> messageList = new ArrayList<String>();
 		Map<String, String[]> inputDataList = request.getParameterMap();
