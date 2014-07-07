@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.dao.Item;
@@ -22,6 +21,16 @@ import com.nmnw.admin.utility.RequestParameterUtility;
 @WebServlet(name="admin/item/search", urlPatterns={"/admin/item/search"})
 public class SearchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String REQUEST_KEY_ACTION = "action";
+	private static final String REQUEST_VALUE_ACTION_SEARCH = "search";
+	private static final String REQUEST_KEY_ITEM_ID = "search_id";
+	private static final String REQUEST_KEY_ITEM_NAME = "search_name";
+	private static final String REQUEST_KEY_ITEM_CATEGORY = "search_category";
+	private static final String REQUEST_KEY_ITEM_PERIOD_FROM = "search_sales_period_from";
+	private static final String REQUEST_KEY_ITEM_PERIOD_TO = "search_sales_period_to";
+	private static final String KEY_RESULT = "result";
+	private static final String KEY_INPUT_DATA_LIST = "inputDataList";
+	private static final String KEY_ERROR_MESSAGE_LIST = "errorMessageList";
 	private static final String SEARCH_FIELD_ID = "商品ID";
 	private static final String SEARCH_FIELD_SALES_PERIOD_FROM = "販売期間(From）";
 	private static final String SEARCH_FIELD_SALES_PERIOD_TO = "販売期間(To）";
@@ -40,79 +49,75 @@ public class SearchServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		List<String> errorMessageList = new ArrayList<String>();
 		Map<String, String[]> inputDataList = request.getParameterMap();
-		String action = request.getParameter("action");
 		String page = ConfigConstants.JSP_DIR_ITEM_SEARCH + "Search.jsp";
 		// 検索画面表示
-		if (!"search".equals(action)) {
-			errorMessageList.add("");
-			request.setAttribute("errorMessageList", errorMessageList);
-			request.setAttribute("inputDataList", inputDataList);
+		if (!REQUEST_VALUE_ACTION_SEARCH.equals(request.getParameter(REQUEST_KEY_ACTION))) {
+			request.setAttribute(KEY_ERROR_MESSAGE_LIST, errorMessageList);
+			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
 			request.getRequestDispatcher(page).forward(request, response);
-		} else {
+			return;
+		}
 		// 検索処理
-			// validation
-			Validator v = new Validator();
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_id"))) {
-				v.isInt(request.getParameter("search_id"), SEARCH_FIELD_ID);
-			}
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_from"))) {
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_to"))) {
-					// from,to有
-					v.correctPeriod(request.getParameter("search_sales_period_from"), SEARCH_FIELD_SALES_PERIOD_FROM, request.getParameter("search_sales_period_to"), SEARCH_FIELD_SALES_PERIOD_TO);
-				} else {
-					// fromのみ
-					v.isDate(request.getParameter("search_sales_period_from"), SEARCH_FIELD_SALES_PERIOD_FROM);
-				}
+		// validation
+		Validator v = new Validator();
+		if (!RequestParameterUtility.isEmptyParam(request.getParameter(REQUEST_KEY_ITEM_ID))) {
+			v.isInt(request.getParameter(REQUEST_KEY_ITEM_ID), SEARCH_FIELD_ID);
+		}
+		if (!RequestParameterUtility.isEmptyParam(request.getParameter(REQUEST_KEY_ITEM_PERIOD_FROM))) {
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO))) {
+				// from,to有
+				v.correctPeriod(request.getParameter(REQUEST_KEY_ITEM_PERIOD_FROM), SEARCH_FIELD_SALES_PERIOD_FROM, request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO), SEARCH_FIELD_SALES_PERIOD_TO);
 			} else {
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_to"))) {
-					// toのみ
-					v.isDate(request.getParameter("search_sales_period_to"), SEARCH_FIELD_SALES_PERIOD_TO);
-				}
+				// fromのみ
+				v.isDate(request.getParameter(REQUEST_KEY_ITEM_PERIOD_FROM), SEARCH_FIELD_SALES_PERIOD_FROM);
 			}
-
-			errorMessageList = v.getErrorMessageList();
-			// 入力エラー時
-			if (errorMessageList.size() != 0) {
-				request.setAttribute("errorMessageList", errorMessageList);
-				request.setAttribute("inputDataList", inputDataList);
-				request.getRequestDispatcher(page).forward(request, response);
-			} else {
-			// 検索
-				try {
-					int searchId = ConfigConstants.NULL_INT;
-					String searchName = "";
-					String searchCategory = "";
-					String searchDateFrom = "";
-					String searchDateTo = "";
-					// parameter
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_id"))) {
-						searchId = (Integer.parseInt(request.getParameter("search_id")));
-					}
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_name"))) {
-						searchName = request.getParameter("search_name");
-					}
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_category"))) {
-						searchCategory = request.getParameter("search_category");
-					}
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_from"))) {
-						searchDateFrom = request.getParameter("search_sales_period_from");
-					}
-					if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_sales_period_to"))) {
-						searchDateTo = request.getParameter("search_sales_period_to");
-					}
-					ItemDao itemdao = new ItemDao();
-					List<Item> itemList = itemdao.selectBySearch(searchId, searchName, searchCategory, searchDateFrom, searchDateTo);
-
-					request.setAttribute("result", itemList);
-					errorMessageList.add("");
-					request.setAttribute("errorMessageList", errorMessageList);
-					request.setAttribute("inputDataList", inputDataList);
-					request.getRequestDispatcher(page).forward(request, response);
-				} catch (Exception e) {
-					e.printStackTrace();
-					ExceptionUtility.redirectErrorPage(request, response, e);
-				}
+		} else {
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO))) {
+				// toのみ
+				v.isDate(request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO), SEARCH_FIELD_SALES_PERIOD_TO);
 			}
+		}
+
+		errorMessageList = v.getErrorMessageList();
+		// 入力エラー時
+		if (errorMessageList.size() != 0) {
+			request.setAttribute(KEY_ERROR_MESSAGE_LIST, errorMessageList);
+			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
+			request.getRequestDispatcher(page).forward(request, response);
+			return;
+		}
+		// 検索
+		try {
+			int searchId = ConfigConstants.NULL_INT;
+			String searchName = "";
+			String searchCategory = "";
+			String searchDateFrom = "";
+			String searchDateTo = "";
+			// parameter
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(REQUEST_KEY_ITEM_ID))) {
+				searchId = (Integer.parseInt(request.getParameter(REQUEST_KEY_ITEM_ID)));
+			}
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(REQUEST_KEY_ITEM_NAME))) {
+				searchName = request.getParameter(REQUEST_KEY_ITEM_NAME);
+			}
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(REQUEST_KEY_ITEM_CATEGORY))) {
+				searchCategory = request.getParameter(REQUEST_KEY_ITEM_CATEGORY);
+			}
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(REQUEST_KEY_ITEM_PERIOD_FROM))) {
+				searchDateFrom = request.getParameter(REQUEST_KEY_ITEM_PERIOD_FROM);
+			}
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO))) {
+				searchDateTo = request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO);
+			}
+			ItemDao itemdao = new ItemDao();
+			List<Item> itemList = itemdao.selectBySearch(searchId, searchName, searchCategory, searchDateFrom, searchDateTo);
+
+			request.setAttribute(KEY_RESULT, itemList);
+			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
+			request.getRequestDispatcher(page).forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ExceptionUtility.redirectErrorPage(request, response, e);
 		}
 	}
 

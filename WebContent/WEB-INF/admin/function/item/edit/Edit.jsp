@@ -45,10 +45,12 @@ $(function(){
 <p>
 	<font color="red">
 <% 
-	for(int i=0; i < errorMessageList.size(); i++) {
-		String message = errorMessageList.get(i);
-		out.print(message);
-		out.print("<br>");
+	if (errorMessageList != null) {
+		for(int i=0; i < errorMessageList.size(); i++) {
+			String message = errorMessageList.get(i);
+			out.print(message);
+			out.print("<br>");
+		}
 	}
 %>
 	</font>

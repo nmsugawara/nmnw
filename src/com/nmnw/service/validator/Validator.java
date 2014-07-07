@@ -204,7 +204,11 @@ public class Validator {
 	public boolean correctPeriod(String from, String fieldNameFrom, String to, String fieldNameTo) {
 		boolean hasError = false;
 		// from、toが日付形式か
-		if (!isDate(from, fieldNameFrom) && !isDate(to, fieldNameTo)) {
+		if (isDate(from, fieldNameFrom) || isDate(to, fieldNameTo)) {
+			String message = getMessage(ValidatorConstants.MESSAGE_CORRECT_PERIOD, fieldNameFrom, fieldNameTo);
+			addErrorMessageList(message);
+			hasError = true;
+		} else {
 			Calendar calFrom = DateConversionUtility.stringToCalendar(from);
 			Calendar calTo = DateConversionUtility.stringToCalendar(to);
 			int judge = calFrom.compareTo(calTo);
@@ -216,6 +220,7 @@ public class Validator {
 		}
 		return hasError;
 	}
+
 	/**
 	 * 最大値チェック（数字）
 	 * @param value

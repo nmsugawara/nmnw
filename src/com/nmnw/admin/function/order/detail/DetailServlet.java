@@ -8,7 +8,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.constant.MessageConstants;
@@ -21,7 +20,12 @@ import com.nmnw.admin.utility.ExceptionUtility;
 @WebServlet(name="admin/order/detail", urlPatterns={"/admin/order/detail"})
 public class DetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String REQUEST_KEY_ORDER_ID = "order_id";
+	private static final String KEY_RESULT = "result";
+	private static final String KEY_RESULT_LIST = "resultList";
+	private static final String KEY_MESSAGE = "message";
 
+	
 	/**
 	 * Construct
 	 */
@@ -39,21 +43,21 @@ public class DetailServlet extends HttpServlet {
 		try {
 			// ’•¶î•ñæ“¾
 			Order order = new Order();
-			order.setOrderId(Integer.parseInt(request.getParameter("order_id")));
+			order.setOrderId(Integer.parseInt(request.getParameter(REQUEST_KEY_ORDER_ID)));
 			OrderDao orderdao = new OrderDao();
 			Order result = orderdao.selectByOrderId(order.getOrderId());
-			request.setAttribute("result", result);
-			request.setAttribute("message", "");
+			request.setAttribute(KEY_RESULT, result);
+			request.setAttribute(KEY_MESSAGE, "");
 			// ŠY“–ƒf[ƒ^‚ª‚È‚¢ê‡
 			if (result.getOrderId() == 0) {
-				request.setAttribute("message", MessageConstants.MESSAGE_NO_DATA);
+				request.setAttribute(KEY_MESSAGE, MessageConstants.MESSAGE_NO_DATA);
 			}
 			// ’•¶Ú×î•ñæ“¾
 			OrderDetail orderDetail = new OrderDetail();
-			orderDetail.setOrderId(Integer.parseInt(request.getParameter("order_id")));
+			orderDetail.setOrderId(Integer.parseInt(request.getParameter(REQUEST_KEY_ORDER_ID)));
 			OrderDetailDao orderdetaildao = new OrderDetailDao();
 			List<OrderDetail> resultList = orderdetaildao.selectByOrderId(orderDetail.getOrderId());
-			request.setAttribute("resultList", resultList);
+			request.setAttribute(KEY_RESULT_LIST, resultList);
 			request.getRequestDispatcher(page).forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();

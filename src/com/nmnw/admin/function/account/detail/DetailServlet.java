@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.constant.MessageConstants;
@@ -18,6 +17,9 @@ import com.nmnw.admin.utility.ExceptionUtility;
 @WebServlet(name="admin/account/detail", urlPatterns={"/admin/account/detail"})
 public class DetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String REQUEST_KEY_ACCOUNT_ID = "account_id";
+	private static final String KEY_RESULT = "result";
+	private static final String KEY_MESSAGE = "message";
 
 	/**
 	 * Construct
@@ -35,14 +37,14 @@ public class DetailServlet extends HttpServlet {
 
 		try {
 			Account account = new Account();
-			account.setId(Integer.parseInt(request.getParameter("account_id")));
+			account.setId(Integer.parseInt(request.getParameter(REQUEST_KEY_ACCOUNT_ID)));
 			AccountDao accountdao = new AccountDao();
 			Account result = accountdao.selectByAccountId(account.getId());
-			request.setAttribute("result", result);
-			request.setAttribute("message", "");
+			request.setAttribute(KEY_RESULT, result);
+			request.setAttribute(KEY_MESSAGE, "");
 			// äYìñÉfÅ[É^Ç™Ç»Ç¢èÍçá
 			if (result.getId() == 0) {
-				request.setAttribute("message", MessageConstants.MESSAGE_NO_DATA);
+				request.setAttribute(KEY_MESSAGE, MessageConstants.MESSAGE_NO_DATA);
 			}
 			request.getRequestDispatcher(page).forward(request, response);
 		} catch (Exception e) {

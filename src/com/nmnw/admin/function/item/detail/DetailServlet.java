@@ -17,6 +17,12 @@ import com.nmnw.admin.utility.ExceptionUtility;
 @WebServlet(name="admin/item/detail", urlPatterns={"/admin/item/detail"})
 public class DetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String REQUEST_KEY_ACTION = "action";
+	private static final String REQUEST_VALUE_ACTION_NEW_END = "new_end";
+	private static final String REQUEST_VALUE_ACTION_EDIT_END = "edit_end";
+	private static final String REQUEST_KEY_ITEM_ID = "item_id";
+	private static final String KEY_RESULT = "result";
+	private static final String KEY_MESSAGE = "message";
 
 	/**
 	 * Construct
@@ -34,22 +40,22 @@ public class DetailServlet extends HttpServlet {
 
 		try {
 			Item item = new Item();
-			item.setId(Integer.parseInt(request.getParameter("item_id")));
+			item.setId(Integer.parseInt(request.getParameter(REQUEST_KEY_ITEM_ID)));
 			ItemDao itemdao = new ItemDao();
 			Item result = itemdao.selectByItemId(item.getId());
-			request.setAttribute("result", result);
-			request.setAttribute("message", "");
+			request.setAttribute(KEY_RESULT, result);
+			request.setAttribute(KEY_MESSAGE, "");
 			// äYìñÉfÅ[É^Ç™Ç»Ç¢èÍçá
 			if (result.getId() == 0) {
-				request.setAttribute("message", MessageConstants.MESSAGE_NO_DATA);
+				request.setAttribute(KEY_MESSAGE, MessageConstants.MESSAGE_NO_DATA);
 			} else {
 			// äYìñÉfÅ[É^Ç™Ç†ÇÈèÍçá
 				// êVãKìoò^äÆóπ
-				if ("new_end".equals(request.getParameter("action"))) {
-					request.setAttribute("message", MessageConstants.MESSAGE_NEW_END);
+				if (REQUEST_VALUE_ACTION_NEW_END.equals(request.getParameter(REQUEST_KEY_ACTION))) {
+					request.setAttribute(KEY_MESSAGE, MessageConstants.MESSAGE_NEW_END);
 				// ï“èWäÆóπ
-				} else if ("edit_end".equals(request.getParameter("action"))) {
-					request.setAttribute("message", MessageConstants.MESSAGE_EDIT_END);
+				} else if (REQUEST_VALUE_ACTION_EDIT_END.equals(request.getParameter(REQUEST_KEY_ACTION))) {
+					request.setAttribute(KEY_MESSAGE, MessageConstants.MESSAGE_EDIT_END);
 				}
 			}
 			request.getRequestDispatcher(page).forward(request, response);
