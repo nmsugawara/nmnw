@@ -4,10 +4,6 @@ import javax.servlet.http.Part;
 
 public class RequestParameterUtility {
 	
-	public RequestParameterUtility() {
-		
-	}
-	
 	public static boolean isEmptyParam (String value) {
 		boolean status = false;
 		if(value == null || value.length() == 0) {

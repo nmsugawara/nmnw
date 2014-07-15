@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.nmnw.service.constant.ConfigConstants;
-import com.nmnw.service.utility.DdConnector;
+import com.nmnw.service.utility.DbConnector;
 
 public class AccountDao {
 	private static final String TABLE_NAME = "account";
@@ -27,28 +27,11 @@ public class AccountDao {
 	 */
 	public Account selectByAccountId(int id)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME + " where id = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, id);
-		ResultSet result = statement.executeQuery();
-		Account account = new Account();
-		while (result.next()) {
-			account.setId(result.getInt("id"));
-			account.setName(result.getString("name"));
-			account.setNameKana(result.getString("name_kana"));
-			account.setMail(result.getString("mail"));
-			account.setPassWord(result.getString("password"));
-			account.setZipCode(result.getString("zip_code"));
-			account.setAddress(result.getString("address"));
-			account.setPhoneNumber(result.getString("phone_number"));
-			account.setDelFlg(result.getBoolean("del_flg"));
-			account.setToken(result.getString("token"));
-			account.setTokenExpireTime(result.getTimestamp("token_expire_time"));
-			account.setSalt(result.getString("salt"));
-		}
-		result.close();
-		statement.close();
+		Account account = getResultOfExecuteSql(statement);
 		connection.close();
 		return account;
 	}
@@ -62,28 +45,11 @@ public class AccountDao {
 	 */
 	public Account selectByMail(String mail)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME + " where mail = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, mail);
-		ResultSet result = statement.executeQuery();
-		Account account = new Account();
-		while (result.next()) {
-			account.setId(result.getInt("id"));
-			account.setName(result.getString("name"));
-			account.setNameKana(result.getString("name_kana"));
-			account.setMail(result.getString("mail"));
-			account.setPassWord(result.getString("password"));
-			account.setZipCode(result.getString("zip_code"));
-			account.setAddress(result.getString("address"));
-			account.setPhoneNumber(result.getString("phone_number"));
-			account.setDelFlg(result.getBoolean("del_flg"));
-			account.setToken(result.getString("token"));
-			account.setTokenExpireTime(result.getTimestamp("token_expire_time"));
-			account.setSalt(result.getString("salt"));
-		}
-		result.close();
-		statement.close();
+		Account account = getResultOfExecuteSql(statement);
 		connection.close();
 		return account;
 	}
@@ -98,47 +64,26 @@ public class AccountDao {
 	 */
 	public Account selectByTokenAndTokenExpireTime(String token, Calendar currentDateTime)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME + " where token = ?"
 				+ " and token_expire_time > ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, token);
 		statement.setTimestamp(2, new Timestamp(currentDateTime.getTimeInMillis()));
-		ResultSet result = statement.executeQuery();
-		Account account = new Account();
-		while (result.next()) {
-			account.setId(result.getInt("id"));
-			account.setName(result.getString("name"));
-			account.setNameKana(result.getString("name_kana"));
-			account.setMail(result.getString("mail"));
-			account.setPassWord(result.getString("password"));
-			account.setZipCode(result.getString("zip_code"));
-			account.setAddress(result.getString("address"));
-			account.setPhoneNumber(result.getString("phone_number"));
-			account.setDelFlg(result.getBoolean("del_flg"));
-			account.setToken(result.getString("token"));
-			account.setTokenExpireTime(result.getTimestamp("token_expire_time"));
-			account.setSalt(result.getString("salt"));
-		}
-		result.close();
-		statement.close();
+		Account account = getResultOfExecuteSql(statement);
 		connection.close();
 		return account;
 	}
 
 	/**
-	 * select(文字列データをキーとして会員情報を取得)
-	 * @param String
+	 * SQLを実行し結果を返す
+	 * @param PreparedStatement
 	 * @return Account
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	private Account selectByStringColumn(String value, String columnName)
+	private Account getResultOfExecuteSql(PreparedStatement statement)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
-		String sql = "select * from " + TABLE_NAME + " where " + columnName + " = ?";
-		PreparedStatement statement = connection.prepareStatement(sql);
-		statement.setString(1, value);
 		ResultSet result = statement.executeQuery();
 		Account account = new Account();
 		while (result.next()) {
@@ -157,7 +102,6 @@ public class AccountDao {
 		}
 		result.close();
 		statement.close();
-		connection.close();
 		return account;
 	}
 
@@ -170,7 +114,7 @@ public class AccountDao {
 	 */
 	public int insert (Account account)
 			throws ClassNotFoundException, SQLException {
-			Connection connection = DdConnector.getConnection();
+			Connection connection = DbConnector.getConnection();
 			String sql = "insert into " + TABLE_NAME
 					+ " (name, name_kana, mail, zip_code, address, phone_number)"
 					+ " values (?,?,?,?,?,?)";
@@ -205,12 +149,21 @@ public class AccountDao {
 	 */
 	public int update (Account account)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		int updateCount = 0;
+		// 会員IDが指定されていない場合
+		if (account.getId() == ConfigConstants.NULL_INT) {
+			return updateCount;
+		}
+		Account targetAccount = selectByAccountId(account.getId());
+		// 該当データが存在しない場合
+		if (targetAccount.getId() == ConfigConstants.NULL_INT) {
+			return updateCount;
+		}
+		Connection connection = DbConnector.getConnection();
 		StringBuilder sqlBuilder = new StringBuilder();
 		sqlBuilder.append("update " + TABLE_NAME + " set");
 		StringBuilder paramBuilder = new StringBuilder();
 		Map<String, Map<String, Object>> dataList = new LinkedHashMap<String, Map<String, Object>>();
-
 		if (!account.getName().isEmpty()) {
 			paramBuilder.append(", name=?");
 			dataList.put("name", new HashMap<String, Object>());
@@ -253,7 +206,7 @@ public class AccountDao {
 			dataList.get("phone_number").put("type", "String");
 			dataList.get("phone_number").put("value", account.getPhoneNumber());
 		}
-		if (account.getDelFlg()) {
+		if (account.getDelFlg() != targetAccount.getDelFlg()) {
 			paramBuilder.append(", del_flg=?");
 			dataList.put("del_flg", new HashMap<String, Object>());
 			dataList.get("del_flg").put("type", "boolean");
@@ -283,20 +236,20 @@ public class AccountDao {
 			dataList.get("salt").put("type", "String");
 			dataList.get("salt").put("value", account.getSalt());
 		}
-		if (account.getId() != ConfigConstants.NULL_INT) {
-			paramBuilder.append(" where id=?");
-			dataList.put("id", new HashMap<String, Object>());
-			dataList.get("id").put("type", "int");
-			dataList.get("id").put("value", account.getId());
+		// 更新対象のカラムが無い場合
+		if (paramBuilder.length() == 0) {
+			return updateCount;
 		}
+		// where句の追加,	不要な[,]の除去
+		paramBuilder.append(" where id=?");
+		dataList.put("id", new HashMap<String, Object>());
+		dataList.get("id").put("type", "int");
+		dataList.get("id").put("value", account.getId());
+		String param = paramBuilder.toString();
+		int deleteIndex = param.indexOf(",");
+		param = param.substring(deleteIndex + ",".length());
+		sqlBuilder.append(param);
 
-		// 不要な,の除去、where句の追加
-		if (paramBuilder.length() != 0) {
-			String param = paramBuilder.toString();
-			int deleteIndex = param.indexOf(",");
-			param = param.substring(deleteIndex+",".length());
-			sqlBuilder.append(param);
-		}
 		String sql = sqlBuilder.toString();
 		PreparedStatement statement = connection.prepareStatement(sql);
 		Iterator iterator = dataList.keySet().iterator();
@@ -306,18 +259,21 @@ public class AccountDao {
 			String type = (String)dataList.get(key).get("type");
 			if ("int".equals(type)) {
 				statement.setInt(count, (Integer)dataList.get(key).get("value"));
-			} else if ("String".equals(type)) {
+			} 
+			if ("String".equals(type)) {
 				statement.setString(count, (String)dataList.get(key).get("value"));
-			} else if ("boolean".equals(type)) {
+			}
+			if ("boolean".equals(type)) {
 				statement.setBoolean(count, (Boolean)dataList.get(key).get("value"));
-			} else if ("DateTime".equals(type)) {
+			}
+			if ("DateTime".equals(type)) {
 				java.util.Date d = (Date)dataList.get(key).get("value");
 				java.sql.Timestamp ts = new java.sql.Timestamp(d.getTime());
 				statement.setTimestamp(count, ts);
 			}
 			count++;
 		}
-		int updateCount = statement.executeUpdate();
+		updateCount = statement.executeUpdate();
 		statement.close();
 		connection.commit();
 		connection.close();

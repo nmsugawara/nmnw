@@ -1,11 +1,12 @@
 package com.nmnw.service.dao;
 import java.util.Date;
 
+import com.nmnw.service.constant.ConfigConstants;
 import com.nmnw.service.utility.HtmlHelper;
 
 public class Item {
 
-	private int _id;
+	private int _id = ConfigConstants.NULL_INT;
 	private String _name = "";
 	private int _price;
 	private String _category = "";

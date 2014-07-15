@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.nmnw.admin.constant.ConfigConstants;
-import com.nmnw.admin.utility.DdConnector;
+import com.nmnw.admin.utility.DbConnector;
 
 public class AccountDao {
 	private static final String TABLE_NAME = "account";
@@ -25,7 +25,7 @@ public class AccountDao {
 	 */
 	public Account selectByAccountId(int id)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME + " where id = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, id);
@@ -61,7 +61,7 @@ public class AccountDao {
 	 */
 	public List<Account> selectBySearch(int id, String name, String nameKana, String mail)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 
 		StringBuilder sqlBuilder = new StringBuilder();
 		sqlBuilder.append("select * from " + TABLE_NAME);
@@ -109,7 +109,8 @@ public class AccountDao {
 			String type = (String)likeList.get(key).get(0);
 			if ("int".equals(type)) {
 				statement.setInt(count, (Integer)likeList.get(key).get(1));
-			} else if ("String".equals(type)) {
+			}
+			if ("String".equals(type)) {
 				statement.setString(count, (String)likeList.get(key).get(1));
 			}
 			count++;

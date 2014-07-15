@@ -14,7 +14,7 @@ import java.util.Map;
 
 import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.utility.DateConversionUtility;
-import com.nmnw.admin.utility.DdConnector;
+import com.nmnw.admin.utility.DbConnector;
 
 public class OrderDao {
 	private static final String TABLE_NAME = "sales_order";
@@ -28,7 +28,7 @@ public class OrderDao {
 	 */
 	public Order selectByOrderId(int orderId)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME + " where order_id = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, orderId);
@@ -65,7 +65,7 @@ public class OrderDao {
 	 */
 	public List<Order> selectBySearch(Map<String, Map<String, String>> searchParameterList)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		
 		StringBuilder sqlBuilder = new StringBuilder();
 		sqlBuilder.append("select * from " + TABLE_NAME);
@@ -105,14 +105,8 @@ public class OrderDao {
 			whereBuilder.append(" and account_phone_number like ?");
 			searchParameterList.get("account_phone_number").put("value", "%" + searchParameterList.get("account_phone_number").get("value") + "%");
 		}
-		if (searchParameterList.get("cancel_flg") != null) {
-			whereBuilder.append(" and cancel_flg = ?");
-		}
 		if (searchParameterList.get("cancel_date") != null) {
 			whereBuilder.append(" and DATE(cancel_time) = ?");
-		}
-		if (searchParameterList.get("shipping_flg") != null) {
-			whereBuilder.append(" and shipping_flg = ?");
 		}
 		if (searchParameterList.get("shipping_date") != null) {
 			whereBuilder.append(" and DATE(shipping_time) = ?");
@@ -135,7 +129,8 @@ public class OrderDao {
 			String type = (String)searchParameterList.get(key).get("type");
 			if ("int".equals(type)) {
 				statement.setInt(count, Integer.parseInt(searchParameterList.get(key).get("value")));
-			} else if ("String".equals(type)) {
+			}
+			if ("String".equals(type)) {
 				statement.setString(count, searchParameterList.get(key).get("value"));
 			}
 			count++;
@@ -175,7 +170,7 @@ public class OrderDao {
 	 */
 	public int updateShippingStatus (int OrderId)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "update " + TABLE_NAME + " set"
 					+ " shipping_flg=?"
 					+ ", shipping_time=?"

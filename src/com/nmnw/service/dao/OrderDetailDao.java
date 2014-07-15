@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.nmnw.service.constant.ConfigConstants;
 import com.nmnw.service.utility.DateConversionUtility;
-import com.nmnw.service.utility.DdConnector;
+import com.nmnw.service.utility.DbConnector;
 
 public class OrderDetailDao {
 	private static final String TABLE_NAME_ORDER_DETAIL = "sales_order_detail";
@@ -23,7 +23,7 @@ public class OrderDetailDao {
 	 */
 	public List<OrderDetail> selectByOrderId(int orderId)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME_ORDER_DETAIL + " where order_id = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, orderId);
@@ -77,7 +77,7 @@ public class OrderDetailDao {
 	 */
 	private void insert (int orderId, int orderDetailId, Cart.CartItem item)
 		throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "insert into " + TABLE_NAME_ORDER_DETAIL
 				+ " (order_id, order_detail_id, item_id, "
 				+ "item_name, item_price, item_count) values "

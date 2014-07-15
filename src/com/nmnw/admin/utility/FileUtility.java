@@ -7,10 +7,7 @@ import java.util.Calendar;
 import javax.servlet.http.Part;
 
 public class FileUtility {
-	private static final String fileNameOfDateTimeType = "yyyyMMddHHmmssSSSS";
-
-	public FileUtility() {
-	}
+	private static final String FILE_NAME_OF_DATE_TIME_TYPE = "yyyyMMddHHmmssSSSS";
 
 	public static String getNewFileName(Part part, String fileBaseName) {
 		String newFileName = "";
@@ -25,7 +22,7 @@ public class FileUtility {
 				String[] oldFileString = oldFileName.split("\\.");
 				String oldFileExtension = oldFileString[oldFileString.length - 1];
 				Calendar cal = Calendar.getInstance();
-				SimpleDateFormat sdf = new SimpleDateFormat(fileNameOfDateTimeType);
+				SimpleDateFormat sdf = new SimpleDateFormat(FILE_NAME_OF_DATE_TIME_TYPE);
 				newFileName = fileBaseName + sdf.format(cal.getTime()) + "." + oldFileExtension;
 				return newFileName;
 			}

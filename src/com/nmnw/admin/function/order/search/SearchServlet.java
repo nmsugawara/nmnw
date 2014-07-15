@@ -60,8 +60,6 @@ public class SearchServlet extends HttpServlet {
 		String page = ConfigConstants.JSP_DIR_ORDER_SEARCH + "Search.jsp";
 		// 検索画面表示
 		if (!REQUEST_VALUE_ACTION_SEARCH.equals(request.getParameter(REQUEST_KEY_ACTION))) {
-			request.setAttribute(KEY_ERROR_MESSAGE_LIST, errorMessageList);
-			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
 			request.getRequestDispatcher(page).forward(request, response);
 			return;
 		}
@@ -110,87 +108,75 @@ public class SearchServlet extends HttpServlet {
 			request.setAttribute(KEY_ERROR_MESSAGE_LIST, errorMessageList);
 			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
 			request.getRequestDispatcher(page).forward(request, response);
-		} else {
-			try {
-				Map<String, Map<String, String>> searchParameterList = new LinkedHashMap<String, Map<String, String>>();
+			return;
+		}
+		try {
+			Map<String, Map<String, String>> searchParameterList = new LinkedHashMap<String, Map<String, String>>();
 
-				// parameter
-				// 注文ID
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_order_id"))) {
-					searchParameterList.put("order_id", new HashMap<String, String>());
-					searchParameterList.get("order_id").put("type", "int");
-					searchParameterList.get("order_id").put("value", request.getParameter("search_order_id"));
-				}
-				// 注文日From
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_order_date_from"))) {
-					searchParameterList.put("order_date_from", new HashMap<String, String>());
-					searchParameterList.get("order_date_from").put("type", "String");
-					searchParameterList.get("order_date_from").put("value", request.getParameter("search_order_date_from"));
-				}
-				// 注文日To
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_order_date_to"))) {
-					searchParameterList.put("order_date_to", new HashMap<String, String>());
-					searchParameterList.get("order_date_to").put("type", "String");
-					searchParameterList.get("order_date_to").put("value", request.getParameter("search_order_date_to"));
-				}
-				// 会員名
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_account_name"))) {
-					searchParameterList.put("account_name", new HashMap<String, String>());
-					searchParameterList.get("account_name").put("type", "String");
-					searchParameterList.get("account_name").put("value", request.getParameter("search_account_name"));
-				}
-				// 会員名カナ
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_account_name_kana"))) {
-					searchParameterList.put("account_name_kana", new HashMap<String, String>());
-					searchParameterList.get("account_name_kana").put("type", "String");
-					searchParameterList.get("account_name_kana").put("value", request.getParameter("search_account_name_kana"));
-				}
-				// メールアドレス
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_account_mail"))) {
-					searchParameterList.put("account_mail", new HashMap<String, String>());
-					searchParameterList.get("account_mail").put("type", "String");
-					searchParameterList.get("account_mail").put("value", request.getParameter("search_account_mail"));
-				}
-				// 電話番号
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_account_phone_number"))) {
-					searchParameterList.put("account_phone_number", new HashMap<String, String>());
-					searchParameterList.get("account_phone_number").put("type", "String");
-					searchParameterList.get("account_phone_number").put("value", request.getParameter("search_account_phone_number"));
-				}
-				// キャンセルフラグ
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_cancel_flg"))) {
-					searchParameterList.put("cancel_flg", new HashMap<String, String>());
-					searchParameterList.get("cancel_flg").put("type", "int");
-					searchParameterList.get("cancel_flg").put("value", request.getParameter("search_cancel_flg"));
-				}
-				// キャンセル日
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_cancel_date"))) {
-					searchParameterList.put("cancel_date", new HashMap<String, String>());
-					searchParameterList.get("cancel_date").put("type", "String");
-					searchParameterList.get("cancel_date").put("value", request.getParameter("search_cancel_date"));
-				}
-				// 出荷フラグ
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_shipping_flg"))) {
-					searchParameterList.put("shipping_flg", new HashMap<String, String>());
-					searchParameterList.get("shipping_flg").put("type", "int");
-					searchParameterList.get("shipping_flg").put("value", request.getParameter("search_shipping_flg"));
-				}
-				// 出荷日
-				if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_shipping_date"))) {
-					searchParameterList.put("shipping_date", new HashMap<String, String>());
-					searchParameterList.get("shipping_date").put("type", "String");
-					searchParameterList.get("shipping_date").put("value", request.getParameter("search_shipping_date"));
-				}
-				OrderDao orderdao = new OrderDao();
-				orderList = orderdao.selectBySearch(searchParameterList);
-
-				request.setAttribute(KEY_RESULT, orderList);
-				request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
-				request.getRequestDispatcher(page).forward(request, response);
-			} catch (Exception e) {
-				e.printStackTrace();
-				ExceptionUtility.redirectErrorPage(request, response, e);
+			// parameter
+			// 注文ID
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_order_id"))) {
+				searchParameterList.put("order_id", new HashMap<String, String>());
+				searchParameterList.get("order_id").put("type", "int");
+				searchParameterList.get("order_id").put("value", request.getParameter("search_order_id"));
 			}
+			// 注文日From
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_order_date_from"))) {
+				searchParameterList.put("order_date_from", new HashMap<String, String>());
+				searchParameterList.get("order_date_from").put("type", "String");
+				searchParameterList.get("order_date_from").put("value", request.getParameter("search_order_date_from"));
+			}
+			// 注文日To
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_order_date_to"))) {
+				searchParameterList.put("order_date_to", new HashMap<String, String>());
+				searchParameterList.get("order_date_to").put("type", "String");
+				searchParameterList.get("order_date_to").put("value", request.getParameter("search_order_date_to"));
+			}
+			// 会員名
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_account_name"))) {
+				searchParameterList.put("account_name", new HashMap<String, String>());
+				searchParameterList.get("account_name").put("type", "String");
+				searchParameterList.get("account_name").put("value", request.getParameter("search_account_name"));
+			}
+			// 会員名カナ
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_account_name_kana"))) {
+				searchParameterList.put("account_name_kana", new HashMap<String, String>());
+				searchParameterList.get("account_name_kana").put("type", "String");
+				searchParameterList.get("account_name_kana").put("value", request.getParameter("search_account_name_kana"));
+			}
+			// メールアドレス
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_account_mail"))) {
+				searchParameterList.put("account_mail", new HashMap<String, String>());
+				searchParameterList.get("account_mail").put("type", "String");
+				searchParameterList.get("account_mail").put("value", request.getParameter("search_account_mail"));
+			}
+			// 電話番号
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_account_phone_number"))) {
+				searchParameterList.put("account_phone_number", new HashMap<String, String>());
+				searchParameterList.get("account_phone_number").put("type", "String");
+				searchParameterList.get("account_phone_number").put("value", request.getParameter("search_account_phone_number"));
+			}
+			// キャンセル日
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_cancel_date"))) {
+				searchParameterList.put("cancel_date", new HashMap<String, String>());
+				searchParameterList.get("cancel_date").put("type", "String");
+				searchParameterList.get("cancel_date").put("value", request.getParameter("search_cancel_date"));
+			}
+			// 出荷日
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_shipping_date"))) {
+				searchParameterList.put("shipping_date", new HashMap<String, String>());
+				searchParameterList.get("shipping_date").put("type", "String");
+				searchParameterList.get("shipping_date").put("value", request.getParameter("search_shipping_date"));
+			}
+			OrderDao orderdao = new OrderDao();
+			orderList = orderdao.selectBySearch(searchParameterList);
+
+			request.setAttribute(KEY_RESULT, orderList);
+			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
+			request.getRequestDispatcher(page).forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ExceptionUtility.redirectErrorPage(request, response, e);
 		}
 	}
 

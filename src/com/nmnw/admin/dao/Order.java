@@ -40,12 +40,8 @@ public class Order {
 	}
 
 	public void setOrderTime(Timestamp orderTime) {
-		try {
-			java.util.Date d = new java.util.Date(orderTime.getTime());
-			_orderTime = d;
-		} catch (NullPointerException e) {
-			_orderTime = orderTime;
-		}
+		java.util.Date d = new java.util.Date(orderTime.getTime());
+		_orderTime = d;
 	}
 
 	public Date getOrderTime() {
@@ -165,12 +161,11 @@ public class Order {
 	}
 
 	public void setCancelTime(Timestamp cancelTime) {
-		try {
-			java.util.Date d = new java.util.Date(cancelTime.getTime());
-			_cancelTime = d;
-		} catch (NullPointerException e) {
-			_cancelTime = cancelTime;
+		java.util.Date d = null;
+		if (cancelTime != null) {
+			d = new java.util.Date(cancelTime.getTime());
 		}
+		_cancelTime = d;
 	}
 
 	public Date getCancelTime() {
@@ -190,12 +185,11 @@ public class Order {
 	}
 
 	public void setShippingTime(Timestamp shippingTime) {
-		try {
-			java.util.Date d = new java.util.Date(shippingTime.getTime());
-			_shippingTime = d;
-		} catch (NullPointerException e) {
-			_shippingTime = shippingTime;
+		java.util.Date d = null;
+		if (shippingTime != null) {
+			d = new java.util.Date(shippingTime.getTime());
 		}
+		_shippingTime = d;
 	}
 
 	public Date getShippingTime() {

@@ -1,12 +1,12 @@
-package com.nmnw.service.utility;
+package com.nmnw.admin.utility;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.nmnw.service.constant.ConfigConstants;
+import com.nmnw.admin.constant.ConfigConstants;
 
-public class DdConnector {
+public class DbConnector {
 	public static Connection getConnection()
 			throws ClassNotFoundException, SQLException {
 		Class.forName (ConfigConstants.DB_DRIVER_NAME);

@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.nmnw.admin.utility.DdConnector;
+import com.nmnw.admin.utility.DbConnector;
 
 public class MonthlySummaryReportDao {
 	private static final String TABLE_NAME_ORDER = "sales_order";
@@ -16,8 +16,9 @@ public class MonthlySummaryReportDao {
 
 	public Map<String, String> selectSummaryDataByOrderPeriod(String from, String to)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
-		String sql = "select count(order_id) as order_count,"
+		Connection connection = DbConnector.getConnection();
+		StringBuilder sqlBuilder = new StringBuilder();
+		sqlBuilder.append("select count(order_id) as order_count,"
 				+ " sum(case when shipping_flg = false and cancel_flg = true then 1 else 0 end) as cancel_count,"
 				+ " sum(case when shipping_flg = true and cancel_flg = false then 1 else 0 end) as shipping_count,"
 				+ " sum(case when shipping_flg = false and cancel_flg = true then 1 else 0 end) / count(order_id) * 100 as cancel_rate,"
@@ -26,11 +27,16 @@ public class MonthlySummaryReportDao {
 				+ " sum(case when shipping_flg = true and cancel_flg = false then 1 else 0 end) / count(order_id) * 100 as shipping_rate,"
 				+ " sum(case when shipping_flg = true and cancel_flg = true then 1 else 0 end) as cancel_count_after_shipping,"
 				+ " sum(case when shipping_flg = true and cancel_flg = true then 1 else 0 end) / sum(case when shipping_flg = true and cancel_flg = false then 1 else 0 end) * 100 as cancel_rate_after_shipping"
-				+ " from " + TABLE_NAME_ORDER + " as so"
-				+ " where order_time between ? and ?";
+				+ " from " + TABLE_NAME_ORDER + " as so");
+		if (from != null && from.length() > 0 && to != null && to.length() > 0) {
+			sqlBuilder.append(" where order_time between ? and ?");
+		}
+		String sql = sqlBuilder.toString();
 		PreparedStatement statement = connection.prepareStatement(sql);
-		statement.setString(1, from);
-		statement.setString(2, to);
+		if (from != null && from.length() > 0 && to != null && to.length() > 0) {
+			statement.setString(1, from);
+			statement.setString(2, to);
+		}
 		ResultSet result = statement.executeQuery();
 		Map<String, String> resultList = new HashMap<String, String>();
 		while (result.next()) {

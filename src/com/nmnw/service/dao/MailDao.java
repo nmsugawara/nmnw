@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.nmnw.service.utility.DdConnector;
+import com.nmnw.service.utility.DbConnector;
 
 public class MailDao {
 	private static final String TABLE_NAME = "mail";
@@ -19,7 +19,7 @@ public class MailDao {
 	 */
 	public Mail selectByCode(String code)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME + " where code = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, code);

@@ -1,12 +1,12 @@
 package com.nmnw.service.dao;
-import java.sql.Timestamp;
 import java.util.Date;
 
+import com.nmnw.admin.constant.ConfigConstants;
 import com.nmnw.admin.utility.HtmlHelper;
 
 public class Account {
 
-	private int _id;
+	private int _id = ConfigConstants.NULL_INT;
 	private String _name = "";
 	private String _nameKana = "";
 	private String _mail = "";
@@ -149,15 +149,6 @@ public class Account {
 
 	public void setTokenExpireTime(Date tokenExpireTime) {
 		_tokenExpireTime = tokenExpireTime;
-	}
-
-	public void setCancelTime(Timestamp tokenExpireTime) {
-		try {
-			java.util.Date d = new java.util.Date(tokenExpireTime.getTime());
-			_tokenExpireTime = d;
-		} catch (NullPointerException e) {
-			_tokenExpireTime = tokenExpireTime;
-		}
 	}
 
 	public Date getTokenExpireTime() {

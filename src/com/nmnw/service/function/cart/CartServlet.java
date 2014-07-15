@@ -156,7 +156,7 @@ public class CartServlet extends HttpServlet {
 				// 商品情報をDBより取得
 				ItemDao itemDao = new ItemDao();
 				Item item = itemDao.selectByItemId(Integer.valueOf(request.getParameter(KEY_ITEM_ID)));
-				if (item.getId() == 0) {
+				if (item.getId() == ConfigConstants.NULL_INT) {
 					// エラー
 					errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
 					request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
@@ -256,7 +256,7 @@ public class CartServlet extends HttpServlet {
 				// 商品情報をDBより取得
 				ItemDao itemDao = new ItemDao();
 				Item item = itemDao.selectByItemId(Integer.valueOf(request.getParameter(KEY_ITEM_ID)));
-				if (item.getId() == 0) {
+				if (item.getId() == ConfigConstants.NULL_INT) {
 					// エラー
 					errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
 					request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);

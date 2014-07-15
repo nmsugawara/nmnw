@@ -10,9 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.nmnw.service.constant.ConfigConstants;
-import com.nmnw.service.utility.DateConversionUtility;
-import com.nmnw.service.utility.DdConnector;
+import com.nmnw.service.dao.Item;
+import com.nmnw.service.utility.DbConnector;
 
 public class ItemDao {
 	private static final String TABLE_NAME = "item";
@@ -26,7 +25,7 @@ public class ItemDao {
 	 */
 	public Item selectByItemId(int id)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME + " where id = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, id);
@@ -62,7 +61,7 @@ public class ItemDao {
 	 */
 	public List<Item> selectBySearch(String name, String category, String from, String to, String sort)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 
 		StringBuilder sqlBuilder = new StringBuilder();
 		sqlBuilder.append("select * from " + TABLE_NAME);
@@ -133,9 +132,7 @@ public class ItemDao {
 		while (iterator.hasNext()) {
 			String key = (String)iterator.next();
 			String type = (String)likeList.get(key).get(0);
-			if ("int".equals(type)) {
-				statement.setInt(count, (Integer)likeList.get(key).get(1));
-			} else if ("String".equals(type)) {
+			if ("String".equals(type)) {
 				statement.setString(count, (String)likeList.get(key).get(1));
 			}
 			count++;
@@ -158,77 +155,5 @@ public class ItemDao {
 		statement.close();
 		connection.close();
 		return resultList;
-	}
-
-	/**
-	 * insert
-	 * @param item
-	 * @return auto_increment_id
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 */
-	public int insert (Item item)
-		throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
-		String sql = "insert into " + TABLE_NAME + " (name, price, category, image_url, explanation, sales_period_from, sales_period_to, stock) values (?,?,?,?,?,?,?,?)";
-		PreparedStatement statement = connection.prepareStatement(sql);
-		statement.setString(1, item.getName());
-		statement.setInt(2, item.getPrice());
-		statement.setString(3, item.getCategory());
-		statement.setString(4, item.getImageUrl());
-		statement.setString(5, item.getExplanation());
-		statement.setDate(6, new java.sql.Date(item.getSalesPeriodFrom().getTime()));
-		statement.setDate(7, new java.sql.Date(item.getSalesPeriodTo().getTime()));
-		statement.setInt(8, item.getStock());
-		int updateCount = statement.executeUpdate();
-		statement.close();
-		connection.commit();
-
-		String getIdSql = "select last_insert_id() as id";
-		statement = connection.prepareStatement(getIdSql);
-		ResultSet result = statement.executeQuery();
-		int id = 0; 
-		while (result.next()) {
-			id = result.getInt("id");
-		}
-		connection.close();
-		return id;
-	}
-
-	/**
-	 * update
-	 * @param item
-	 * @return id
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 */
-	public int update (Item item)
-			throws ClassNotFoundException, SQLException {
-			Connection connection = DdConnector.getConnection();
-			String sql = "update " + TABLE_NAME + " set"
-						+ " name=?"
-						+ ", price=?"
-						+ ", category=?"
-						+ ", image_url=?"
-						+ ", explanation=?"
-						+ ", sales_period_from=?"
-						+ ", sales_period_to=?"
-						+ ", stock=?"
-						+ " where id=?";
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, item.getName());
-			statement.setInt(2, item.getPrice());
-			statement.setString(3, item.getCategory());
-			statement.setString(4, item.getImageUrl());
-			statement.setString(5, item.getExplanation());
-			statement.setDate(6, new java.sql.Date(item.getSalesPeriodFrom().getTime()));
-			statement.setDate(7, new java.sql.Date(item.getSalesPeriodTo().getTime()));
-			statement.setInt(8, item.getStock());
-			statement.setInt(9, item.getId());
-			int updateCount = statement.executeUpdate();
-			statement.close();
-			connection.commit();
-			connection.close();
-			return item.getId();
 	}
 }

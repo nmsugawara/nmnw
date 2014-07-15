@@ -7,8 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nmnw.admin.constant.ConfigConstants;
-import com.nmnw.admin.utility.DdConnector;
+import com.nmnw.admin.utility.DbConnector;
 
 public class OrderDetailDao {
 	private static final String TABLE_NAME = "sales_order_detail";
@@ -22,7 +21,7 @@ public class OrderDetailDao {
 	 */
 	public List<OrderDetail> selectByOrderId(int orderId)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME + " where order_id = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, orderId);

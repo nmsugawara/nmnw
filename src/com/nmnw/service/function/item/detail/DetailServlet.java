@@ -42,7 +42,7 @@ public class DetailServlet extends HttpServlet {
 			request.setAttribute(KEY_RESULT, result);
 			request.setAttribute(KEY_MESSAGE, "");
 			// ŠY“–ƒf[ƒ^‚ª‚È‚¢ê‡
-			if (result.getId() == 0) {
+			if (result.getId() == ConfigConstants.NULL_INT) {
 				request.setAttribute(KEY_MESSAGE, MessageConstants.MESSAGE_NO_DATA);
 			}
 			request.getRequestDispatcher(page).forward(request, response);

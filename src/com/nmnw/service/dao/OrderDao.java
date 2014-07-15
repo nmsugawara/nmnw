@@ -16,7 +16,7 @@ import com.nmnw.admin.dao.Item;
 import com.nmnw.service.dao.Order;
 import com.nmnw.service.constant.ConfigConstants;
 import com.nmnw.service.utility.DateConversionUtility;
-import com.nmnw.service.utility.DdConnector;
+import com.nmnw.service.utility.DbConnector;
 
 public class OrderDao {
 	private static final String TABLE_NAME_ORDER = "sales_order";
@@ -31,7 +31,7 @@ public class OrderDao {
 	 */
 	public Order selectByOrderId(int orderId)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME_ORDER + " where order_id = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, orderId);
@@ -69,7 +69,7 @@ public class OrderDao {
 	 */
 	public List<Order> selectByAccountIdAndOrderPeriod(int accountId, String orderPeriod)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		// íçï∂ä˙ä‘èåèóLñ≥îªífÉtÉâÉO
 		Boolean hasOrderPeriod = false;
 		StringBuilder sqlBuilder = new StringBuilder();
@@ -122,7 +122,7 @@ public class OrderDao {
 	 */
 	public Order selectByOrderIdAndAccountId(int orderId, int accountId)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "select * from " + TABLE_NAME_ORDER + " where order_id = ? and account_id = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, orderId);
@@ -161,7 +161,7 @@ public class OrderDao {
 	 */
 	public int insert (Account account, int totalPrice)
 		throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "insert into " + TABLE_NAME_ORDER
 				+ " (order_time, account_id, account_name, "
 				+ "account_name_kana, account_mail, account_zip_code, "
@@ -202,7 +202,7 @@ public class OrderDao {
 	 */
 	public int updateCancelStatus (int OrderId)
 			throws ClassNotFoundException, SQLException {
-		Connection connection = DdConnector.getConnection();
+		Connection connection = DbConnector.getConnection();
 		String sql = "update " + TABLE_NAME_ORDER + " set"
 					+ " cancel_flg=?"
 					+ ", cancel_time=?"
