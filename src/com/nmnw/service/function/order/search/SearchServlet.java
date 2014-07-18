@@ -28,6 +28,14 @@ import com.nmnw.service.validator.Validator;
 @WebServlet(name="order/search", urlPatterns={"/order/search"})
 public class SearchServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String KEY_ID = "id";
+	private static final String KEY_ORDER_PERIOD = "order_period";
+	private static final String KEY_ORDER = "order";
+	private static final String KEY_ORDER_DETAIL = "orderDetail";
+	private static final String KEY_ORDER_STATUS = "orderStatus";
+	private static final String KEY_RESULT = "result";
+	private static final String KEY_INPUT_DATA_LIST = "inputDataList";
+	private static final String KEY_ERROR_MESSAGE_LIST = "errorMessageList";
 	private static final String ORDER_STATUS_ORDER = "注文済";
 	private static final String ORDER_STATUS_ORDER_CANCEL = "キャンセル";
 	private static final String ORDER_STATUS_SHIPPING = "発送済";
@@ -54,19 +62,19 @@ public class SearchServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Integer loginId;
 		// ログインしてない場合
-		if (session.getAttribute("id") == null) {
+		if (session.getAttribute(KEY_ID) == null) {
 			// エラー
 			errorMessageList.add(MessageConstants.MESSAGE_NOT_LOGIN);
-			request.setAttribute("errorMessageList", errorMessageList);
+			request.setAttribute(KEY_ERROR_MESSAGE_LIST, errorMessageList);
 			request.getRequestDispatcher(page).forward(request, response);
 			return;
 		}
-		loginId = (Integer)session.getAttribute("id");
+		loginId = (Integer)session.getAttribute(KEY_ID);
 		// 検索
 		try {
 			// 注文取得
 			String orderPeriod = "";
-			if (!RequestParameterUtility.isEmptyParam(request.getParameter("order_period"))) {
+			if (!RequestParameterUtility.isEmptyParam(request.getParameter(KEY_ORDER_PERIOD))) {
 				orderPeriod = DateConversionUtility.getdaysAfterString(Integer.valueOf(request.getParameter("order_period")));
 			}
 			OrderDao orderdao = new OrderDao();
@@ -76,13 +84,13 @@ public class SearchServlet extends HttpServlet {
 				Map<String, Object> orderInfo = new HashMap<String, Object>();
 				OrderDetailDao orderDetailDao = new OrderDetailDao();
 				List<OrderDetail> orderDetailList = orderDetailDao.selectByOrderId(orderList.get(i).getOrderId());
-				orderInfo.put("order", orderList.get(i));
-				orderInfo.put("orderDetail", orderDetailList);
-				orderInfo.put("orderStatus", getOrderStatus(orderList.get(i).getShippingFlg(), orderList.get(i).getCancelFlg()));
+				orderInfo.put(KEY_ORDER, orderList.get(i));
+				orderInfo.put(KEY_ORDER_DETAIL, orderDetailList);
+				orderInfo.put(KEY_ORDER_STATUS, getOrderStatus(orderList.get(i).getShippingFlg(), orderList.get(i).getCancelFlg()));
 				resultList.add(orderInfo);
 			}
-			request.setAttribute("result", resultList);
-			request.setAttribute("inputDataList", inputDataList);
+			request.setAttribute(KEY_RESULT, resultList);
+			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
 			request.getRequestDispatcher(page).forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();

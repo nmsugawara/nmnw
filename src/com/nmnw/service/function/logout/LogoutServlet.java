@@ -33,8 +33,6 @@ public class LogoutServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		String page = ConfigConstants.JSP_DIR_LOGOUT + "Logout.jsp";
-		String action = request.getParameter("action");
-		String message = "";
 		// ログアウト処理
 		HttpSession session = request.getSession();
 		session.invalidate();

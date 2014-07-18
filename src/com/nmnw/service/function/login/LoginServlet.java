@@ -20,7 +20,7 @@ import static com.nmnw.service.utility.PropertyUtility.getPropertyValue;
 @WebServlet(name="login", urlPatterns={"/login"})
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String REQUEST_REQUEST_KEY_ACTION = "action";
+	private static final String REQUEST_KEY_ACTION = "action";
 	private static final String VALUE_ACTION_LOGIN = "login";
 	private static final String KEY_MESSAGE = "message";
 	private static final String REQUEST_KEY_MAIL = "login_mail";
@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
 		String page = ConfigConstants.JSP_DIR_LOGIN + "Login.jsp";
 		String message = "";
 		// ログイン画面表示
-		if (!VALUE_ACTION_LOGIN.equals(request.getParameter(REQUEST_REQUEST_KEY_ACTION))) {
+		if (!(VALUE_ACTION_LOGIN.equals(request.getParameter(REQUEST_KEY_ACTION)))) {
 			request.getRequestDispatcher(page).forward(request, response);
 		} else {
 		// ログイン処理

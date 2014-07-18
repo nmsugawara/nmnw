@@ -87,7 +87,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		// キャンセルフラグ
 		if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_cancel_flg"))) {
-			v.isInt(request.getParameter("search_order_id"), SEARCH_FIELD_ORDER_ID);
+			v.isInt(request.getParameter("search_cancel_flg"), SEARCH_FIELD_ORDER_ID);
 		}
 		// キャンセル日
 		if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_cancel_date"))) {
@@ -95,7 +95,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		// 出荷フラグ
 		if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_shipping_flg"))) {
-			v.isInt(request.getParameter("search_shipping_id"), SEARCH_FIELD_SHIPPING_FLG);
+			v.isInt(request.getParameter("search_shipping_flg"), SEARCH_FIELD_SHIPPING_FLG);
 		}
 		// 出荷日
 		if (!RequestParameterUtility.isEmptyParam(request.getParameter("search_shipping_date"))) {

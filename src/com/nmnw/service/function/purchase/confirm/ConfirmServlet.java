@@ -21,6 +21,7 @@ import com.nmnw.service.utility.ExceptionUtility;
 @WebServlet(name="purchase/confirm", urlPatterns={"/purchase/confirm"})
 public class ConfirmServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String KEY_ID = "id";
 	private static final String KEY_CART = "cart";
 	private static final String KEY_ACCOUNT = "account";
 	private static final String KEY_ERROR_MESSAGE = "errorMessageList";
@@ -46,14 +47,14 @@ public class ConfirmServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			Integer loginId;
 			// ログインしてない場合
-			if (session.getAttribute("id") == null) {
+			if (session.getAttribute(KEY_ID) == null) {
 				// エラー
 				errorMessageList.add(MessageConstants.MESSAGE_NOT_LOGIN);
 				request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
 				request.getRequestDispatcher(page).forward(request, response);
 				return;
 			}
-			loginId = (Integer)session.getAttribute("id");
+			loginId = (Integer)session.getAttribute(KEY_ID);
 
 			// Cartオブジェクトがなければ
 			if (session.getAttribute(KEY_CART) == null) {

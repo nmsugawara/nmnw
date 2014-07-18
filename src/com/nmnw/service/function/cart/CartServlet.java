@@ -31,7 +31,7 @@ public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String FIELD_ITEM_ID = "商品ID";
 	private static final String FIELD_ITEM_COUNT = "商品個数";
-	private static final String REQUEST_REQUEST_KEY_ACTION = "action";
+	private static final String REQUEST_KEY_ACTION = "action";
 	private static final String ACTION_ADD = "add";
 	private static final String ACTION_DELETE = "delete";
 	private static final String ACTION_MODIFY = "modify";
@@ -84,7 +84,7 @@ public class CartServlet extends HttpServlet {
 
 			// actionパラメータが意図しない値の場合
 			String[] vaildActionParam = {ACTION_ADD, ACTION_DELETE, ACTION_MODIFY};
-			if (request.getParameter(REQUEST_REQUEST_KEY_ACTION) != null && !Arrays.asList(vaildActionParam).contains(request.getParameter(REQUEST_REQUEST_KEY_ACTION))) {
+			if (request.getParameter(REQUEST_KEY_ACTION) != null && !Arrays.asList(vaildActionParam).contains(request.getParameter(REQUEST_KEY_ACTION))) {
 				// エラー
 				errorMessageList.add(MessageConstants.MESSAGE_ILLEGAL_PARAMETER);
 				request.setAttribute(KEY_ERROR_MESSAGE, errorMessageList);
@@ -97,7 +97,7 @@ public class CartServlet extends HttpServlet {
 			// カート画面表示
 			////////////////////////////
 			// actionパラメータがない場合
-			if (request.getParameter(REQUEST_REQUEST_KEY_ACTION) == null) {
+			if (request.getParameter(REQUEST_KEY_ACTION) == null) {
 				// セッション内のCartオブジェクト有無確認
 				Boolean hasObject = false;
 				Enumeration<String> en = session.getAttributeNames();
@@ -134,7 +134,7 @@ public class CartServlet extends HttpServlet {
 			////////////////////////////
 			// 商品追加
 			////////////////////////////
-			if (ACTION_ADD.equals(request.getParameter(REQUEST_REQUEST_KEY_ACTION))) {
+			if (ACTION_ADD.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 				// 商品パラメータチェック
 				Validator v = new Validator();
 				// 商品ID
@@ -188,7 +188,7 @@ public class CartServlet extends HttpServlet {
 			////////////////////////////
 			// 商品削除
 			////////////////////////////
-			if (ACTION_DELETE.equals(request.getParameter(REQUEST_REQUEST_KEY_ACTION))) {
+			if (ACTION_DELETE.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 				// 商品パラメータチェック
 				Validator v = new Validator();
 				// 商品ID
@@ -235,7 +235,7 @@ public class CartServlet extends HttpServlet {
 			////////////////////////////
 			// 商品個数変更
 			////////////////////////////
-			if (ACTION_MODIFY.equals(request.getParameter(REQUEST_REQUEST_KEY_ACTION))) {
+			if (ACTION_MODIFY.equals(request.getParameter(REQUEST_KEY_ACTION))) {
 				// 商品パラメータチェック
 				Validator v = new Validator();
 				// 商品ID

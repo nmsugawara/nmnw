@@ -24,6 +24,8 @@ public class CancelServlet extends HttpServlet {
 	private static final String FIELD_ORDER_ID = "注文ID";
 	private static final String SESSION_KEY_ERROR_MESSAGE = "errorMessageList";
 	private static final String SESSION_KEY_ORDER_ID = "orderId";
+	private static final String KEY_ORDER_ID = "order_id";
+	private static final String KEY_ID = "id";
 
 	/**
 	 * Construct
@@ -38,13 +40,13 @@ public class CancelServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		String page = ConfigConstants.JSP_DIR_ORDER_CANCEL + "Cancel.jsp";
-		String orderId = request.getParameter("order_id");
+		String orderId = request.getParameter(KEY_ORDER_ID);
 		List<String> errorMessageList = new ArrayList<String>();
 		try {
 			// ログインチェック
 			HttpSession session = request.getSession();
 			// ログインしてない場合
-			if (session.getAttribute("id") == null) {
+			if (session.getAttribute(KEY_ID) == null) {
 				// エラー
 				errorMessageList.add(MessageConstants.MESSAGE_NOT_LOGIN);
 				request.setAttribute(SESSION_KEY_ERROR_MESSAGE, errorMessageList);

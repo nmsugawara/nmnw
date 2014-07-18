@@ -99,7 +99,7 @@ public class ResetPasswordServlet extends HttpServlet {
 				// 入力メールよりアカウント情報取得
 				AccountDao accountDao = new AccountDao();
 				Account account = accountDao.selectByMail(request.getParameter(KEY_MAIL));
-				if (account.getId() == 0) {
+				if (account.getId() == ConfigConstants.NULL_INT) {
 					// エラー
 					request.setAttribute(REQUEST_KEY_ACTION, VALUE_ACTION_RESET);
 					errorMessageList.add(MessageConstants.MESSAGE_MAIL_NOT_EXIST);
