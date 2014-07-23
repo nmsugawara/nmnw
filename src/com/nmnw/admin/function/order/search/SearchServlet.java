@@ -60,6 +60,7 @@ public class SearchServlet extends HttpServlet {
 		String page = ConfigConstants.JSP_DIR_ORDER_SEARCH + "Search.jsp";
 		// åüçıâÊñ ï\é¶
 		if (!REQUEST_VALUE_ACTION_SEARCH.equals(request.getParameter(REQUEST_KEY_ACTION))) {
+			request.setAttribute(KEY_INPUT_DATA_LIST, inputDataList);
 			request.getRequestDispatcher(page).forward(request, response);
 			return;
 		}

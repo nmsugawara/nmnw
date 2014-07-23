@@ -98,7 +98,7 @@ public class CompleteServlet extends HttpServlet {
 			// çáåvã‡äz
 			int totalPrice = 0;
 			for (int i = 0; i < cartItemList.size(); i++) {
-				totalPrice += cartItemList.get(i).getItemPrice();
+				totalPrice += cartItemList.get(i).getItemPrice() * cartItemList.get(i).getItemCount();
 			}
 			// íçï∂èÓïÒinsert
 			OrderDao orderDao = new OrderDao();

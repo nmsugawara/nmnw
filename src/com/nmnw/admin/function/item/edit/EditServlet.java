@@ -133,9 +133,11 @@ public class EditServlet extends HttpServlet {
 				String itemId = String.valueOf(itemdao.update(item));
 				String url = "http://" + getPropertyValue("DOMAIN") + ConfigConstants.SERVLET_DIR_ITEM_DETAIL + "?item_id=" + itemId + "&action=edit_end";
 				response.sendRedirect(url);
+				return;
 			} catch (Exception e) {
 				e.printStackTrace();
 				ExceptionUtility.redirectErrorPage(request, response, e);
+				return;
 			}
 		}
 		// ÉGÉâÅ[

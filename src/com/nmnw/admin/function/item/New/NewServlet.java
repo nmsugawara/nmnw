@@ -65,7 +65,7 @@ public class NewServlet extends HttpServlet {
 		// êVãKìoò^
 		// validation
 		ItemValidator iv = new ItemValidator();
-		iv.checkName(request.getParameter(REQUEST_KEY_ITEM_ID));
+		iv.checkName(request.getParameter(REQUEST_KEY_ITEM_NAME));
 		iv.checkPrice(request.getParameter(REQUEST_KEY_ITEM_PRICE));
 		iv.checkCategory(request.getParameter(REQUEST_KEY_ITEM_CATEGORY));
 		iv.checkExplanation(request.getParameter(REQUEST_KEY_ITEM_EXPLANATION));

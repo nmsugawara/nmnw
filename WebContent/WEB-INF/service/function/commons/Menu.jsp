@@ -16,13 +16,19 @@
 			</div>
 			<a class="brand pull-right" href="/nmnw/index">No Music, No Work</a>
 			<ul class="nav nav-pills">
-				<li><a href="/nmnw/index">Top</a></li>
-				<li><a href="/nmnw/item/search">商品検索</a></li>
-				<li><a href="/nmnw/login">ログイン</a></li>
-				<li><a href="/nmnw/account/register">新規会員登録</a></li>
 <%
 	if (name != null) {
 		out.println("<li class=\"navbar-text\">こんにちは" + name + "さん。</li>");
+	}
+%>
+				<li><a href="/nmnw/index">Top</a></li>
+				<li><a href="/nmnw/item/search">商品検索</a></li>
+<%
+	if (id == null) {
+%>
+				<li><a href="/nmnw/login">ログイン</a></li>
+				<li><a href="/nmnw/account/register">新規会員登録</a></li>
+<%
 	}
 %>
 <%
