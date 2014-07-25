@@ -98,8 +98,7 @@ public class EditServlet extends HttpServlet {
 					iv.checkImage(image);
 				}
 				iv.checkExplanation(request.getParameter(REQUEST_KEY_ITEM_EXPLANATION));
-				iv.checkSalesPeriodFrom(request.getParameter(REQUEST_KEY_ITEM_PERIOD_FROM));
-				iv.checkSalesPeriodTo(request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO));
+				iv.checkSalesPeriod(request.getParameter(REQUEST_KEY_ITEM_PERIOD_FROM), request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO));
 				iv.checkStock(request.getParameter(REQUEST_KEY_ITEM_STOCK));
 	
 				errorMessageList = iv.getValidationList();

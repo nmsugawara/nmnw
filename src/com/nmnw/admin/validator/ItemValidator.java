@@ -19,11 +19,11 @@ public class ItemValidator {
 	private static final String FIELD_STOCK = "ç›å…êî";
 
 	private static final int MAX_SIZE_NAME = 200;
-	private static final int MIN_SIZE_PRICE = 0;
-	private static final int MAX_SIZE_PRICE = 10000;
+	private static final long MIN_SIZE_PRICE = 0;
+	private static final long MAX_SIZE_PRICE = 10000;
 	private static final int MAX_SIZE_EXPLANATION = 5000;
-	private static final int MIN_SIZE_STOCK = 0;
-	private static final int MAX_SIZE_STOCK = 100;
+	private static final long MIN_SIZE_STOCK = 0;
+	private static final long MAX_SIZE_STOCK = 100;
 
 	private Validator v;
 	
@@ -43,8 +43,8 @@ public class ItemValidator {
 	public void checkPrice(String value) {
 		if (!v.required(value, FIELD_PRICE)) {
 			if (!v.isInt(value, FIELD_PRICE)) {
-				if (!v.minSizeInt(Integer.parseInt(value), MIN_SIZE_PRICE, FIELD_PRICE)) {
-					v.maxSizeInt(Integer.parseInt(value), MAX_SIZE_PRICE, FIELD_PRICE);	
+				if (!v.minSizeLong(Long.parseLong(value), MIN_SIZE_PRICE, FIELD_PRICE)) {
+					v.maxSizeLong(Long.parseLong(value), MAX_SIZE_PRICE, FIELD_PRICE);
 				}
 			}
 		}
@@ -60,23 +60,17 @@ public class ItemValidator {
 		}
 	}
 
-	public void checkSalesPeriodFrom(String value) {
-		if (!v.required(value, FIELD_SALES_PERIOD_FROM)) {
-			v.isDate(value, FIELD_SALES_PERIOD_FROM);
-		}
-	}
-
-	public void checkSalesPeriodTo(String value) {
-		if (!v.required(value, FIELD_SALES_PERIOD_TO)) {
-			v.isDate(value, FIELD_SALES_PERIOD_TO);
+	public void checkSalesPeriod(String from, String to) {
+		if (!v.required(from, FIELD_SALES_PERIOD_FROM) && !v.required(to, FIELD_SALES_PERIOD_TO)) {
+			v.correctPeriod(from, FIELD_SALES_PERIOD_FROM, to, FIELD_SALES_PERIOD_TO);
 		}
 	}
 
 	public void checkStock(String value) {
 		if (!v.required(value, FIELD_STOCK)) {
 			if (!v.isInt(value, FIELD_STOCK)) {
-				if (!v.minSizeInt(Integer.parseInt(value), MIN_SIZE_STOCK, FIELD_STOCK)) {
-					v.maxSizeInt(Integer.parseInt(value), MAX_SIZE_STOCK, FIELD_STOCK);
+				if (!v.minSizeLong(Long.parseLong(value), MIN_SIZE_STOCK, FIELD_STOCK)) {
+					v.maxSizeLong(Long.parseLong(value), MAX_SIZE_STOCK, FIELD_STOCK);
 				}
 			}
 		}

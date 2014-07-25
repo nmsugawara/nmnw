@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class DateConversionUtility {
 	private static final String FORMAT_DATE = "yyyy-MM-dd";
@@ -44,6 +45,7 @@ public class DateConversionUtility {
 			return null;
 		}
 		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
 		dateFormat.setLenient(false);
 		try {
 			return dateFormat.parse(value);
@@ -62,6 +64,7 @@ public class DateConversionUtility {
 			return null;
 		}
 		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
 		dateFormat.setLenient(false);
 		try {
 			return dateFormat.parse(value);
@@ -76,11 +79,13 @@ public class DateConversionUtility {
 	public static String getCurrentDateString () {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
 		return dateFormat.format(calendar.getTime());
 	}
 
 	public static Date timestampToDate(Timestamp timestamp) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
 		dateFormat.setLenient(false);
 		try {
 			String date = dateFormat.format(timestamp);
@@ -154,6 +159,7 @@ public class DateConversionUtility {
 		int days = cal.getActualMinimum(Calendar.DAY_OF_MONTH);
 		cal.set(Calendar.DAY_OF_MONTH, days);
 		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
+		sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
 		return sdf.format(cal.getTime());
 	}
 
@@ -166,6 +172,7 @@ public class DateConversionUtility {
 		int days = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 		cal.set(Calendar.DAY_OF_MONTH, days);
 		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
+		sdf.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
 		return sdf.format(cal.getTime());
 	}
 
@@ -178,6 +185,7 @@ public class DateConversionUtility {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, daysAfter);
 		SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT_DATE);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
 		dateFormat.setLenient(false);
 		try {
 			return dateFormat.format(cal.getTime());

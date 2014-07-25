@@ -143,7 +143,7 @@ public class Validator {
 	 * @param fieldName
 	 * @return hasError
 	 */
-	public boolean maxSizeInt(int value, int maxSize, String fieldName) {
+	public boolean maxSizeLong(long value, long maxSize, String fieldName) {
 		boolean hasError = false;
 		if (value > maxSize) {
 			String message = getMessage(ValidatorConstants.MESSAGE_MAXSIZE_INT, fieldName, String.valueOf(maxSize));
@@ -194,7 +194,7 @@ public class Validator {
 	 * @param fieldName
 	 * @return hasError
 	 */
-	public boolean minSizeInt(int value, int minSize, String fieldName) {
+	public boolean minSizeLong(long value, long minSize, String fieldName) {
 		boolean hasError = false;
 		if (value < minSize) {
 			String message = getMessage(ValidatorConstants.MESSAGE_MINSIZE_INT, fieldName, String.valueOf(minSize));

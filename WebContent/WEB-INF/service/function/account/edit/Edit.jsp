@@ -38,10 +38,12 @@
 <p>
 	<font color="red">
 <% 
-	for(int i=0; i < errorMessageList.size(); i++) {
-		String message = errorMessageList.get(i);
-		out.print(message);
-		out.print("<br>");
+	if (errorMessageList != null) {
+		for(int i=0; i < errorMessageList.size(); i++) {
+			String message = errorMessageList.get(i);
+			out.print(message);
+			out.print("<br>");
+		}
 	}
 %>
 	</font>
@@ -49,7 +51,7 @@
 <%
 	if ("edit".equals(action) || "edit_end".equals(action)) {
 		// 該当データがある場合
-		if (result.getId() != 0) {
+	if (result != null || inputDataList != null) {
 %>
 <div id="data_table">
 <form method="post" action="edit?action=edit_end"  enctype="application/x-www-form-urlencoded">

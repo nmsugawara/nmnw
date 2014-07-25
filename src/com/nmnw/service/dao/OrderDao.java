@@ -79,6 +79,7 @@ public class OrderDao {
 			sqlBuilder.append(" and order_time > ?");
 			hasOrderPeriod = true;
 		}
+		sqlBuilder.append(" order by order_id desc");
 		String sql = sqlBuilder.toString();
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setInt(1, accountId);

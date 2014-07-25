@@ -69,8 +69,7 @@ public class NewServlet extends HttpServlet {
 		iv.checkPrice(request.getParameter(REQUEST_KEY_ITEM_PRICE));
 		iv.checkCategory(request.getParameter(REQUEST_KEY_ITEM_CATEGORY));
 		iv.checkExplanation(request.getParameter(REQUEST_KEY_ITEM_EXPLANATION));
-		iv.checkSalesPeriodFrom(request.getParameter(REQUEST_KEY_ITEM_PERIOD_FROM));
-		iv.checkSalesPeriodTo(request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO));
+		iv.checkSalesPeriod(request.getParameter(REQUEST_KEY_ITEM_PERIOD_FROM), request.getParameter(REQUEST_KEY_ITEM_PERIOD_TO));
 		iv.checkStock(request.getParameter(REQUEST_KEY_ITEM_STOCK));
 		Part image = request.getPart(REQUEST_KEY_ITEM_IMAGE);
 		iv.checkImage(image);

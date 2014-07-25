@@ -23,7 +23,7 @@
 <body>
 <jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
 <p>
-	<h1>商品詳細情報</h1>
+	<h1>注文詳細情報</h1>
 </p>
 <% 
 	// 該当データがない場合

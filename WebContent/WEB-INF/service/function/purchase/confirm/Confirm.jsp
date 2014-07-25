@@ -28,7 +28,7 @@
 <title>No Music No Work | 購入確認</title>
 </head>
 <body class="service_body">
-<jsp:include page="/WEB-INF/admin/function/commons/Menu.jsp"/>
+<jsp:include page="/WEB-INF/service/function/commons/Menu.jsp"/>
 <table id="canvas">
 <tr>
 <td>
